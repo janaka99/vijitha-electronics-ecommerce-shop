@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.bg-color-1{
+    @apply bg-[#1A56DB]
+}
+
+.text-color-1{
+    @apply text-[#1A55D9]
+}
+
+.btn-1{
+    @apply px-6 py-2 text-white bg-[#1A56DB] rounded-sm w-fit
+}
+
+.btn-2{
+    @apply bg-color-1 px-3 py-2 transition-all text-white w-fit  items-center cursor-pointer flex justify-center  text-sm hover:bg-[#1244af]
+}
+.btn-3{
+    @apply bg-red-500 px-3 py-2 transition-all text-white w-fit  items-center cursor-pointer flex justify-center  text-sm hover:bg-red-600
+}
+
+
+
+.gradient-bg-1{
+    @apply bg-gradient-to-r from-[#c1d1db7a] to-[#dacac076]
+}
