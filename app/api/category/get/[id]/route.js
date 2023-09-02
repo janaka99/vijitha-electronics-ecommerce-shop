@@ -1,15 +1,16 @@
 import { IsLoggedIn } from "@middlewares";
+import Category from "@models/category";
 import Item from "@models/item";
 import { connectToDB } from "@utils/database";
 
 export async function GET(req, res) {
   try {
     await connectToDB();
-    //find all available products
+    //find available categories
     const id = req.nextUrl.searchParams.get("id");
-    const rs = await Item.find({ _id: id }).populate("category");
-
-    //return all the products
+    const rs = await Category.find({ _id: id });
+    console.log(rs);
+    //return all the categories
     return new Response(JSON.stringify(rs), {
       status: 200,
     });

@@ -4,17 +4,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BiUpload } from "react-icons/bi";
 import styled from "styled-components";
 import Loader from "@components/Loader";
-
-const InputField = (name, defaultValue, type) => {
-  return (
-    <input
-      className="w-full px-5 text-black bg-white p-3 outline-none"
-      type={type}
-      name={name}
-      defaultValue={defaultValue}
-    />
-  );
-};
+import PopUp from "@components/PopUp";
 
 const page = (props, { setUpdateInventoryProductWindow }) => {
   const formRef = useRef();
@@ -22,6 +12,11 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
 
   const [categories, setCategories] = useState([]);
   const [tempImageUrl, setTempImageUrl] = useState("");
+  const [popUp, setPopUp] = useState({
+    message: "",
+    type: "",
+    show: false,
+  });
 
   const getProduct = async () => {
     const res = await fetch(
@@ -32,7 +27,6 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
     );
     if (res.ok) {
       const newRes = await res.json();
-      console.log(newRes);
 
       setItemToUpdate({
         id: newRes[0]._id,
@@ -42,10 +36,10 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
         qty: newRes[0].qty,
         file: null,
         src: newRes[0].src,
-        category: newRes[0].category.name,
-        category_id: newRes[0].category._id,
+        category: newRes[0].category != null ? newRes[0].category?.name : null,
+        category_id:
+          newRes[0].category != null ? newRes[0].category?._id : null,
       });
-      console.log(newRes);
     }
   };
 
@@ -55,7 +49,7 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
         method: "GET",
       });
       const newRes = await res.json();
-      console.log(newRes);
+
       if (res.ok) {
         setCategories(newRes);
       } else {
@@ -203,28 +197,30 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
         category: categoryRef.current.value,
         id: itemToUpdate.id,
       };
-      console.log(product);
+
       form.append("details ", JSON.stringify(product));
       if (itemToUpdate.file !== null) {
         form.append("file", itemToUpdate.file);
       }
-      console.log(product);
-      console.log(itemToUpdate);
-      // const res = await fetch("/api/item/update", {
-      //   method: "POST",
-      //   body: form,
-      // });
 
-      // if (res.ok) {
-      //   // getProducts();
-      //   // handleFormView();
-      //   console.log("successfully updated product ", await res.json());
-      // } else {
-      //   setErrorList({
-      //     ...errorList,
-      //     form: "Product Update Failed, Try again later!",
-      //   });
-      // }
+      const res = await fetch("/api/item/update", {
+        method: "POST",
+        body: form,
+      });
+
+      if (res.ok) {
+        setPopUp({
+          message: "Product updated successfully",
+          type: "success",
+          show: true,
+        });
+      } else {
+        setPopUp({
+          message: "Product updat failed",
+          type: "error",
+          show: true,
+        });
+      }
       setReqLoading(false);
     } else {
       setReqLoading(false);
@@ -261,100 +257,41 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
   }, []);
 
   return (
-    <div className="max-w-[1440px]  w-[95%] flex flex-col gap-5 my-12 mx-auto">
-      <div className="h-[50px] p-1 flex justify-center items-center bg-[#1f2937] w-full text-white">
+    <div className="max-w-[1440px]  w-[95%] flex flex-col gap-3 my-12 mx-auto relative">
+      <h1 className="uppercase text-2xl font-semibold text-center mb-7">
         Update Product Image
-      </div>
+      </h1>
       <form
-        className="w-full min-h-[750px]  h-full p-4 flex flex-col bg-[#1f2937] gap-4"
+        className="w-full min-h-[750px]  h-full p-4 flex flex-col gap-4 pb-0"
         ref={formRef}
         onSubmit={(e) => handleFormSubmit(e)}
       >
         <div className="flex-grow h-full flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Name</label>
-            <input
-              className="w-full px-5 text-black bg-white p-3 outline-none"
-              type="text"
-              placeholder="Product Name"
-              onChange={(e) => {
-                setItemToUpdate({
-                  ...itemToUpdate,
-                  name: e.target.value,
-                });
-              }}
-              defaultValue={itemToUpdate?.name}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {errorList.name}
-            </div>
-          </div>
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Price</label>
-            <input
-              className="w-full px-5 text-black bg-white p-3 outline-none"
-              type="number"
-              placeholder="Price ( Rs )"
-              onChange={(e) => {
-                setItemToUpdate({
-                  ...itemToUpdate,
-                  price: e.target.value,
-                });
-              }}
-              defaultValue={itemToUpdate?.price}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {errorList.price}
-            </div>
-          </div>
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Description</label>
-            <textarea
-              className="resize-none h-max px-5 text-black bg-white p-3 outline-none min-h-[215px]"
-              type="text"
-              placeholder="Description"
-              onChange={(e) => {
-                console.log(e.target.value);
-                setItemToUpdate({
-                  ...itemToUpdate,
-                  description: e.target.value,
-                });
-              }}
-              defaultValue={itemToUpdate?.description}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {errorList.description}
-            </div>
-          </div>
-        </div>
-        <div className="flex-grow flex flex-col justify-between gap-4">
-          <div className="w-full h-[calc(100%-40px)] flex flex-col gap-4">
+          <div className="flex gap-4 flex-col md:flex-row">
             <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">
-                Stock Availability
-              </label>
+              <label className="w-full px-5 text-[#1F2937]">Name</label>
               <input
-                className="w-full px-5 text-black bg-white p-3 outline-none"
-                type="number"
-                placeholder="Stock ( ex- 99 )"
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
+                type="text"
+                placeholder="Product Name"
                 onChange={(e) => {
                   setItemToUpdate({
                     ...itemToUpdate,
-                    qty: e.target.value,
+                    name: e.target.value,
                   });
                 }}
-                defaultValue={itemToUpdate?.qty}
+                defaultValue={itemToUpdate?.name}
               />
               <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-                {errorList.quantity}
+                {errorList.name}
               </div>
             </div>
-            <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">Category</label>
+            <div className="w-full md:w-2/5 flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">Category</label>
               {itemToUpdate?.category_id === null ? (
                 <>
                   <select
-                    className="w-full px-5 text-black bg-white p-3 outline-none"
+                    className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
                     ref={categoryRef}
                     defaultValue={""}
                   >
@@ -369,7 +306,7 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
               ) : (
                 <>
                   <select
-                    className="w-full px-5 text-black bg-white p-3 outline-none"
+                    className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
                     ref={categoryRef}
                     defaultValue={itemToUpdate.category_id}
                   >
@@ -393,16 +330,87 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
                 {errorList.category}
               </div>
             </div>
+          </div>
+          <div className="flex gap-4 flex-col md:flex-row">
             <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">Image</label>
+              <label className="w-full px-5 text-[#1F2937]">Price</label>
+              <input
+                className="w-full px-5 text-black text-sm bg-gray-200  p-3 outline-none"
+                type="number"
+                placeholder="Price ( Rs )"
+                onChange={(e) => {
+                  setItemToUpdate({
+                    ...itemToUpdate,
+                    price: e.target.value,
+                  });
+                }}
+                defaultValue={itemToUpdate?.price}
+              />
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {errorList.price}
+              </div>
+            </div>
+            <div className="w-full md:w-2/5 flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">
+                Stock Availability
+              </label>
+              <input
+                className="w-full px-5 text-black text-sm bg-gray-200  p-3 outline-none"
+                type="number"
+                placeholder="Stock ( ex- 99 )"
+                onChange={(e) => {
+                  setItemToUpdate({
+                    ...itemToUpdate,
+                    qty: e.target.value,
+                  });
+                }}
+                defaultValue={itemToUpdate?.qty}
+              />
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {errorList.quantity}
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-3">
+            <label className="w-full px-5 text-[#1F2937]">Description</label>
+            <textarea
+              className="resize-none h-max px-5 text-black text-sm bg-gray-200  p-3 outline-none min-h-[215px]"
+              type="text"
+              placeholder="Description"
+              onChange={(e) => {
+                console.log(e.target.value);
+                setItemToUpdate({
+                  ...itemToUpdate,
+                  description: e.target.value,
+                });
+              }}
+              defaultValue={itemToUpdate?.description}
+            />
+            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+              {errorList.description}
+            </div>
+          </div>
+        </div>
+        <div className="flex-grow flex flex-col justify-between gap-4">
+          <div className="w-full h-[calc(100%-40px)] flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-3">
+              <div className="flex gap-4 ">
+                <label className="w-fit px-5 text-[#1F2937]">Image</label>
+                <button
+                  className="btn-2 h-fit w-fit place-self-end"
+                  onClick={keepOriginalImage}
+                >
+                  Keep the original image
+                </button>
+              </div>
               <div className="w-full sm:flex grid grid-cols-2 sm:flex-wrap gap-4 now">
                 <label
-                  className="sm:w-[25%]  w-full aspect-square  flex sm:justify-center items-center bg-gray-200  "
+                  className="sm:w-[25%]  w-full aspect-square  flex justify-center items-center bg-gray-200  "
                   htmlFor="imageToUploadInUpdate"
                 >
                   <BiUpload size={50} />
                   <input
-                    className="imageToUploadInUpdate imageToUpload w-full px-5 text-black bg-white p-3
+                    className="imageToUploadInUpdate imageToUpload w-full px-5 text-black bg-gray-200  p-3
                 outline-none hidden"
                     type="file"
                     id="imageToUploadInUpdate"
@@ -411,7 +419,6 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
                     }}
                   />
                 </label>
-
                 <label className="sm:w-[25%] w-full aspect-square  flex justify-center items-center bg-gray-200  ">
                   <img
                     src={`${
@@ -420,9 +427,6 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
                     alt=""
                   />
                 </label>
-                <button>
-                  <p onClick={keepOriginalImage}>Keep the original</p>
-                </button>
               </div>
               <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
                 {errorList.file}
@@ -434,33 +438,19 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
           </div>
         </div>
       </form>
-      <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-        {errorList.form}
-      </div>
-      <div className="w-full flex flex-col gap-3">
+      <div className="w-[100%] px-4 mx-auto flex flex-col gap-3">
         <button className="btn-3 min-w-[100%] " onClick={handleProductDelete}>
           Delete
         </button>
       </div>
       {reqLoading && (
-        <LoadingDiv>
+        <div className="absolute w-screen h-full bg-[#ffffff03] backdrop-blur-[1px] flex justify-center items-center">
           <Loader size={"50px"} border={"5px"} />
-        </LoadingDiv>
+        </div>
       )}
+      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };
 
 export default page;
-
-const LoadingDiv = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  /* background-color: red; */
-  background-color: #ffffff03;
-  backdrop-filter: blur(1px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;

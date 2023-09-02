@@ -29,7 +29,9 @@ const Header = () => {
     return (
       <Nav>
         <NavContainer>
-          <Logo>Vijitha Electronics</Logo>
+          <Logo className="cursor-pointer " href="/">
+            Vijitha Electronics
+          </Logo>
           <div className="flex gap-12 items-center">
             <Link href="/" className="relative ">
               <AiOutlineShoppingCart size={24} className="text-white" />
@@ -88,7 +90,7 @@ const NavContainer = styled.nav`
   height: 100%;
 `;
 
-const Logo = styled.div`
+const Logo = styled.a`
   color: #ffffff;
 `;
 

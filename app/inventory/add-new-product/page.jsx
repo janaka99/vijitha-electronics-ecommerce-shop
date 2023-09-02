@@ -1,12 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BiUpload } from "react-icons/bi";
-import styled from "styled-components";
 import Loader from "@components/Loader";
+import { useRouter } from "next/navigation";
+import PopUp from "@components/PopUp";
 
 const page = ({}) => {
   const [categories, setCategories] = useState([]);
+
+  const router = useRouter();
+
+  const [popUp, setPopUp] = useState({
+    message: "",
+    type: "",
+    show: false,
+  });
 
   const getCategories = async () => {
     try {
@@ -58,6 +66,10 @@ const page = ({}) => {
     setFile(file);
     reader.readAsDataURL(file);
   };
+
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -113,12 +125,23 @@ const page = ({}) => {
       });
 
       if (res.ok) {
-        handleFormView();
-        console.log(res);
+        setReqLoading(false);
+        setPopUp({
+          message: "Product successfully added",
+          type: "success",
+          show: true,
+        });
+        await delay(5000);
+        router.push("/inventory");
       } else {
-        console.log(res.json());
+        setReqLoading(false);
+
+        setPopUp({
+          message: "Product add failed",
+          type: "error",
+          show: true,
+        });
       }
-      setReqLoading(false);
     } else {
       setReqLoading(false);
       return false;
@@ -130,67 +153,72 @@ const page = ({}) => {
   }, []);
 
   return (
-    <div className="max-w-[1440px]  w-[95%] flex flex-col gap-5 my-12 mx-auto">
-      <div className="h-[50px] p-1 flex justify-center items-center bg-[#1f2937] w-full text-white">
+    <div className="max-w-[1440px]  w-[95%] flex flex-col gap-5 my-12 mx-auto relative">
+      <h1 className="uppercase text-2xl font-semibold text-center">
         Add New Product
-      </div>
+      </h1>
       <form
-        className="w-full min-h-[750px]  h-full p-4 flex flex-col bg-[#1f2937] gap-4"
+        className="w-full min-h-[750px]  h-full p-4 flex flex-col  gap-4"
         ref={formRef}
         onSubmit={(e) => handleFormSubmit(e)}
       >
         <div className="flex-grow h-full flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Name</label>
-            <input
-              className="w-full px-5 text-black bg-white p-3 outline-none"
-              type="text"
-              placeholder="Product Name"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {nameError}
-            </div>
-          </div>
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Price</label>
-            <input
-              className="w-full px-5 text-black bg-white p-3 outline-none"
-              type="number"
-              placeholder="Price ( Rs )"
-              onChange={(e) => {
-                setPrice(e.target.value);
-              }}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {priceError}
-            </div>
-          </div>
-          <div className="w-full flex flex-col gap-3">
-            <label className="w-full px-5 text-white">Description</label>
-            <textarea
-              className="resize-none h-max px-5 text-black bg-white p-3 outline-none min-h-[215px]"
-              type="text"
-              placeholder="Description"
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
-            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-              {descriptionError}
-            </div>
-          </div>
-        </div>
-        <div className="flex-grow flex flex-col justify-between gap-4">
-          <div className="w-full h-[calc(100%-40px)] flex flex-col gap-4">
+          <div className="flex gap-4 flex-col md:flex-row">
             <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">
+              <label className="w-full px-5 text-[#1F2937]">Name</label>
+              <input
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
+                type="text"
+                placeholder="Product Name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {nameError}
+              </div>
+            </div>
+            <div className="md:w-2/5 flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">Category</label>
+              <select
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
+                ref={categoryRef}
+              >
+                <option className="text-black text-sm" value="">
+                  Select a category
+                </option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {categoryError}
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-4 flex-col md:flex-row">
+            <div className="w-full flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">Price</label>
+              <input
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
+                type="number"
+                placeholder="Price ( Rs )"
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+              />
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {priceError}
+              </div>
+            </div>
+            <div className="w-full md:w-2/5 flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">
                 Stock Availability
               </label>
               <input
-                className="w-full px-5 text-black bg-white p-3 outline-none"
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
                 type="number"
                 placeholder="Stock ( ex- 99 )"
                 defaultValue={0}
@@ -202,53 +230,53 @@ const page = ({}) => {
                 {stockError}
               </div>
             </div>
-            <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">Category</label>
-              <select
-                className="w-full px-5 text-black bg-white p-3 outline-none"
-                ref={categoryRef}
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-                {categoryError}
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-3">
-              <label className="w-full px-5 text-white">Image</label>
-              <div className="w-full sm:flex grid grid-cols-2 sm:flex-wrap gap-4 now">
-                <label
-                  className="sm:w-[25%]  w-full aspect-square  flex sm:justify-start items-center bg-gray-200  "
-                  id="imageToUploads"
-                >
-                  <BiUpload size={50} />
-                  <input
-                    className="imageToUpload w-full px-5 text-black bg-white p-3
-                outline-none hidden"
-                    type="file"
-                    id="imageToUploads"
-                    onChange={(e) => {
-                      handleFileUploads(e.target.files[0]);
-                    }}
-                  />
-                </label>
-                <label className="sm:w-[25%] w-full aspect-square  flex justify-center items-center bg-gray-200  ">
-                  <img src={temporyImageView} alt="" />
-                </label>
-              </div>
-              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
-                {fileError}
-              </div>
-            </div>
           </div>
           <div className="w-full flex flex-col gap-3">
-            <button className="btn-2 min-w-[100%] ">Add</button>
+            <label className="w-full px-5 text-[#1F2937]">Description</label>
+            <textarea
+              className="resize-none h-max px-5 text-black text-sm bg-gray-200 p-3 outline-none min-h-[215px]"
+              type="text"
+              placeholder="Description"
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+              {descriptionError}
+            </div>
           </div>
+        </div>
+
+        <div className="w-full h-[calc(100%-40px)] flex sm:flex-row gap-4">
+          <div className="w-full md:w-2/4 flex-col gap-3">
+            <label className="w-full px-5 text-[#1F2937] ">Image</label>
+            <div className="w-full grid grid-cols-2 gap-4 mt-3">
+              <label
+                className=" w-full aspect-square  flex justify-center items-center bg-gray-200  "
+                id="imageToUploads"
+              >
+                <BiUpload size={50} />
+                <input
+                  className="imageToUpload w-full px-5 text-black text-sm bg-gray-200 p-3
+                outline-none hidden"
+                  type="file"
+                  id="imageToUploads"
+                  onChange={(e) => {
+                    handleFileUploads(e.target.files[0]);
+                  }}
+                />
+              </label>
+              <label className=" w-full aspect-square  flex justify-center items-center bg-gray-200  ">
+                <img src={temporyImageView} alt="" />
+              </label>
+            </div>
+            <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+              {fileError}
+            </div>
+          </div>
+        </div>
+        <div className="w-full flex flex-col gap-3">
+          <button className="btn-2 min-w-[100%] ">Add</button>
         </div>
       </form>
       {reqLoading && (
@@ -256,15 +284,9 @@ const page = ({}) => {
           <Loader size={"50px"} border={"5px"} />
         </div>
       )}
+      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };
 
 export default page;
-
-const Error = styled.div`
-  color: red;
-  margin-left: 20px;
-  font-size: 12px;
-  height: 10px;
-`;

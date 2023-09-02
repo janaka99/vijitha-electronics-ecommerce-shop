@@ -10,7 +10,6 @@ export async function GET(req, res) {
     await connectToDB();
     //find all available products
     const rs = await Item.find({ status: "available" }).populate("category");
-    console.log(rs);
     //return all the products
     return new Response(JSON.stringify(rs), {
       status: 200,
