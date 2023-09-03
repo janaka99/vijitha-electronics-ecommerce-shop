@@ -480,7 +480,10 @@ const page = () => {
             {errorList.email}
           </div>
 
-          <button className="btn-1 self-end min-w-[200px] w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-[#1A56DB] rounded-sm max-w-[200px] w-full self-end"
+            type="submit"
+          >
             Update Email
           </button>
           {loading.isEmailLoading && (
@@ -509,7 +512,10 @@ const page = () => {
           <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-left ">
             {errorList.name}
           </div>
-          <button className="btn-1 self-end min-w-[200px] w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-[#1A56DB] rounded-sm max-w-[200px] w-full self-end"
+            type="submit"
+          >
             Update Name
           </button>
           {loading.isNameLoading && (
@@ -539,7 +545,10 @@ const page = () => {
           <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-left ">
             {errorList.phone_number}
           </div>
-          <button className="btn-1 self-end min-w-[200px] w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-[#1A56DB] rounded-sm max-w-[200px] w-full self-end"
+            type="submit"
+          >
             Update Contact
           </button>
           {loading.isContactLoading && (
@@ -606,7 +615,10 @@ const page = () => {
               </div>
             </div>
           </div>
-          <button className="btn-1 self-end min-w-[200px] w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-[#1A56DB] rounded-sm max-w-[200px] w-full self-end"
+            type="submit"
+          >
             Update Address
           </button>
           {loading.isAddressLoading && (
@@ -634,7 +646,10 @@ const page = () => {
           <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-left ">
             {errorList.password}
           </div>
-          <button className="btn-1 self-end min-w-[200px] w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-[#1A56DB] rounded-sm max-w-[200px] w-full self-end"
+            type="submit"
+          >
             Update Password
           </button>
           {loading.isPasswordLoading && (
