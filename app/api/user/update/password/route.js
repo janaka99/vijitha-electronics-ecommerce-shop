@@ -8,8 +8,13 @@ export const POST = async (req, res) => {
 
   if (user !== false) {
     try {
-      const { email } = await req.json();
-      if (email == undefined || email == null || email == "") {
+      const { password } = await req.json();
+      if (
+        password == undefined ||
+        password == null ||
+        password == "" ||
+        password.length <= 8
+      ) {
         return new Response(
           JSON.stringify({
             message: "Check Your form again before submit again!",
@@ -20,28 +25,20 @@ export const POST = async (req, res) => {
         );
       }
       await connectToDB();
-      var crypto = require("crypto");
-      var vcode = crypto.randomBytes(20).toString("hex");
 
       await User.findByIdAndUpdate(user._id, {
-        email: email,
-        emailVerification: vcode,
-        isVerified: false,
+        password: password,
       });
 
       return new Response(
-        JSON.stringify({ message: "Successfully Updated Your Email" }),
+        JSON.stringify({ message: "Successfully Updated Your Password" }),
         {
           status: 200,
         }
       );
     } catch (error) {
-      let msg = "Something went wrong";
-      console.error(error.code);
-      if (error.code === 11000) {
-        msg = "Email is already registered";
-      }
-      return new Response(JSON.stringify({ message: msg }), {
+      console.log(error);
+      return new Response(JSON.stringify({ message: "Something went wrong" }), {
         status: 401,
       });
     }

@@ -134,44 +134,44 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
     setErrorListEmpty();
     let error = false;
     if (itemToUpdate.name === "") {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         name: "Name Can't be empty",
-      });
+      }));
 
       error = true;
     }
     if (itemToUpdate.price === "0") {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         price: "Product price cannot be 0",
-      });
+      }));
       error = true;
     } else if (typeof Number(itemToUpdate.price) == NaN) {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         price: "Invalid price",
-      });
+      }));
       error = true;
     } else if (Number(itemToUpdate.price) == 0) {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         price: "Product price cannot be 0",
-      });
+      }));
       error = true;
     }
     if (itemToUpdate.description === "") {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         description: "Description cannot be empty",
-      });
+      }));
       error = true;
     }
     if (typeof Number(itemToUpdate.qty) == NaN) {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         quantity: "Invalid quantity",
-      });
+      }));
       error = true;
     }
     if (
@@ -179,10 +179,10 @@ const page = (props, { setUpdateInventoryProductWindow }) => {
       categoryRef.current.value == "" ||
       categoryRef.current.value === 0
     ) {
-      setErrorList({
-        ...errorList,
+      setErrorList((prev) => ({
+        ...prev,
         category: "Select a category",
-      });
+      }));
       error = true;
     }
     if (error === false) {

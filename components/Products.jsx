@@ -36,9 +36,6 @@ const Products = ({ setCart }) => {
         {products.map((item) => (
           <ProductCard item={item} key={item.price} />
         ))}
-        {products.map((item) => (
-          <ProductCard item={item} key={item.price} />
-        ))}
       </div>
       <button className="btn-1 my-12 mx-auto">Next</button>
     </div>

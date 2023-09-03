@@ -10,8 +10,8 @@ const ProductCard = ({ item }) => {
     >
       <div className="w-full aspect-square p-2">
         <img
-          src={`${item.src} contain object-center`}
-          className="w-full h-full bg-red-600"
+          src={`${item.src} contain object-center p-2`}
+          className="w-full h-full bg-[#eeeeee]"
           alt=""
         />
       </div>

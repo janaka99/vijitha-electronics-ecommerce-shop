@@ -64,7 +64,7 @@ const page = (props) => {
     <div className="max-w-[1440px] w-[95%] mx-auto flex flex-col gap-12 py-12 min-h-[calc(100vh-80px)]">
       <div className="w-full flex gap-12  flex-col lg:flex-row">
         <div className=" flex justify-center lg:justify-start item-start ">
-          <div className="max-w-[500px] w-full aspect-square bg-gray-200 p-6 flex justify-center items-center">
+          <div className="max-w-[500px] min-w-[400px] w-full aspect-square bg-gray-200 p-6 flex justify-center items-center">
             <img
               className="object-contain object-center"
               src={`${product?.src}`}

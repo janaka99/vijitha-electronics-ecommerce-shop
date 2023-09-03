@@ -8,8 +8,12 @@ export const POST = async (req, res) => {
 
   if (user !== false) {
     try {
-      const { email } = await req.json();
-      if (email == undefined || email == null || email == "") {
+      const { phone_number } = await req.json();
+      if (
+        phone_number == undefined ||
+        phone_number == null ||
+        phone_number == ""
+      ) {
         return new Response(
           JSON.stringify({
             message: "Check Your form again before submit again!",
@@ -19,27 +23,32 @@ export const POST = async (req, res) => {
           }
         );
       }
+      if (typeof Number(phone_number) == NaN) {
+        return new Response(
+          JSON.stringify({
+            message: "Contact Should Be Numbers",
+          }),
+          {
+            status: 400,
+          }
+        );
+      }
       await connectToDB();
-      var crypto = require("crypto");
-      var vcode = crypto.randomBytes(20).toString("hex");
 
       await User.findByIdAndUpdate(user._id, {
-        email: email,
-        emailVerification: vcode,
-        isVerified: false,
+        phoneNumber: phone_number,
       });
 
       return new Response(
-        JSON.stringify({ message: "Successfully Updated Your Email" }),
+        JSON.stringify({ message: "Successfully Updated Your Contact Number" }),
         {
           status: 200,
         }
       );
     } catch (error) {
       let msg = "Something went wrong";
-      console.error(error.code);
       if (error.code === 11000) {
-        msg = "Email is already registered";
+        msg = "Phone Number already registered";
       }
       return new Response(JSON.stringify({ message: msg }), {
         status: 401,

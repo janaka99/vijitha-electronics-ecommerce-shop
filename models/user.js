@@ -11,6 +11,14 @@ const UserSchema = new Schema(
       required: [true, "Quentity is required"],
       unique: true,
     },
+    src: {
+      type: String,
+      unique: true,
+    },
+    imageId: {
+      type: String,
+      unique: true,
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -22,7 +30,7 @@ const UserSchema = new Schema(
     },
     NIC: {
       type: String,
-      required: [true, "NIC is required"],
+      // required: [true, "NIC is required"],
       unique: true,
     },
     address1: {
@@ -47,16 +55,16 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["manager", "admin", "employee"],
-      default: "manager",
+      enum: ["manager", "admin", "employee", "customer"],
+      default: "customer",
     },
     isVerified: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     accountStatus: {
       type: String,
-      enum: ["working", "resigned"],
+      enum: ["working", "closed"],
       default: "working",
     },
     cart: [
