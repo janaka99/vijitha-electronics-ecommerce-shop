@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { BiUpload } from "react-icons/bi";
-import Loader from "@components/Loader";
 import { useRouter } from "next/navigation";
-import PopUp from "@components/PopUp";
 import { toast, Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import SpinLoader from "@components/SpinLoader";
@@ -14,12 +12,6 @@ const page = ({}) => {
   const { data, status } = useSession();
 
   const router = useRouter();
-
-  const [popUp, setPopUp] = useState({
-    message: "",
-    type: "",
-    show: false,
-  });
 
   const getCategories = async () => {
     try {
@@ -56,12 +48,6 @@ const page = ({}) => {
   const [stockError, setStockError] = useState("");
   const [fileError, setFileError] = useState("");
   const [categoryError, setCategoryError] = useState("");
-
-  const handleFormView = () => {
-    formRef.current.reset();
-    setFile(null);
-    setTemporyImageView(null);
-  };
 
   const handleFileUploads = async (file) => {
     setFile(null);
@@ -133,21 +119,13 @@ const page = ({}) => {
 
       if (res.ok) {
         setReqLoading(false);
-        setPopUp({
-          message: "Product successfully added",
-          type: "success",
-          show: true,
-        });
+        toast.success("Successfully created new product");
         await delay(5000);
         router.push("/inventory");
       } else {
         setReqLoading(false);
 
-        setPopUp({
-          message: "Product add failed",
-          type: "error",
-          show: true,
-        });
+        toast.error("Product add failed");
       }
     } else {
       setReqLoading(false);
@@ -302,7 +280,6 @@ const page = ({}) => {
           <SpinLoader />
         </div>
       )}
-      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };
