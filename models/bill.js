@@ -12,6 +12,10 @@ const BillSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Item",
         },
+        reviewed: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     cashier: {

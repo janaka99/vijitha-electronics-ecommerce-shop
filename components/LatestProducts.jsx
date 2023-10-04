@@ -9,7 +9,7 @@ const LatestProducts = () => {
   //get all the products available
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/item/all", {
+      const res = await fetch("/api/item/latest-products", {
         method: "GET",
       });
       const newRes = await res.json();
@@ -34,18 +34,14 @@ const LatestProducts = () => {
         Latest Products
       </h1>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4 gap-6">
-        {products.map((item) => (
-          <ProductCard item={item} key={item.price} />
-        ))}
-        {products.map((item) => (
-          <ProductCard item={item} key={item.price} />
+        {products.map((item, i) => (
+          <ProductCard item={item} key={i} />
         ))}
       </div>
       <a
         href="/shop/products"
         target="_black"
-        rel="noopener noreferrer"
-        nonferre
+        rel="noreferrer"
         className="btn-1 my-12 mx-auto"
       >
         See All Products

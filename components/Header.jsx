@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import styled from "styled-components";
 import WholePageLoading from "./WholePageLoading";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
@@ -24,22 +23,34 @@ const Header = () => {
   };
 
   if (status === "loading") {
-    return <WholePageLoading />;
+    return (
+      <div className="w-screen h-[50px] bg-[#1F2937] flex justify-start items-center">
+        <div className="w-[90%] max-w-[1440px] mx-auto">
+          <a className="cursor-pointer text-white" href="/">
+            Vijitha Electronics
+          </a>
+        </div>
+      </div>
+    );
   } else {
     return (
-      <Nav>
-        <NavContainer>
-          <Logo className="cursor-pointer " href="/">
+      <header className="bg-[#1f2937] w-full h-[50px] relative">
+        <nav className="w-[90%] max-w-[1440px] mx-auto flex justify-between items-center h-full">
+          <a className="cursor-pointer text-white" href="/">
             Vijitha Electronics
-          </Logo>
-          <div className="flex gap-12 items-center">
+          </a>
+          <div className="flex h-full gap-12 items-center">
             <Link href="/" className="relative ">
               <AiOutlineShoppingCart size={24} className="text-white" />
               <span className="absolute right-[-12px] -top-[10px] z-10 text-[#1A56DB] font-bold text-lg">
                 5
               </span>
             </Link>
-            <NavLinks navBarVisibility={navBarVisibility}>
+            <div
+              className={`absolute top-[50px] md:top-0 right-0 bg-[#1f2937] flex-col md:flex-row flex h-[calc(100vh-50px)] gap-10 pt-8  md:pt-0 w-[200px] md:w-fit items-center transition-all text-white md:h-full md:gap-4 text-sm md:static md:translate-x-0 ${
+                navBarVisibility ? "translate-x-0" : "translate-x-[200px]"
+              } `}
+            >
               <Link href="/">Home</Link>
 
               {status === "authenticated" && data !== null ? (
@@ -57,73 +68,18 @@ const Header = () => {
                   Log In
                 </Link>
               )}
-            </NavLinks>
+            </div>
           </div>
-          <HamburgerMenu
+          <GiHamburgerMenu
             onClick={handleNavBar}
             color="#fff"
             size={30}
-            className="cursor-pointer lg:"
+            className="cursor-pointer flex md:hidden"
           />
-        </NavContainer>
-      </Nav>
+        </nav>
+      </header>
     );
   }
 };
 
 export default Header;
-
-const Nav = styled.header`
-  background-color: #1f2937;
-  width: 100%;
-  height: 50px;
-  position: relative;
-`;
-
-const NavContainer = styled.nav`
-  width: 95%;
-  max-width: 1440px;
-  margin-inline: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-`;
-
-const Logo = styled.a`
-  color: #ffffff;
-`;
-
-const NavLinks = styled.div`
-  color: #ffffff;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  gap: 15px;
-  font-size: 14px;
-  line-height: 16px;
-
-  @media screen and (max-width: 768px) {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: #1f2937;
-    flex-direction: column;
-    height: calc(100vh - 50px);
-    gap: 40px;
-    padding-top: 30px;
-    width: 200px;
-    align-items: center;
-    transition: all 0.5s ease-in-out;
-    transform: ${(props) =>
-      props.navBarVisibility ? "translateX(0)" : "translateX(200px)"};
-  }
-`;
-
-const HamburgerMenu = styled(GiHamburgerMenu)`
-  display: none;
-
-  @media screen and (max-width: 768px) {
-    display: flex;
-  }
-`;

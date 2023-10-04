@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 
 const CartItems = ({ cart }) => {
+  const handleCheckout = () => {};
+
   return (
     <>
       {cart.length <= 0 ? (
@@ -31,9 +33,12 @@ const CartItems = ({ cart }) => {
               </div>
             </div>
           ))}
-          <button className="px-8 mx-auto py-2 bg-color-1 text-white w-full mt-6 border-[1px] border-[#1A56DB] hover:bg-[#1a57dbf0]">
+          <a
+            href="/shop/buy/checkout"
+            className="px-8 mx-auto py-2 bg-color-1 text-white w-full mt-6 border-[1px] border-[#1A56DB] hover:bg-[#1a57dbf0]"
+          >
             Checkout
-          </button>
+          </a>
         </>
       )}
     </>

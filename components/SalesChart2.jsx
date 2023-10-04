@@ -10,7 +10,6 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import styled from "styled-components";
 import Loader from "./Loader";
 
 ChartJS.register(
@@ -94,66 +93,28 @@ const SalesChart2 = () => {
   };
 
   return (
-    <Container>
-      <TopBar>
-        <Select
+    <div className="w-[90%] mx-auto flex flex-col mt-[30px]">
+      <div>
+        <select
+          className="w-full bg-[#f1f2f2] mt-[20px] py-[10px] px-[15px] outline-none"
           defaultValue={"last7days"}
           onChange={(e) => handleChartChange(e.target.value)}
         >
           <option value="last7days">Last 7 Days</option>
           <option value="last31days">Last 31 Days</option>
-        </Select>
-      </TopBar>
-      <BarContainer>
+        </select>
+      </div>
+      <div className="w-full min-h-full h-[500px] relative">
         {loading ? (
-          <LoadingDiv>
+          <div className="absolute top-0 left-0 w-full h-full min-h-[500px] bg-[#ffffff] backdrop-blur-[1px] flex justify-center items-center">
             <Loader size={"50px"} border={"5px"} />
-          </LoadingDiv>
+          </div>
         ) : (
           <Bar options={options} data={data} />
         )}
-      </BarContainer>
-    </Container>
+      </div>
+    </div>
   );
 };
 
 export default SalesChart2;
-
-const Container = styled.div`
-  width: 90%;
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
-`;
-const TopBar = styled.div`
-  /* height: 30px; */
-`;
-
-const Select = styled.select`
-  width: 100%;
-  background-color: #f1f2f2;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 10px 15px;
-  outline: none;
-`;
-
-const BarContainer = styled.div`
-  width: 95%;
-  min-height: 100%;
-  position: relative;
-`;
-
-const LoadingDiv = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #ffffff;
-  backdrop-filter: blur(1px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;

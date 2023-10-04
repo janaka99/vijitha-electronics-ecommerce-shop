@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Loader from "@components/Loader";
+import SpinLoader from "@components/SpinLoader";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
@@ -31,11 +32,12 @@ const Login = () => {
     setReqLoading(false);
   };
 
-  useEffect(() => {
-    console.log("asdasd");
-    if (status === "authenticated" && data !== null) router.push("/");
-    console.log("asdasd ", status);
-  }, [status, router]);
+  if (status === "loading") {
+    return <SpinLoader />;
+  }
+  if (status === "authenticated") {
+    router.push("/");
+  }
 
   return (
     <Main>

@@ -2,24 +2,23 @@
 import InventoryCategoryItem from "@components/InventoryCategoryItem";
 import Loader from "@components/Loader";
 import PopUp from "@components/PopUp";
+import SpinLoader from "@components/SpinLoader";
+import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import toast from "react-hot-toast";
 
 const page = () => {
+  const { data, status } = useSession();
   const [categories, setCategories] = useState([]);
   const [titleError, settitleError] = useState("");
   const [reqLoading, setReqLoading] = useState(false);
   const [title, settitle] = useState("");
-
-  const [popUp, setPopUp] = useState({
-    message: "",
-    type: "",
-    show: false,
-  });
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
 
   const formRef = useRef();
 
   const getCategories = async () => {
+    setIsCategoriesLoading(true);
     try {
       const res = await fetch("/api/category/all", {
         method: "GET",
@@ -27,10 +26,15 @@ const page = () => {
       const newRes = await res.json();
       if (res.ok) {
         setCategories(newRes);
+        setIsCategoriesLoading(false);
       } else {
-        // settitleError(newRes.message);
+        setIsCategoriesLoading(false);
+        toast.error("Something went wrong");
       }
-    } catch (error) {}
+    } catch (error) {
+      setIsCategoriesLoading(false);
+      toast.error("Something went wrong");
+    }
   };
 
   const handleFormView = () => {
@@ -59,33 +63,31 @@ const page = () => {
         getCategories();
         handleFormView();
         setReqLoading(false);
-
-        setPopUp({
-          message: "Category successfully added",
-          type: "success",
-          show: true,
-        });
+        toast.success("Category successfully added");
       } else {
         setReqLoading(false);
-        setPopUp({
-          message: "Something went wrong try again later",
-          type: "error",
-          show: true,
-        });
+        toast.error("Something went wrong");
       }
     } catch (error) {
-      setPopUp({
-        message: "Something went wrong try again later",
-        type: "error",
-        show: true,
-      });
       setReqLoading(false);
+      toast.error("Something went wrong");
     }
   };
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  if (status === "loading") {
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <SpinLoader />
+      </div>
+    );
+  }
+  if (status === "unauthenticated") {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="max-w-[720px] w-[95%] mx-auto my-12 flex flex-col gap-12 relative">
@@ -116,7 +118,7 @@ const page = () => {
         </div>
         {reqLoading && (
           <div className="absolute w-full h-full top-0 left-0 bg-[#ffffff03] backdrop-blur-[1px] flex justify-center items-center">
-            <Loader size={"50px"} border={"5px"} />
+            <SpinLoader />
           </div>
         )}
       </form>
@@ -124,16 +126,18 @@ const page = () => {
         Categories
       </h1>
       <div className="">
-        {categories.map((category) => (
-          <InventoryCategoryItem
-            key={category._id}
-            category={category}
-            getCategories={getCategories}
-            setPopUp={setPopUp}
-          />
-        ))}
+        {isCategoriesLoading ? (
+          <SpinLoader />
+        ) : (
+          categories.map((category) => (
+            <InventoryCategoryItem
+              key={category._id}
+              category={category}
+              getCategories={getCategories}
+            />
+          ))
+        )}
       </div>
-      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };

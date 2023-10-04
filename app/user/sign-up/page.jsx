@@ -6,10 +6,15 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import WholePageLoading from "@components/WholePageLoading";
 import { resolve } from "styled-jsx/css";
+import toast from "react-hot-toast";
+import SpinLoader from "@components/SpinLoader";
+import ErrorPage from "@components/ErrorPage";
 // import Loader from "./Loader";
 
 const page = () => {
   const router = useRouter();
+
+  const formRef = useRef();
   const { data: session, status } = useSession();
 
   const [loading, setloading] = useState(false);
@@ -47,13 +52,8 @@ const page = () => {
     });
   };
 
-  const asdasd = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("asdasd ", errorList);
     setAllErrorsEmpty();
     setloading(true);
     let error = false;
@@ -91,7 +91,8 @@ const page = () => {
         ...prev,
         phone_number: "Contact Cannot Be Empty",
       }));
-    } else if (typeof Number(user.phone_number) == NaN) {
+    }
+    if (isNaN(Number(user.phone_number))) {
       error = true;
       setErrorList((prev) => ({
         ...prev,
@@ -113,36 +114,47 @@ const page = () => {
       }));
     }
     console.log(user);
+    if (error == true) {
+      toast.error("Check the form and try again");
+      setloading(false);
+      return;
+    }
+    try {
+      const res = await fetch("/api/user/sign-up", {
+        method: "POST",
+        body: JSON.stringify(user),
+      });
 
-    await asdasd();
-    console.log(errorList);
-    //   try {
-    //     const res = await fetch("/api/user/reasign", {
-    //       method: "POST",
-    //       body: JSON.stringify(updatedEmployee),
-    //     });
+      if (res.ok) {
+        setloading(false);
+        formRef.current.reset();
+        toast.success("Successfully signed up. Verify your email address");
+      } else {
+        setloading(false);
 
-    //     if (res.ok) {
-    //       console.log(res);
-    //     } else {
-    //       console.log(res);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    //   getUsers();
-    setloading(false);
+        toast.error("Something went wrong, please try again");
+      }
+    } catch (error) {
+      setloading(false);
+
+      toast.error("Something went wrong, please try again");
+    }
   };
 
   if (status === "loading") {
-    <WholePageLoading />;
-  } else if (status === "unauthenticated") {
-    router.push("/user/login");
+    return <SpinLoader />;
+  }
+  if (status === "authenticated") {
+    return <ErrorPage />;
   }
 
   return (
     <div className="max-w-[700px] w-[95%] mx-auto my-16">
-      <form onSubmit={handleFormSubmit} className="w-full flex flex-col gap-3">
+      <form
+        ref={formRef}
+        onSubmit={handleFormSubmit}
+        className="w-full flex flex-col gap-3"
+      >
         <div className="w-full flex flex-col gap-2 mb-12">
           <h1 className=" uppercase text-2xl font-semibold text-center">
             Sign Up
@@ -276,18 +288,6 @@ const page = () => {
           </button>
         </div>
       </form>
-      {/* <AddNewEmp addNewEmpWindow={addNewEmpWindow}>
-        <AddNewEmployee
-          setAddNewEmpWindow={setAddNewEmpWindow}
-          getUsers={getUsers}
-        />
-      </AddNewEmp> */}
-      {loading && (
-        // <LoadingDiv>
-        //   <Loader size={"50px"} border={"5px"} />
-        // </LoadingDiv>
-        <></>
-      )}
     </div>
   );
 };

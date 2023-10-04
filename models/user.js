@@ -1,4 +1,4 @@
-import mongoose, { Schema, models, model } from "mongoose";
+import mongoose, { Schema, models, model, trusted } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -50,8 +50,13 @@ const UserSchema = new Schema(
       unique: true,
     },
     passResetCode: {
-      type: String,
-      default: null,
+      code: {
+        type: String,
+        default: null,
+      },
+      expireDate: {
+        type: Date,
+      },
     },
     role: {
       type: String,
@@ -60,25 +65,49 @@ const UserSchema = new Schema(
     },
     isVerified: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     accountStatus: {
       type: String,
       enum: ["working", "closed"],
       default: "working",
     },
-    cart: [
+    shippingAddress: [
       {
-        itemId: {
-          type: Schema.Types.ObjectId,
-          ref: "Item",
+        name: { type: String, required: true },
+        address1: {
+          type: String,
+          required: [true, "Adress 1 is required"],
         },
-        quantity: {
+        address2: {
+          type: String,
+          required: [true, "Adress 2 is required"],
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        state: {
+          type: String,
+          required: true,
+        },
+        country: {
+          value: {
+            type: String,
+          },
+          label: {
+            type: String,
+          },
+        },
+        postalCode: {
           type: Number,
-          default: 1,
+          required: true,
+        },
+        contact: {
+          type: Number,
+          required: true,
         },
       },
-      { timestamps: true },
     ],
   },
   { timestamps: true }

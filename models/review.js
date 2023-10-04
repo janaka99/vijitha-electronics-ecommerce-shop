@@ -2,10 +2,14 @@ import mongoose, { Schema, models, model } from "mongoose";
 
 const ReviewChema = new Schema(
   {
-    name: {
+    message: {
       type: String,
       required: [true, "Name is required"],
       unique: true,
+    },
+    rating: {
+      type: Number,
+      enum: [1, 2, 3, 4, 5],
     },
     addedBy: {
       type: Schema.Types.ObjectId,
@@ -14,6 +18,10 @@ const ReviewChema = new Schema(
     item: {
       type: Schema.Types.ObjectId,
       ref: "Item",
+    },
+    orderItem: {
+      type: Schema.Types.ObjectId,
+      ref: "OrderItem",
     },
   },
   { timestamps: true }

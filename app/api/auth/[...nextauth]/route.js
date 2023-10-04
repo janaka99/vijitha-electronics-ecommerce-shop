@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@models/user";
 import { connectToDB } from "@utils/database";
+import bcrypt from "bcrypt";
 
 const handler = NextAuth({
   providers: [
@@ -10,17 +11,30 @@ const handler = NextAuth({
       credentials: {},
       async authorize(credentials, req) {
         const { email, password } = credentials;
+        if (email == "" || password == "") {
+          return new Response(
+            JSON.stringify({ message: "Invalid credentials" }),
+            { status: 401 }
+          );
+        }
         try {
           //perform user verification logic
           await connectToDB();
           console.log(email, password);
           const user = await User.findOne({
             email: email,
-            password: password,
+            isVerified: true,
           });
-          console.log(user);
           if (!user) {
             throw new Error("Invalid credentials");
+          }
+          let result = await bcrypt.compare(password, user.password);
+          console.log(result);
+          if (!result) {
+            return new Response(
+              JSON.stringify({ message: "Invalid credentials" }),
+              { status: 401 }
+            );
           }
 
           return {

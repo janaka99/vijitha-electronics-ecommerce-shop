@@ -635,7 +635,7 @@ const page = () => {
           <input
             className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
             type="text"
-            placeholder="Contact Number"
+            placeholder="New Password"
             onChange={(e) => {
               setUser({
                 ...user,

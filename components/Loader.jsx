@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+// /Cheked
+
 const Loader = ({ size, border }) => {
   return <Div size={size} border={border}></Div>;
 };

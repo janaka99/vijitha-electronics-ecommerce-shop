@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
-import styled from "styled-components";
 import EditCategory from "./EditCategory";
 
-const InventoryCategoryItem = ({ category, getCategories, setPopUp }) => {
-  const [popUpwindow, setpopUpwindow] = useState(false);
+//chekced
+
+const InventoryCategoryItem = ({ category, getCategories }) => {
   const [categoryEditWindow, setcategoryEditWindow] = useState(false);
 
   return (
@@ -31,7 +31,6 @@ const InventoryCategoryItem = ({ category, getCategories, setPopUp }) => {
             setcategoryEditWindow={setcategoryEditWindow}
             getCategories={getCategories}
             category={category}
-            setPopUp={setPopUp}
           />
         </div>
       </div>

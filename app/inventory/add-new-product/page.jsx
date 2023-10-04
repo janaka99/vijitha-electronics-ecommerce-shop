@@ -4,9 +4,14 @@ import { BiUpload } from "react-icons/bi";
 import Loader from "@components/Loader";
 import { useRouter } from "next/navigation";
 import PopUp from "@components/PopUp";
+import { toast, Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import SpinLoader from "@components/SpinLoader";
+import ErrorPage from "@components/ErrorPage";
 
 const page = ({}) => {
   const [categories, setCategories] = useState([]);
+  const { data, status } = useSession();
 
   const router = useRouter();
 
@@ -26,9 +31,11 @@ const page = ({}) => {
       if (res.ok) {
         setCategories(newRes);
       } else {
-        // settitleError(newRes.message);
+        toast.error("Something went wrong");
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   const formRef = useRef();
@@ -151,6 +158,17 @@ const page = ({}) => {
   useEffect(() => {
     getCategories();
   }, []);
+
+  if (status === "loading") {
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <SpinLoader />
+      </div>
+    );
+  }
+  if (status === "unauthenticated") {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="max-w-[1440px]  w-[95%] flex flex-col gap-5 my-12 mx-auto relative">
@@ -281,7 +299,7 @@ const page = ({}) => {
       </form>
       {reqLoading && (
         <div className="absolute w-full h-full bg-[#ffffff03] backdrop-blur-[1px] flex justify-center items-center">
-          <Loader size={"50px"} border={"5px"} />
+          <SpinLoader />
         </div>
       )}
       {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}

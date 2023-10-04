@@ -1,11 +1,11 @@
-import { IsLoggedIn } from "@middlewares";
+import { IsLoggedIn, IsLoggedInAsAdmin } from "@middlewares";
 import Category from "@models/category";
 import { connectToDB } from "@utils/database";
 import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   //check the if the user is logged and has authority to delete a product
-  const loggedUser = await IsLoggedIn(req);
+  const loggedUser = await IsLoggedInAsAdmin(req);
   if (loggedUser !== false) {
     try {
       const { categoryId } = await req.json();
@@ -26,9 +26,7 @@ export async function POST(req, res) {
       } else {
         connectToDB();
         //else find the category and delete it from the database
-        const rs = await Category.findOne({ id: categoryId });
-        console.log(rs);
-        await rs.deleteOne();
+        await Category.findOneAndDelete({ _id: categoryId });
 
         return new Response(JSON.stringify({ message: "Success" }), {
           status: 200,

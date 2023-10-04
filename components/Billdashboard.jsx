@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Loader from "./Loader";
-import BilltableData from "./BilltableData";
+import BilltableData from "./OrdertableData";
 
 const Billdashboard = () => {
   const [todaySorFar, settodaySorFar] = useState(0);

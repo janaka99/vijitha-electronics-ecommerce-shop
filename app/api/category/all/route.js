@@ -9,7 +9,7 @@ export async function GET(req, res) {
   if (loggedUser !== false) {
     try {
       connectToDB();
-      const rs = await Category.find({});
+      const rs = await Category.find();
 
       return new Response(JSON.stringify(rs), {
         status: 200,

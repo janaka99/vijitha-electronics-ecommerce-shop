@@ -2,13 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
+import SpinLoader from "./SpinLoader";
 
-const EditCategory = ({
-  getCategories,
-  category,
-  setcategoryEditWindow,
-  setPopUp,
-}) => {
+//cheked
+
+const EditCategory = ({ getCategories, category, setcategoryEditWindow }) => {
   const [title, settitle] = useState(category.name);
   const [titleError, settitleError] = useState("");
   const [reqLoading, setReqLoading] = useState(false);
@@ -22,6 +21,7 @@ const EditCategory = ({
     setReqLoading(true);
     if (title == "") {
       settitleError("Category name cannot be empty");
+      setReqLoading(false);
       return;
     }
     const data = {
@@ -35,19 +35,10 @@ const EditCategory = ({
     const newRes = await res.json();
     if (res.ok) {
       getCategories();
-
       handleFormView();
-      setPopUp({
-        message: "SuccessFully Updated",
-        type: "success",
-        show: true,
-      });
+      toast.success("Successfully updated category");
     } else {
-      setPopUp({
-        message: "Something went wrong try again later",
-        type: "error",
-        show: true,
-      });
+      toast.error("Something went wrong");
     }
     setReqLoading(false);
   };
@@ -67,33 +58,16 @@ const EditCategory = ({
         setReqLoading(false);
         getCategories();
         handleFormView();
-        setPopUp({
-          message: "Successfully deleted the category",
-          type: "success",
-          show: true,
-        });
+        toast.success("Successfully deleted the category");
       } else {
         setReqLoading(false);
-        setPopUp({
-          message: "Something went wrong try again later",
-          type: "error",
-          show: true,
-        });
+        toast.error("Something went wrong");
       }
     } catch (error) {
       setReqLoading(false);
-
-      setPopUp({
-        message: "Something went wrong try again later",
-        type: "error",
-        show: true,
-      });
+      toast.error("Something went wrong");
     }
   };
-
-  useEffect(() => {
-    settitle(category.name);
-  }, []);
 
   return (
     <div className="w-full p-2 relative">
@@ -123,7 +97,7 @@ const EditCategory = ({
       </div>
       {reqLoading && (
         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-[#ffffff03] backdrop-blur-[1px]">
-          <Loader size={"50px"} border={"5px"} />
+          <SpinLoader />
         </div>
       )}
     </div>

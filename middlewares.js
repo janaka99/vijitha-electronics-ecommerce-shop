@@ -13,7 +13,13 @@ export async function IsLoggedInAsAdmin(req, next) {
         const user = await User.findOne({
           $and: [
             { email: decoded.email },
-            { $or: [{ role: "manager" }, { role: "admin" }] },
+            {
+              $or: [
+                { role: "manager" },
+                { role: "admin" },
+                { role: "employee" },
+              ],
+            },
           ],
         });
         if (!user) {
