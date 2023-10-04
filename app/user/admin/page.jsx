@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import WholePageLoading from "../../../components/WholePageLoading";
+import SpinLoader from "@components/SpinLoader";
 
 const page = () => {
   const { data, status } = useSession();
@@ -11,7 +11,7 @@ const page = () => {
   const [loading, setloading] = useState(false);
 
   if (status === "loading") {
-    <WholePageLoading />;
+    <SpinLoader />;
   } else if (status === "unauthenticated") {
     router.push("/user/login");
   } else {

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { TbCategory } from "react-icons/tb";
 import { FiShoppingBag } from "react-icons/fi";
-import ProductsCategories from "@components/ProductsCategories";
+import ProductsCategories from "@/components/ProductsCategories";
 import CartItems from "@components/CartItems";
 import Products from "@components/Products";
 import SpinLoader from "@components/SpinLoader";

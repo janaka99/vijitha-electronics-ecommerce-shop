@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import WholePageLoading from "@components/WholePageLoading";
+import WholePageLoading from "@/components/WholePageLoading";
 import { resolve } from "styled-jsx/css";
 import PopUp from "@components/PopUp";
 import Loader from "@components/Loader";

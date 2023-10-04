@@ -11,7 +11,7 @@ const nextConfig = {
   images: {
     domains: ["localhost", "firebasestorage.googleapis.com"],
   },
-  pageDir: "./app",
+  // pageDir: "./app",
 };
 
 module.exports = nextConfig;
