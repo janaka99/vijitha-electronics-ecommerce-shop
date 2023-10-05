@@ -106,10 +106,16 @@ const Inventory = () => {
         <div className="w-full bg-[#fff]">
           <div className="p-3 w-full md:h-[60px] gap-3 md:gap-0 flex flex-col md:flex-row justify-between">
             <div className="h-full flex gap-2">
-              <a className="btn-2" href="/inventory/add-new-product">
+              <a
+                className="btn-2"
+                href="/admin-dashboard/inventory/add-new-product"
+              >
                 Add New Product &nbsp; <MdProductionQuantityLimits />{" "}
               </a>
-              <a className="btn-2" href="/inventory/manage-categories">
+              <a
+                className="btn-2"
+                href="/admin-dashboard/inventory/manage-categories"
+              >
                 Manage Categories &nbsp; <BiCategoryAlt />{" "}
               </a>
             </div>

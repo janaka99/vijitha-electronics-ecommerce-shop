@@ -1,3 +1,4 @@
+import Category from "@models/category";
 import Item from "@models/item";
 import { connectToDB } from "@utils/database";
 
@@ -8,6 +9,7 @@ export async function GET(req, res) {
     const rs = await Item.find({ status: "available" })
       .populate({
         path: "category",
+        model: Category,
       })
       .sort({ createdAt: -1 })
       .limit(8);

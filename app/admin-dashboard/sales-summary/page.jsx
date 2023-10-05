@@ -8,6 +8,8 @@ import OrdertableData from "@components/OrdertableData";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import ErrorPage from "@components/ErrorPage";
+import SalesChart from "@components/SalesChart";
+import SalesChart2 from "@components/SalesChart2";
 
 const Button = ({ title, total, filter, handleTableView }) => {
   return (
@@ -19,7 +21,7 @@ const Button = ({ title, total, filter, handleTableView }) => {
         {title}
       </div>
       <div className="text-[25px] p-2 w-full flex justify-between text-white">
-        {total} <span className="text-blue-500 font-bold">LKR</span>
+        {total} <span className="text-blue-500 font-bold">$</span>
       </div>
     </button>
   );
@@ -147,6 +149,10 @@ const page = () => {
         </div>
       ) : (
         <>
+          <div className="flex gap-2 ">
+            <SalesChart2 />
+            <SalesChart />
+          </div>
           <div className="w-full p-1 grid grid-cols-4 gap-2">
             <Button
               title={"Today So Far"}

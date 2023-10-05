@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import Loader from "./Loader";
+import SpinLoader from "./SpinLoader";
 
 ChartJS.register(
   CategoryScale,
@@ -22,22 +23,24 @@ ChartJS.register(
 );
 
 const SalesChart2 = () => {
-  const [bills, setbills] = useState([]);
+  const [chartDataType, setChartDatatype] = useState("last7days");
   const [dataSet, setdataSet] = useState([]);
   const [loading, setloading] = useState(false);
 
   //get all the users available
-  const getAllBills = async () => {
+  const getAllOrderData = async () => {
     setloading(true);
     try {
-      const res = await fetch("/api/bill/all/last7days", {
-        method: "GET",
-      });
+      const res = await fetch(
+        `/api/order/admin/get-sales-data/${chartDataType}`,
+        {
+          method: "GET",
+        }
+      );
       const newRes = await res.json();
+      console.log(newRes);
       if (res.ok) {
-        setbills(newRes);
-      } else {
-        // settitleError(newRes.message);
+        setdataSet(newRes);
       }
     } catch (error) {
       console.log(error);
@@ -46,11 +49,12 @@ const SalesChart2 = () => {
   };
 
   useEffect(() => {
-    getAllBills();
-  }, []);
+    getAllOrderData();
+  }, [chartDataType]);
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
@@ -63,37 +67,22 @@ const SalesChart2 = () => {
   };
 
   const data = {
-    labels: bills.map((dt) => dt.date),
+    labels: dataSet.map((dt) => dt.date),
     datasets: [
       {
         label: "Total Cost",
-        data: bills.map((dt) => dt.totalCost),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        data: dataSet.map((dt) => dt.total),
+        backgroundColor: "#1A56DB",
       },
     ],
   };
 
   const handleChartChange = async (d) => {
-    setloading(true);
-    try {
-      const res = await fetch("/api/bill/all/" + d, {
-        method: "GET",
-      });
-      const newRes = await res.json();
-      console.log("last 31 days ", newRes);
-      if (res.ok) {
-        setbills(newRes);
-      } else {
-        // settitleError(newRes.message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setloading(false);
+    setChartDatatype(d);
   };
 
   return (
-    <div className="w-[90%] mx-auto flex flex-col mt-[30px]">
+    <div className="w-[90%] mx-auto flex flex-col ">
       <div>
         <select
           className="w-full bg-[#f1f2f2] mt-[20px] py-[10px] px-[15px] outline-none"
@@ -104,10 +93,10 @@ const SalesChart2 = () => {
           <option value="last31days">Last 31 Days</option>
         </select>
       </div>
-      <div className="w-full min-h-full h-[500px] relative">
+      <div className="w-full aspect-[8/5]  relative ">
         {loading ? (
-          <div className="absolute top-0 left-0 w-full h-full min-h-[500px] bg-[#ffffff] backdrop-blur-[1px] flex justify-center items-center">
-            <Loader size={"50px"} border={"5px"} />
+          <div className="absolute top-0 left-0 w-full h-full aspect-[] bg-[#ffffff] backdrop-blur-[1px] flex justify-center items-center">
+            <SpinLoader />
           </div>
         ) : (
           <Bar options={options} data={data} />

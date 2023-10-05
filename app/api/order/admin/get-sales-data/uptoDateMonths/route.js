@@ -1,6 +1,8 @@
 import { IsLoggedIn } from "@middlewares";
 import Bill from "@models/bill";
 import Item from "@models/item";
+import Order from "@models/order";
+import OrderItem from "@models/orderedItem";
 import { connectToDB } from "@utils/database";
 
 export async function GET(req, res) {
@@ -16,12 +18,27 @@ export async function GET(req, res) {
       const firstMonthOfYear = new Date(currentYear, 0, 1);
       const monthsOfYear = [];
 
+      const allMonths = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
       for (let i = 0; i <= currentMonth; i++) {
         const month = new Date(currentYear, i, 1);
         monthsOfYear.push(month);
       }
 
-      const results = await Bill.aggregate([
+      const results = await OrderItem.aggregate([
         {
           $match: {
             createdAt: { $gte: firstMonthOfYear },
@@ -30,25 +47,29 @@ export async function GET(req, res) {
         {
           $group: {
             _id: { $month: "$createdAt" },
-            totalCost: { $sum: "$totalCost" },
+            total: {
+              $sum: {
+                $multiply: ["$quantity", "$boughtPrice_unit"],
+              },
+            },
           },
         },
       ]);
 
-      const data = monthsOfYear.map((month) => {
-        const monthNumber = month.getMonth();
-        const year = month.getFullYear();
-        const result = results.find((item) => item._id === monthNumber);
-        const totalCost = result ? result.totalCost : 0;
+      let allMonthsData = [];
 
-        return {
-          month: monthNumber,
-          year,
-          totalCost,
-        };
+      allMonths.forEach((month) => {
+        allMonthsData.push({
+          month: month,
+          total: 0,
+        });
       });
 
-      return new Response(JSON.stringify(data), {
+      results.forEach((result) => {
+        const monthIndex = result._id - 1;
+        allMonthsData[monthIndex].total = result.total;
+      });
+      return new Response(JSON.stringify(allMonthsData), {
         status: 200,
       });
     } catch (error) {

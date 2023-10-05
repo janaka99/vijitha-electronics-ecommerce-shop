@@ -264,13 +264,16 @@ const page = (props) => {
 
   return (
     <div className="max-w-[1440px]  w-[95%] flex flex-col gap-3 my-12 mx-auto relative">
-      <h1 className="uppercase text-2xl font-semibold text-center mb-7">
-        Update Product Image
-      </h1>
+
       {isGetProductLoading ? (
+           <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
         <SpinLoader />
+        </div>
       ) : (
         <>
+              <h1 className="uppercase text-2xl font-semibold text-center mb-7">
+        Update Product Image
+      </h1>
           <form
             className="w-full min-h-[750px]  h-full p-4 flex flex-col gap-4 pb-0"
             ref={formRef}

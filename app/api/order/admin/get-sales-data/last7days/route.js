@@ -1,6 +1,7 @@
 import { IsLoggedIn } from "@middlewares";
 import Bill from "@models/bill";
 import Item from "@models/item";
+import OrderItem from "@models/orderedItem";
 import { connectToDB } from "@utils/database";
 
 export async function GET(req, res) {
@@ -22,7 +23,7 @@ export async function GET(req, res) {
       }
 
       console.log(dateRange);
-      const results = await Bill.aggregate([
+      const results = await OrderItem.aggregate([
         {
           $match: {
             createdAt: { $gte: lastSevenDays },
@@ -31,20 +32,24 @@ export async function GET(req, res) {
         {
           $group: {
             _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-            totalCost: { $sum: "$totalCost" },
+            total: {
+              $sum: {
+                $multiply: ["$quantity", "$boughtPrice_unit"],
+              },
+            },
           },
         },
       ]);
-      console.log(results);
+
       const data = dateRange.map((date) => {
         const result = results.find((item) => item._id === date);
-        const totalCost = result ? result.totalCost : 0;
+        const total = result ? result.total : 0;
         return {
           date,
-          totalCost,
+          total,
         };
       });
-      console.log(data);
+
       return new Response(JSON.stringify(data), {
         status: 200,
       });

@@ -40,173 +40,68 @@ const Login = () => {
   }
 
   return (
-    <Main>
-      <Container>
-        <Image>
-          <ImageBorder>
-            <h1>Wijitha Electronics</h1>
-            <Icons>
-              <FaHeadphones />
-              <BsFillKeyboardFill />
-              <GiWireCoil />
-              <GrMonitor />
-            </Icons>
-          </ImageBorder>
-        </Image>
-        <Content>
-          <Title>Welcome Back!</Title>
-          <Form onSubmit={handleLogin}>
-            <Row>
-              <Label>Email</Label>
-              <Input
-                type="text"
-                value={userInfo.email}
+    <div className="max-w-[95%] mx-auto w-screen h-[calc(100vh-50px)] flex justify-center items-center">
+      <div className="max-w-[400px] w-full  flex flex-col justify-center items-center p-6 gap-2 border border-gray-100 shadow-md rounded-md">
+        <div className="w-full flex flex-col gap-4 pt-2 pb-4 text-center">
+          <h1 className="text-2xl uppercase tracking-wider font-semibold">
+            Vijitha Electronics
+          </h1>
+          <div className="flex w-full justify-center items-center gap-1 text-black">
+            <FaHeadphones />
+            <BsFillKeyboardFill />
+            <GiWireCoil />
+            <GrMonitor />
+          </div>
+        </div>
+        <div className=" flex flex-col gap-1 w-full ">
+          <h1 className="text-base text-left tracking-widest mb-4  ">
+            Welcome Back!
+          </h1>
+          <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+            <div className="w-full flex  ">
+              <input
+                className="w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2"
+                type="email"
+                placeholder="Email"
                 onChange={({ target }) =>
                   setUserInfo({ ...userInfo, email: target.value })
                 }
               />
-            </Row>
-            <Row>
-              <Label>Password</Label>
-              <Input
-                type="text"
-                value={userInfo.password}
+            </div>
+            <div className="w-full flex  ">
+              <input
+                className="w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2"
+                type="password"
+                placeholder="Password"
                 onChange={({ target }) =>
                   setUserInfo({ ...userInfo, password: target.value })
                 }
               />
-            </Row>
-            <Row>
-              <SubmitButton type="submit">Login</SubmitButton>
-            </Row>
-          </Form>
-          <ForgotPassword href="/">Forgot Password?</ForgotPassword>
-        </Content>
-        {reqLoading && (
-          <LoadingDiv>
-            <Loader size={"50px"} border={"5px"} />
-          </LoadingDiv>
-        )}
-      </Container>
-    </Main>
+            </div>
+            <div className="w-full flex justify-center">
+              <button
+                className="w-fit bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-sm text-white font-bold tracking-widest"
+                type="submit"
+              >
+                Login
+              </button>
+            </div>
+            <span className="w-full text-center text-sm tracking-wider font-semibold italic">
+              Not registered?{" "}
+              <a className="text-blue-500" href="/user/sign-up">
+                Sign Up
+              </a>
+            </span>
+          </form>
+          <span className="w-full text-center text-sm tracking-wider font-semibold ">
+            <a className="underline text-sm" href="/forgot-password">
+              Forgot Password
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Login;
-
-const Main = styled.div`
-  width: 100vw;
-  height: calc(100vh - 50px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const Container = styled.div`
-  max-width: 600px;
-  flex-grow: 1;
-  display: flex;
-  -webkit-box-shadow: 0px 0px 24px 5px rgba(31, 41, 55, 0.07);
-  -moz-box-shadow: 0px 0px 24px 5px rgba(31, 41, 55, 0.07);
-  box-shadow: 0px 0px 24px 5px rgba(31, 41, 55, 0.07);
-  position: relative;
-`;
-
-const LoadingDiv = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  /* background-color: red; */
-  background-color: #ffffff03;
-  backdrop-filter: blur(1px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Image = styled.div`
-  width: 50%;
-`;
-
-const ImageBorder = styled.div`
-  height: 100%;
-  width: 100%;
-  /* border: 5px solid #1f2937b1; */
-  padding: 100px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-  h1 {
-    font-size: 35px;
-    font-weight: 600;
-  }
-`;
-
-const Icons = styled.div`
-  display: flex;
-  font-size: 20px;
-  gap: 10px;
-`;
-
-const Content = styled.div`
-  width: 50%;
-  background-color: #1f2937;
-  padding: 50px;
-  text-align: center;
-  color: #fff;
-`;
-
-const Title = styled.div`
-  margin-bottom: 30px;
-  font-size: 25px;
-`;
-
-const Form = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const Row = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: start;
-  gap: 10px;
-  font-size: 14px;
-`;
-
-const Label = styled.label``;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 8px;
-  border-radius: 2px;
-  outline: none;
-  color: #000;
-`;
-
-const SubmitButton = styled.button`
-  background-color: #1a56db;
-  padding: 8px 10px;
-  transition: all 0.2s ease-in-out;
-  color: #fff;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  &:hover {
-    background-color: #1244af;
-    transition: all 0.2s ease-in-out;
-  }
-`;
-
-const ForgotPassword = styled(Link)`
-  font-size: 12px;
-  text-decoration: underline;
-`;

@@ -35,7 +35,6 @@ const page = () => {
   const [isAddressSaving, setisAddressSaving] = useState(false);
 
   const getCartItems = async () => {
-    setisCartLoading(true);
     const res = await fetch("/api/cart/get", {
       method: "GET",
     });
@@ -44,12 +43,17 @@ const page = () => {
       const resn = await res.json();
       console.log(resn);
       setCartItems(resn);
-      setisCartLoading(false);
     } else {
       console.log(await res.json());
-      setisCartLoading(false);
     }
   };
+
+  const loadCartData = async () => {
+    setisCartLoading(true);
+    await getCartItems();
+    setisCartLoading(false);
+  };
+
   const getShippingAddresses = async () => {
     setisAddressLoading(true);
     const res = await fetch("/api/customer/get-shipping-addresses", {
@@ -79,7 +83,7 @@ const page = () => {
       return;
     }
     setisPaymentProcessing(true);
-    const res = await fetch("/api/bill/pay", {
+    const res = await fetch("/api/order/pay", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -163,7 +167,7 @@ const page = () => {
   }, []);
 
   useEffect(() => {
-    getCartItems();
+    loadCartData();
     getShippingAddresses();
   }, []);
 

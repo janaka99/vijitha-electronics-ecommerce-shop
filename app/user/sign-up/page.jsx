@@ -142,7 +142,11 @@ const page = () => {
   };
 
   if (status === "loading") {
-    return <SpinLoader />;
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] ">
+        <SpinLoader />
+      </div>
+    );
   }
   if (status === "authenticated") {
     return <ErrorPage />;
@@ -153,139 +157,152 @@ const page = () => {
       <form
         ref={formRef}
         onSubmit={handleFormSubmit}
-        className="w-full flex flex-col gap-3"
+        className="w-full flex flex-col gap-1 shadow-md p-6 border-gray-100 border"
       >
-        <div className="w-full flex flex-col gap-2 mb-12">
+        <div className="w-full flex flex-col gap-2 mb-2">
           <h1 className=" uppercase text-2xl font-semibold text-center">
             Sign Up
           </h1>
         </div>
-        <div className="w-full flex flex-col gap-1">
-          <label className="text-sm text-black ml-3 ">Email</label>
-          <input
-            className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-            type="email"
-            placeholder="Enter Your Email"
-            onChange={(e) => {
-              setUser({
-                ...user,
-                email: e.target.value,
-              });
-            }}
-          />
-          <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right ">
-            {errorList.email}
+        <div className="flex flex-col gap-2 md:flex-row">
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-sm text-black ml-3 ">Email</label>
+            <input
+              className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+              type="email"
+              placeholder="Devid@gmail.com"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                });
+              }}
+            />
+            <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right ">
+              {errorList.email}
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-sm text-black ml-3 ">Name</label>
+            <input
+              className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+              type="text"
+              placeholder="Devid Liam"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  name: e.target.value,
+                });
+              }}
+            />
+            <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right ">
+              {errorList.name}
+            </div>
           </div>
         </div>
-        <div className="w-full flex flex-col gap-2">
-          <label className="text-sm text-black ml-3 ">Name</label>
-          <input
-            className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-            type="text"
-            placeholder="Enter Your Name"
-            onChange={(e) => {
-              setUser({
-                ...user,
-                name: e.target.value,
-              });
-            }}
-          />
-          <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right ">
-            {errorList.name}
+        <div className="flex flex-col gap-2 md:flex-row">
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-sm text-black ml-3 ">Contact Number</label>
+            <input
+              className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+              type="text"
+              placeholder="+9475 755 555"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  phone_number: e.target.value,
+                });
+              }}
+            />
+            <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right ">
+              {errorList.phone_number}
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-sm text-black ml-3 ">Password</label>
+            <input
+              className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+              type="password"
+              placeholder="*************"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                });
+              }}
+            />
+            <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right ">
+              {errorList.password}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 md:flex-row">
+          <div className="w-full flex flex-col gap-2">
+            <label className="text-sm text-black ml-3 ">Address</label>
+            <div className="flex flex-col w-full gap-2  ">
+              <div className="flex flex-col w-full mb-1">
+                <input
+                  className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+                  type="text"
+                  placeholder="No 00"
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      address1: e.target.value,
+                    });
+                  }}
+                />
+                <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right ">
+                  {errorList.address1}
+                </div>
+              </div>
+              <div className="flex flex-col w-full mb-1">
+                <input
+                  className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+                  type="text"
+                  placeholder="Wolf street"
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      address2: e.target.value,
+                    });
+                  }}
+                />
+                <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right">
+                  {errorList.address2}
+                </div>
+              </div>
+              <div className="flex flex-col w-full mb-1">
+                <input
+                  className="w-full text-sm outline-blue-500 px-2 py-2 bg-gray-100 rounded-md "
+                  type="text"
+                  placeholder="Califonia"
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      address3: e.target.value,
+                    });
+                  }}
+                />
+                <div className="h-[5px] text-[12px] w-full mr-3 text-red-500 text-right">
+                  {errorList.address3}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="w-full flex flex-col gap-2">
-          <label className="text-sm text-black ml-3 ">Contact Number</label>
-          <input
-            className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-            type="text"
-            placeholder="Contact Number"
-            onChange={(e) => {
-              setUser({
-                ...user,
-                phone_number: e.target.value,
-              });
-            }}
-          />
-          <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right ">
-            {errorList.phone_number}
-          </div>
-        </div>
-        <div className="w-full flex flex-col gap-2">
-          <label className="text-sm text-black ml-3 ">Address</label>
-          <div className="flex flex-col w-full gap-8 ">
-            <div className="flex flex-col w-full ">
-              <input
-                className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-                type="text"
-                placeholder="Address 1"
-                onChange={(e) => {
-                  setUser({
-                    ...user,
-                    address1: e.target.value,
-                  });
-                }}
-              />
-              <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right ">
-                {errorList.address1}
-              </div>
-            </div>
-            <div className="flex flex-col w-full ">
-              <input
-                className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-                type="text"
-                placeholder="Address 2"
-                onChange={(e) => {
-                  setUser({
-                    ...user,
-                    address2: e.target.value,
-                  });
-                }}
-              />
-              <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right">
-                {errorList.address2}
-              </div>
-            </div>
-            <div className="flex flex-col w-full ">
-              <input
-                className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-                type="text"
-                placeholder="Address 2"
-                onChange={(e) => {
-                  setUser({
-                    ...user,
-                    address3: e.target.value,
-                  });
-                }}
-              />
-              <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right">
-                {errorList.address3}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex flex-col gap-2">
-          <label className="text-sm text-black ml-3 ">Password</label>
-          <input
-            className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-            type="text"
-            placeholder="Contact Number"
-            onChange={(e) => {
-              setUser({
-                ...user,
-                password: e.target.value,
-              });
-            }}
-          />
-          <div className="h-[5px] text-sm w-full mr-3 text-red-500 text-right ">
-            {errorList.password}
-          </div>
-        </div>
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2 mt-2">
           <button className="btn-1 min-w-full" type="submit">
             Sign Up
           </button>
+          <span className="w-full text-center text-sm tracking-wider font-semibold italic">
+            Already registered{" "}
+            <a className="text-blue-500" href="/user/login">
+              login
+            </a>
+          </span>
         </div>
       </form>
     </div>

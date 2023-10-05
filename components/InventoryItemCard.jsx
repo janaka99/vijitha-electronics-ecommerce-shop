@@ -33,7 +33,7 @@ const InventoryItemCard = ({ item }) => {
         </div>
         <a
           className="absolute top-1 right-1"
-          href={`/inventory/update/${item.name}?id=${item._id}`}
+          href={`/admin-dashboard/inventory/update/${item.name}?id=${item._id}`}
         >
           <AiFillEdit size={24} />
         </a>

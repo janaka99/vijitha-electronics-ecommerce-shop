@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TbCategory } from "react-icons/tb";
 import { FiShoppingBag } from "react-icons/fi";
 import ProductsCategories from "@/components/ProductsCategories";
@@ -7,11 +7,13 @@ import CartItems from "@components/CartItems";
 import Products from "@components/Products";
 import SpinLoader from "@components/SpinLoader";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { CartContext } from "@context/cartContext/CartContextState";
 
 const Page = () => {
-  const [cart, setCart] = useState([]);
+  const { status } = useSession();
+  const { cart, getMyCart, isCartLoading } = useContext(CartContext);
 
-  const [isCartLoading, setisCartLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [allProductList, setAllProductList] = useState([]);
 
@@ -62,25 +64,20 @@ const Page = () => {
     }
   };
 
-  const getCartItems = async () => {
-    setisCartLoading(true);
-    const res = await fetch("/api/cart/get", {
-      method: "GET",
-    });
-
-    if (res.ok) {
-      const resn = await res.json();
-      setisCartLoading(false);
-      setCart(resn);
-    } else {
-      setisCartLoading(false);
-    }
-  };
-
   useEffect(() => {
-    getCartItems();
+    if (status === "authenticated") {
+      getMyCart();
+    }
     getProducts();
   }, []);
+
+  if (status === "loading") {
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <SpinLoader />
+      </div>
+    );
+  }
 
   return (
     <div className="w-[95%] max-w-[1440px] my-12 mx-auto">
@@ -94,22 +91,24 @@ const Page = () => {
               <ProductsCategories filterByCategory={filterByCategory} />
             </div>
           </div>
-          <div className="w-full flex-col gap-3 hidden md:flex">
-            <div className="flex gap-2 items-center text-base font-bold uppercase">
-              Cart <FiShoppingBag />
+          {status === "authenticated" && (
+            <div className="w-full flex-col gap-3 hidden md:flex">
+              <div className="flex gap-2 items-center text-base font-bold uppercase">
+                Cart <FiShoppingBag />
+              </div>
+              <div className="flex flex-col gap-1 pl-2 text-base ">
+                {isCartLoading ? (
+                  <div className="w-full  flex flex-col gap-4 ">
+                    <div className="w-full py-4 bg-gray-100"></div>
+                    <div className="w-full py-4 bg-gray-100"></div>
+                    <div className="w-full py-4 bg-gray-100"></div>
+                  </div>
+                ) : (
+                  <CartItems cart={cart} />
+                )}
+              </div>
             </div>
-            <div className="flex flex-col gap-1 pl-2 text-base ">
-              {isCartLoading ? (
-                <div className="w-full  flex flex-col gap-4 ">
-                  <div className="w-full py-4 bg-gray-100"></div>
-                  <div className="w-full py-4 bg-gray-100"></div>
-                  <div className="w-full py-4 bg-gray-100"></div>
-                </div>
-              ) : (
-                <CartItems cart={cart} />
-              )}
-            </div>
-          </div>
+          )}
         </div>
         <div className="flex-grow flex flex-col w-full gap-12 ">
           <div className="w-full flex items-center h-[50px]">

@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import "./global.css";
 import { Toaster } from "react-hot-toast";
+import { CartContextProvider } from "@context/cartContext/CartContextState";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,11 @@ export default function RootLayout({ children }) {
           <Provider>
             <div className="main ">
               <main>
-                <Header />
-                {children}
-                <Toaster />
+                <CartContextProvider>
+                  <Header />
+                  {children}
+                  <Toaster />
+                </CartContextProvider>
               </main>
             </div>
             <div className="portal"></div>

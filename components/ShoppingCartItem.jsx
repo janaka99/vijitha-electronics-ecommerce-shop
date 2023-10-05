@@ -76,7 +76,7 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
     }
   };
   return (
-    <div className="p-2 flex gap-2 shadow-sm rounded-sm h-[166px] w-full relative">
+    <div className="  p-2 flex gap-2 shadow-sm rounded-sm h-[166px] w-full relative">
       <div className="w-[150px] h-[150px] flex justify-center items-center bg-gray-200 p-2 rounded-lg">
         <img
           className="w-full h-full object-contain "
@@ -114,7 +114,11 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
           </button>
         </div>
       </div>
-      {isLoading && <SpinLoader />}
+      {isLoading && (
+        <div className="absolute inset-0 w-full h-full">
+          <SpinLoader />
+        </div>
+      )}
     </div>
   );
 };

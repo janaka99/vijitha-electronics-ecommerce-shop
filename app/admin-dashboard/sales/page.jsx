@@ -69,10 +69,7 @@ const Page = () => {
         <h1 className=" uppercase text-2xl font-semibold text-center mt-12">
           Sales Summary
         </h1>
-        <div className="flex-grow grid w-full grid-cols-1  gap-12 mb-12">
-          <SalesChart2 />
-          <SalesChart />
-        </div>
+        <div className="flex-grow grid w-full grid-cols-1  gap-12 mb-12"></div>
       </div>
     </div>
   );
