@@ -39,10 +39,8 @@ export async function POST(req) {
       await Order.updateOne(
         { _id: session.metadata.order_id },
         { isPaid: true }
-      ).session(mongooseSession);
-      await Cart.deleteMany({ customer: session.metadata.user_id }).session(
-        mongooseSession
       );
+      await Cart.deleteMany({ customer: session.metadata.user_id });
 
       await mongooseSession.commitTransaction();
 

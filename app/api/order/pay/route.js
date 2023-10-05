@@ -15,12 +15,11 @@ export async function POST(req, res) {
 
     try {
       mongoSession.startTransaction();
-      const result = await Cart.find({ customer: loggedUser._id })
-        .populate({
-          path: "itemId",
-          model: Item,
-        })
-        .session(mongoSession);
+      const result = await Cart.find({ customer: loggedUser._id }).populate({
+        path: "itemId",
+        model: Item,
+      });
+
       if (result.length <= 0) {
         return new Response(JSON.stringify({ message: "Invalid purchase" }), {
           status: 500,
@@ -42,14 +41,12 @@ export async function POST(req, res) {
       }
 
       for (const orderItem of result) {
-        const item = await Item.findById(orderItem.itemId._id).session(
-          mongoSession
-        );
+        const item = await Item.findById(orderItem.itemId._id);
         if (item) {
           // reduce the quantity of the product back in stock
           item.qty -= orderItem.quantity;
           item.totalSold += orderItem.quantity;
-          await item.save().session(mongoSession);
+          await item.save();
         }
       }
 
@@ -71,7 +68,7 @@ export async function POST(req, res) {
             customer: loggedUser._id,
           });
 
-          let ord = await newOrderItem.save().session(mongoSession);
+          let ord = await newOrderItem.save();
 
           return ord._id;
         })
@@ -81,7 +78,7 @@ export async function POST(req, res) {
 
       console.log(newOrder);
       console.log("work for here 1");
-      const createdOrder = await newOrder.save().session(mongoSession);
+      const createdOrder = await newOrder.save();
 
       console.log("work for here 2");
       const params = {
@@ -98,7 +95,7 @@ export async function POST(req, res) {
 
           return {
             price_data: {
-              currency: "lkr",
+              currency: "usd",
               product_data: {
                 name: item.itemId.name,
                 images: [img],
@@ -114,7 +111,7 @@ export async function POST(req, res) {
         mode: "payment",
 
         success_url: `${head}/user/dashboard/my-orders`,
-        cancel_url: `${head}/shop/buy/checkout`,
+        cancel_url: `${head}/products/buy/checkout`,
         metadata: {
           order_id: createdOrder._id.toString(),
           user_id: loggedUser._id.toString(),
