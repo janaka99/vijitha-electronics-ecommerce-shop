@@ -14,7 +14,7 @@ export async function POST(req, res) {
     const mongoSession = await mongoose.startSession();
 
     try {
-      mongoSession.startTransaction();
+      // mongoSession.startTransaction();
       const result = await Cart.find({ customer: loggedUser._id }).populate({
         path: "itemId",
         model: Item,
@@ -89,7 +89,7 @@ export async function POST(req, res) {
         phone_number_collection: {
           enabled: true,
         },
-        shipping_options: [{ shipping_rate: "shr_1NvGibSAnzC7DqTgDpHE81uU" }],
+        shipping_options: [{ shipping_rate: "shr_1NxxAxSAnzC7DqTgT7c3j3Zp" }],
         line_items: result.map((item) => {
           const img = item.itemId.src;
 
@@ -126,7 +126,7 @@ export async function POST(req, res) {
         },
       };
       console.log("work for here 3");
-      await mongoSession.commitTransaction();
+      // await mongoSession.commitTransaction();
       const session = await stripeInstance.checkout.sessions.create(params);
       // let session = "Asda";
       console.log("work for here 4");
@@ -135,7 +135,7 @@ export async function POST(req, res) {
       });
     } catch (err) {
       console.error(err);
-      await mongoSession.abortTransaction();
+      // await mongoSession.abortTransaction();
       return new Response(
         JSON.stringify({ message: "Category already exists" }),
         {
@@ -143,7 +143,7 @@ export async function POST(req, res) {
         }
       );
     } finally {
-      mongoSession.endSession();
+      // mongoSession.endSession();
     }
   } else {
     console.log("asd");

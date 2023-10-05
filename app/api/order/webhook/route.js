@@ -29,7 +29,7 @@ export async function POST(req) {
   //   const address = session.customer_details.address;
 
   if (event.type === "checkout.session.completed") {
-    const mongooseSession = await mongoose.startSession();
+    // const mongooseSession = await mongoose.startSession();
 
     try {
       const session = event.data.object;
@@ -42,18 +42,18 @@ export async function POST(req) {
       );
       await Cart.deleteMany({ customer: session.metadata.user_id });
 
-      await mongooseSession.commitTransaction();
+      // await mongooseSession.commitTransaction();
 
       return new Response(JSON.stringify({ message: "Order Placed" }), {
         status: 200,
       });
     } catch (error) {
-      mongooseSession.abortTransaction();
+      // mongooseSession.abortTransaction();
       return new Response(JSON.stringify({ message: "Something went wrong" }), {
         status: 400,
       });
     } finally {
-      mongooseSession.endSession();
+      // mongooseSession.endSession();
     }
   }
   return new Response(JSON.stringify({ message: "Something went wrong" }), {
