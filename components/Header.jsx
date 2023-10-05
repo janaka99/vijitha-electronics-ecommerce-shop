@@ -62,7 +62,7 @@ const Header = () => {
                   <Link href="/inventory">Inventory</Link>
                   <Link href="/">Bill</Link>
                   <Link href="/user/admin">Settings</Link>
-                  <Link href="/products/buy/checkout" className="relative mr-1">
+                  <Link href="/user/dashboard/" className="relative mr-1">
                     <AiOutlineShoppingCart size={24} className="text-white" />
                     <span className="absolute right-[-10px] -top-[10px] z-10 text-[#1A56DB] font-bold text-sm">
                       {cart.length}

@@ -5,7 +5,6 @@ import Cart from "@models/cart";
 import OrderItem from "@models/orderedItem";
 import mongoose from "mongoose";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
-// whsec_293a39677864d1641bea738d1d6c512ec92808e6ad8e5af5295ba9e4b81ca6cd
 
 export async function POST(req) {
   const body = await req.text();
@@ -21,9 +20,12 @@ export async function POST(req) {
     );
   } catch (error) {
     console.log(error);
-    return new Response(JSON.stringify({ message: "Webhook Error" }), {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({ message: "Webhook Error", error: error }),
+      {
+        status: 400,
+      }
+    );
   }
 
   //   const address = session.customer_details.address;
@@ -49,11 +51,15 @@ export async function POST(req) {
       });
     } catch (error) {
       // mongooseSession.abortTransaction();
-      return new Response(JSON.stringify({ message: "Something went wrong" }), {
-        status: 400,
-      });
-    } finally {
-      // mongooseSession.endSession();
+      return new Response(
+        JSON.stringify({
+          message: "Something went wrong",
+          error: error.message,
+        }),
+        {
+          status: 400,
+        }
+      );
     }
   }
   return new Response(JSON.stringify({ message: "Something went wrong" }), {
