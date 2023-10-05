@@ -34,7 +34,7 @@ export async function POST(req) {
     try {
       const session = event.data.object;
       //   console.log(session);
-      mongooseSession.startTransaction();
+      // mongooseSession.startTransaction();
 
       await Order.updateOne(
         { _id: session.metadata.order_id },
