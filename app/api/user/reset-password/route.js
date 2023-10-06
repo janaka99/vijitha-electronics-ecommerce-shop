@@ -29,17 +29,17 @@ export const POST = async (req) => {
       ],
     });
     if (user) {
-      console.log(user);
-      // let newHashedPass = await bcrypt.hash(password.toString(), 10);
-      // user.passResetCode = {
-      //   code: undefined,
-      //   expireDate: undefined,
-      // };
-      // user.password = newHashedPass;
+      // console.log(user);
+      let newHashedPass = await bcrypt.hash(password.toString(), 10);
+      user.passResetCode = {
+        code: undefined,
+        expireDate: undefined,
+      };
+      user.password = newHashedPass;
 
-      // await user.save();
+      await user.save();
 
-      // await passResetSuccess(user.email);
+      await passResetSuccess(user.email);
       // console.log(user);
       return new Response(JSON.stringify({ message: "Successfull " }), {
         status: 200,
