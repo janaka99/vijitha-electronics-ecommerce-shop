@@ -18,12 +18,15 @@ const Header = () => {
 
   const { cart, getMyCart } = useContext(CartContext);
 
+  console.log(data);
+
   const handleNavBar = () => {
     setNavBarVisibility(!navBarVisibility);
   };
 
   const handleSignOut = async () => {
     const res = await signOut();
+    router.push("/");
   };
 
   useEffect(() => {
@@ -59,10 +62,15 @@ const Header = () => {
 
               {status === "authenticated" && data !== null ? (
                 <>
-                  <Link href="/inventory">Inventory</Link>
-                  <Link href="/">Bill</Link>
-                  <Link href="/user/admin">Settings</Link>
-                  <Link href="/user/dashboard/" className="relative mr-1">
+                  {data.user.role === "admin" ||
+                    data.user.role === "manager" ||
+                    (data.user.role === "employee" && (
+                      <>
+                        <Link href="/user/dashboard">My Dashboard</Link>
+                      </>
+                    ))}
+                  <Link href="/admin-dashboard">Admin Dashboard</Link>
+                  <Link href="/products/buy/checkout" className="relative mr-1">
                     <AiOutlineShoppingCart size={24} className="text-white" />
                     <span className="absolute right-[-10px] -top-[10px] z-10 text-[#1A56DB] font-bold text-sm">
                       {cart.length}

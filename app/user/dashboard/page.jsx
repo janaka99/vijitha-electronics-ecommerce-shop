@@ -70,7 +70,7 @@ const page = () => {
           <p>Orders</p>
         </a>
         <a
-          href="/shop/buy/checkout"
+          href="/products/buy/checkout"
           className="w-full flex flex-col justify-center items-center gap-2 p-2 rounded-md shadow-md hover:shadow-lg transition-all border cursor-pointer"
         >
           <AiOutlineShoppingCart color="blue" size={40} />

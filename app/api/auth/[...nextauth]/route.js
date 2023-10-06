@@ -31,10 +31,7 @@ const handler = NextAuth({
           let result = await bcrypt.compare(password, user.password);
           console.log(result);
           if (!result) {
-            return new Response(
-              JSON.stringify({ message: "Invalid credentials" }),
-              { status: 401 }
-            );
+            throw new Error("Invalid credentials");
           }
 
           return {

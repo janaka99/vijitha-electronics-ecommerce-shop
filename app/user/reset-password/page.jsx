@@ -10,11 +10,12 @@ import { useStateManager } from "react-select";
 
 const page = (props) => {
   const router = useRouter();
-  const [token, setToken] = useState("");
+  const [isTokenVerified, setisTokenVerified] = useState(false);
   const [password, setpassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
   const [error, seterror] = useState(false);
   const [isReqLoading, setisReqLoading] = useState(false);
+  const [isTokenValidating, setisTokenValidating] = useState(true);
 
   const { data, status } = useSession();
 
@@ -57,10 +58,32 @@ const page = (props) => {
       setisReqLoading(false);
     }
   };
-
+  const verifyToken = async () => {
+    setisTokenValidating(true);
+    console.log("Verifying");
+    try {
+      let res = await fetch(
+        `/api/user/verify-token/token?token=${props.searchParams.token.toString()}`,
+        {
+          method: "GET",
+        }
+      );
+      if (res.ok) {
+        console.log(res);
+        setisTokenVerified(true);
+        setisTokenValidating(false);
+      } else {
+        setisTokenValidating(false);
+        setisTokenVerified(false);
+      }
+    } catch (error) {
+      toast.error("Password reset failed");
+      setisTokenValidating(false);
+    }
+  };
   useEffect(() => {
     if (status === "unauthenticated") {
-      //   verifyUserEmail();
+      verifyToken();
     }
   }, [status]);
 
@@ -75,6 +98,16 @@ const page = (props) => {
     return <ErrorPage />;
   }
 
+  if (isTokenValidating == true) {
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <SpinLoader />
+      </div>
+    );
+  }
+  if (isTokenVerified === false) {
+    return <ErrorPage />;
+  }
   return (
     <div className="w-screen max-w-full h-[calc(100vh-80px)] flex justify-center items-center">
       <div className="max-w-[400px] mx-auto w-[90%] p-6 flex gap6 border border-gray-200 shadow-md rounded-md">

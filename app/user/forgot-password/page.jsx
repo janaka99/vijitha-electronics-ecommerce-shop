@@ -24,7 +24,7 @@ const page = () => {
       body: JSON.stringify({ email: email }),
     });
     if (res.ok) {
-      toast.success("Email reset linked successfully sent to your email");
+      toast.success("Email reset link successfully sent to your email");
       setIsReqLoading(false);
     } else {
       toast.error("Something went wrong");

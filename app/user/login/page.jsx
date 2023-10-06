@@ -11,6 +11,8 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Loader from "@components/Loader";
 import SpinLoader from "@components/SpinLoader";
+import { AiOutlineLoading } from "react-icons/ai";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
@@ -28,8 +30,11 @@ const Login = () => {
       password: userInfo.password,
       redirect: false,
     });
-    console.log(res);
-    setReqLoading(false);
+    if (res.error) {
+      toast.error(res.error);
+      setReqLoading(false);
+      return;
+    }
   };
 
   if (status === "loading") {
@@ -60,9 +65,12 @@ const Login = () => {
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <div className="w-full flex  ">
               <input
-                className="w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2"
+                className={`w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2 ${
+                  reqLoading && "bg-gray-200"
+                }`}
                 type="email"
                 placeholder="Email"
+                disabled={reqLoading ? true : false}
                 onChange={({ target }) =>
                   setUserInfo({ ...userInfo, email: target.value })
                 }
@@ -70,21 +78,36 @@ const Login = () => {
             </div>
             <div className="w-full flex  ">
               <input
-                className="w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2"
+                className={`w-full rounded-md border border-gray-100 outline-blue-500  text-sm p-2 ${
+                  reqLoading && "bg-gray-200"
+                }`}
                 type="password"
                 placeholder="Password"
+                disabled={reqLoading ? true : false}
                 onChange={({ target }) =>
                   setUserInfo({ ...userInfo, password: target.value })
                 }
               />
             </div>
             <div className="w-full flex justify-center">
-              <button
-                className="w-fit bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-sm text-white font-bold tracking-widest"
-                type="submit"
-              >
-                Login
-              </button>
+              {reqLoading ? (
+                <button
+                  className="w-[200px] bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-sm flex items-center justify-center gap-2 text-white font-normal tracking-widest"
+                  disabled
+                >
+                  Authenticating
+                  <span className="animate-spin font-normal">
+                    <AiOutlineLoading size={20} />
+                  </span>
+                </button>
+              ) : (
+                <button
+                  className="w-[200px] bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-sm text-white font-bold tracking-widest"
+                  type="submit"
+                >
+                  Login
+                </button>
+              )}
             </div>
             <span className="w-full text-center text-sm tracking-wider font-semibold italic">
               Not registered?{" "}
@@ -94,7 +117,7 @@ const Login = () => {
             </span>
           </form>
           <span className="w-full text-center text-sm tracking-wider font-semibold ">
-            <a className="underline text-sm" href="/forgot-password">
+            <a className="underline text-sm" href="/user/forgot-password">
               Forgot Password
             </a>
           </span>
