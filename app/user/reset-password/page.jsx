@@ -63,7 +63,7 @@ const page = (props) => {
     console.log("Verifying");
     try {
       let res = await fetch(
-        `/api/user/verify-token/token?token=${props.searchParams.token.toString()}`,
+        `/api/user/verify-token/token?token=${props.searchParams.token}`,
         {
           method: "GET",
         }
@@ -77,12 +77,13 @@ const page = (props) => {
         setisTokenVerified(false);
       }
     } catch (error) {
-      console.log(error);
+      console.log("error ", error);
       setisTokenValidating(false);
     }
   };
   useEffect(() => {
     if (status === "unauthenticated") {
+      console.log("trigfgered error");
       verifyToken();
     }
   }, [status]);
@@ -116,12 +117,14 @@ const page = (props) => {
             type="password"
             className="p-2 outline-blue-500 text-sm border border-gray-200 rounded-md"
             placeholder="Enter Passowrd "
+            disabled={isReqLoading ? true : false}
             onChange={(e) => setpassword(e.target.value)}
           />
           <input
             type="password"
             className="p-2 outline-blue-500 text-sm border border-gray-200 rounded-md"
             placeholder="Enter Password Again"
+            disabled={isReqLoading ? true : false}
             onChange={(e) => setconfirmPassword(e.target.value)}
           />
           {isReqLoading ? (
