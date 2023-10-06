@@ -29,7 +29,7 @@ export const POST = async (req) => {
     });
 
     if (user) {
-      // let newHashedPass = await bcrypt.hash(password.toString(), 10);
+      let newHashedPass = await bcrypt.hash(password.toString(), 10);
       user.passResetCode = {
         code: undefined,
         expireDate: undefined,
