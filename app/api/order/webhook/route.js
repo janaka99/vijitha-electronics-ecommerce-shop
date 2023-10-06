@@ -8,9 +8,32 @@ import { NextRequest, NextResponse } from "next/server";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const event = await req.json();
+  const body = await req.json();
+  let payload = body.toString();
   const signature = headers().get("stripe-signature");
   // const signature = NextResponse.headers().get("stripe-signature").toString();
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({
+        message: "Webhook Error",
+        newErrro: error,
+        error: body,
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+
+  //   const address = session.customer_details.address;
 
   if (event.type === "checkout.session.completed") {
     // const mongooseSession = await mongoose.startSession();
@@ -44,28 +67,6 @@ export async function POST(req) {
       );
     }
   }
-  // try {
-  //   event = stripe.webhooks.constructEvent(
-  //     body,
-  //     signature,
-  //     process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
-  //   );
-  // } catch (error) {
-  //   console.log(error);
-  //   return new Response(
-  //     JSON.stringify({
-  //       message: "Webhook Error",
-  //       newErrro: error,
-  //       error: body,
-  //     }),
-  //     {
-  //       status: 400,
-  //     }
-  //   );
-  // }
-
-  //   const address = session.customer_details.address;
-
   return new Response(JSON.stringify({ message: "Something went wrong" }), {
     status: 400,
   });
