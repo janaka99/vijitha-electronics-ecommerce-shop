@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const body = await req.text();
+  const body = await req.json();
   const signature = headers().get("stripe-signature");
   // const signature = NextResponse.headers().get("stripe-signature").toString();
   let event;
@@ -21,7 +21,7 @@ export async function POST(req) {
   } catch (error) {
     console.log(error);
     return new Response(
-      JSON.stringify({ message: "Webhook Error", error: error }),
+      JSON.stringify({ message: "Webhook Error", error: body }),
       {
         status: 400,
       }
