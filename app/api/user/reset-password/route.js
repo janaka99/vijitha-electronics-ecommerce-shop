@@ -5,8 +5,10 @@ import bcrypt from "bcrypt";
 
 export const POST = async (req) => {
   try {
-    const { token, password } = await req.json();
-    if (token == "") {
+    let { token, password } = await req.json();
+    token = undefined;
+    console.log(token);
+    if (token == "" || token == null || token === undefined) {
       return new Response(JSON.stringify({ message: "Invalid Token" }), {
         status: 400,
       });
@@ -20,22 +22,25 @@ export const POST = async (req) => {
     await connectToDB();
 
     let user = await User.findOne({
-      "passwordReset.code": token,
-      "passwordReset.expireDate": { $gt: Date.now() },
+      $and: [
+        { "passwordReset.code": { $exists: true } },
+        { "passwordReset.code": token },
+        { "passwordReset.expireDate": { $gt: Date.now() } },
+      ],
     });
-
     if (user) {
-      let newHashedPass = await bcrypt.hash(password.toString(), 10);
-      user.passResetCode = {
-        code: undefined,
-        expireDate: undefined,
-      };
-      user.password = newHashedPass;
-
-      await user.save();
-
-      await passResetSuccess(user.email);
       console.log(user);
+      // let newHashedPass = await bcrypt.hash(password.toString(), 10);
+      // user.passResetCode = {
+      //   code: undefined,
+      //   expireDate: undefined,
+      // };
+      // user.password = newHashedPass;
+
+      // await user.save();
+
+      // await passResetSuccess(user.email);
+      // console.log(user);
       return new Response(JSON.stringify({ message: "Successfull " }), {
         status: 200,
       });

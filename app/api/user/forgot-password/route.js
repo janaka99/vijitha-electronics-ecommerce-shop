@@ -18,7 +18,6 @@ export const POST = async (req) => {
       email: email.toLowerCase(),
       isVerified: true,
     });
-
     if (user) {
       var crypto = require("crypto");
       var code = crypto.randomBytes(20).toString("hex");

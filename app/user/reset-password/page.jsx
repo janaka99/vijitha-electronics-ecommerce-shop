@@ -36,7 +36,7 @@ const page = (props) => {
     }
     setisReqLoading(true);
     try {
-      const ver_token = window.location.search.split("=")[1].toString;
+      const ver_token = window.location.search.split("=")[1].toString();
       let res = await fetch(`/api/user/reset-password`, {
         method: "POST",
         body: JSON.stringify({
