@@ -15,9 +15,7 @@ export async function POST(req) {
   let event;
   let err = {
     header1: headers().get("stripe-signature"),
-    header2: NextRequest.headers().get("stripe-signature"),
     header2: headers().get["stripe-signature"],
-    header2: req.headers.stripe - signature,
   };
 
   try {
