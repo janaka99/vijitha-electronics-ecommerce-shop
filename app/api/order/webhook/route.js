@@ -9,11 +9,10 @@ import { buffer } from "micro";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
+  const body = await req.text();
+  const signature = headers().get("stripe-signature").toString();
+  let event;
   try {
-    const body = await req.text();
-    const signature = headers().get("stripe-signature");
-    let event;
-
     event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -25,6 +24,7 @@ export async function POST(req) {
       JSON.stringify({
         message: "Webhook Error",
         newErrro: error,
+        body: body,
       }),
       {
         status: 400,
