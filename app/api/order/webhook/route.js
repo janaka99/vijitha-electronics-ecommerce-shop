@@ -5,10 +5,11 @@ import Cart from "@models/cart";
 import OrderItem from "@models/orderedItem";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import { buffer } from "micro";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const body = await req.json();
+  const body = await buffer(req);
   let payload = body.toString();
   const signature = headers().get("stripe-signature");
   // const signature = NextResponse.headers().get("stripe-signature").toString();
