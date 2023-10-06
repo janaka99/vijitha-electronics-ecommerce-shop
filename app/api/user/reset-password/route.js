@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 export const POST = async (req) => {
   try {
     let { token, password } = await req.json();
-
+    token = token.toString();
     if (token == "" || token == null || token === undefined) {
       return new Response(JSON.stringify({ message: "Invalid Token" }), {
         status: 400,
@@ -22,14 +22,14 @@ export const POST = async (req) => {
 
     let user = await User.findOne({
       $and: [
-        { "passwordReset.code": { $exists: true } },
-        { "passwordReset.code": token },
-        { "passwordReset.expireDate": { $gt: Date.now() } },
+        { "passResetCode.code": { $exists: true } },
+        { "passResetCode.code": token },
+        { "passResetCode.expireDate": { $gt: Date.now() } },
       ],
     });
+
     if (user) {
-      // console.log(user);
-      let newHashedPass = await bcrypt.hash(password.toString(), 10);
+      // let newHashedPass = await bcrypt.hash(password.toString(), 10);
       user.passResetCode = {
         code: undefined,
         expireDate: undefined,
