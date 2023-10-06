@@ -61,6 +61,7 @@ const page = (props) => {
   const verifyToken = async () => {
     setisTokenValidating(true);
     console.log("Verifying");
+    console.log(props.searchParams.token);
     try {
       let res = await fetch(
         `/api/user/verify-token/token?token=${props.searchParams.token}`,
