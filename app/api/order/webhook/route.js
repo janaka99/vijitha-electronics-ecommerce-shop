@@ -13,6 +13,12 @@ export async function POST(req) {
   // const signature = NextResponse.headers().get("stripe-signature").toString();
   console.log(signature);
   let event;
+  let err = {
+    header1: headers().get("stripe-signature"),
+    header2: NextRequest.headers().get("stripe-signature"),
+    header2: headers().get["stripe-signature"],
+    header2: req.headers.stripe - signature,
+  };
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -22,12 +28,6 @@ export async function POST(req) {
     );
   } catch (error) {
     console.log(error);
-    let err = {
-      header1: headers().get("stripe-signature"),
-      header2: NextRequest.headers().get("stripe-signature"),
-      header2: headers().get["stripe-signature"],
-      header2: req.headers.stripe - signature,
-    };
     return new Response(
       JSON.stringify({ message: "Webhook Error", error: err }),
       {
