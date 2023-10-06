@@ -36,10 +36,11 @@ const page = (props) => {
     }
     setisReqLoading(true);
     try {
+      const ver_token = window.location.search.split("=")[1].toString;
       let res = await fetch(`/api/user/reset-password`, {
         method: "POST",
         body: JSON.stringify({
-          token: props.searchParams.token.toString(),
+          token: ver_token,
           password: password,
         }),
       });
@@ -60,15 +61,12 @@ const page = (props) => {
   };
   const verifyToken = async () => {
     setisTokenValidating(true);
-    console.log("Verifying");
-    console.log(props.searchParams.token);
+
+    const ver_token = window.location.search.split("=")[1].toString();
     try {
-      let res = await fetch(
-        `/api/user/verify-token/token?token=${props.searchParams.token}`,
-        {
-          method: "GET",
-        }
-      );
+      let res = await fetch(`/api/user/verify-token/token?token=${ver_token}`, {
+        method: "GET",
+      });
       if (res.ok) {
         console.log(res);
         setisTokenVerified(true);
