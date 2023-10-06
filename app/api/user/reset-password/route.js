@@ -6,8 +6,7 @@ import bcrypt from "bcrypt";
 export const POST = async (req) => {
   try {
     let { token, password } = await req.json();
-    token = undefined;
-    console.log(token);
+
     if (token == "" || token == null || token === undefined) {
       return new Response(JSON.stringify({ message: "Invalid Token" }), {
         status: 400,
