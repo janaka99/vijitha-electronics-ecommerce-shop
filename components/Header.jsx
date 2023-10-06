@@ -54,7 +54,7 @@ const Header = () => {
           </a>
           <div className="flex h-full gap-12 items-center">
             <div
-              className={`absolute top-[50px] md:top-0 right-0 bg-[#1f2937] flex-col md:flex-row flex h-[calc(100vh-50px)] gap-10 pt-8  md:pt-0 w-[200px] md:w-fit items-center transition-all text-white md:h-full md:gap-4 text-sm md:static md:translate-x-0 ${
+              className={`absolute z-[51] top-[50px] md:top-0 right-0 bg-[#1f2937] flex-col md:flex-row flex h-[calc(100vh-50px)] gap-10 pt-8  md:pt-0 w-[200px] md:w-fit items-center transition-all text-white md:h-full md:gap-4 text-sm md:static md:translate-x-0 ${
                 navBarVisibility ? "translate-x-0" : "translate-x-[200px]"
               } `}
             >

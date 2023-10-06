@@ -22,7 +22,7 @@ const handler = NextAuth({
           await connectToDB();
           console.log(email, password);
           const user = await User.findOne({
-            email: email,
+            email: email.toLowerCase(),
             isVerified: true,
           });
           if (!user) {

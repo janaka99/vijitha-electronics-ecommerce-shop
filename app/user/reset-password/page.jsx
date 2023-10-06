@@ -77,7 +77,7 @@ const page = (props) => {
         setisTokenVerified(false);
       }
     } catch (error) {
-      toast.error("Password reset failed");
+      console.log(error);
       setisTokenValidating(false);
     }
   };

@@ -9,7 +9,7 @@ const Banner = () => {
           Tech, at your fingertips. Shop smarter, shop here
         </h1>
         <a
-          href="/shop/products"
+          href="/products"
           className="px-6 py-2 bg-color-1 font-bold tracking-wider  w-fit"
         >
           SHOP NOW

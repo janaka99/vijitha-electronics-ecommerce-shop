@@ -6,8 +6,8 @@ const Services = () => {
       <h1 className="uppercase text-2xl font-semibold text-center">
         WHY SHOP WITH US
       </h1>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-3 max-w-[900px] mx-auto  gap-6 my-12">
-        <div className="max-w-[250px] w-full flex flex-col gap-4 justify-center ">
+      <div className="w-full grid grid-cols-1  md:grid-cols-3 max-w-[900px] mx-auto gap-12 md:gap-6 my-12">
+        <div className="max-w-[500px] md:max-w-[250px]  w-full flex flex-col gap-4 justify-center  mx-auto">
           <div className="">
             <img src="/delivery.svg" alt="" className="w-[55px] mx-auto" />
           </div>
@@ -19,7 +19,7 @@ const Services = () => {
             perspiciatis.
           </div>
         </div>
-        <div className="max-w-[250px] w-full flex flex-col gap-4 justify-center  mx-auto">
+        <div className="max-w-[500px] md:max-w-[250px] w-full flex flex-col gap-4 justify-center  mx-auto">
           <div className="">
             {" "}
             <img src="/shipping.svg" alt="" className="w-[55px] mx-auto" />
@@ -32,7 +32,7 @@ const Services = () => {
             perspiciatis.
           </div>
         </div>
-        <div className="max-w-[250px] w-full flex flex-col gap-4 justify-center mx-auto">
+        <div className="max-w-[500px] md:max-w-[250px] w-full flex flex-col gap-4 justify-center mx-auto">
           <div className="">
             {" "}
             <img src="/quality.svg" alt="" className="w-[55px] mx-auto" />

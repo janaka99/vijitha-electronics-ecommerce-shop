@@ -14,7 +14,10 @@ export const POST = async (req) => {
     }
     await connectToDB();
 
-    let user = await User.findOne({ email: email, isVerified: true });
+    let user = await User.findOne({
+      email: email.toLowerCase(),
+      isVerified: true,
+    });
 
     if (user) {
       var crypto = require("crypto");

@@ -25,7 +25,7 @@ export const POST = async (req, res) => {
 
     const newUser = new User({
       name: name,
-      email: email,
+      email: email.toLowerCase(),
       password: password,
       phoneNumber: phoneNumber,
       NIC: id,
