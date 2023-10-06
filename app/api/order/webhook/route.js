@@ -21,7 +21,11 @@ export async function POST(req) {
   } catch (error) {
     console.log(error);
     return new Response(
-      JSON.stringify({ message: "Webhook Error", error: body }),
+      JSON.stringify({
+        message: "Webhook Error",
+        newErrro: error,
+        error: body,
+      }),
       {
         status: 400,
       }
