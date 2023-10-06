@@ -1,4 +1,6 @@
 "use client";
+import ErrorPage from "@components/ErrorPage";
+import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import React from "react";
 
