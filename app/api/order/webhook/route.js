@@ -4,7 +4,7 @@ import Order from "@models/order";
 import Cart from "@models/cart";
 import OrderItem from "@models/orderedItem";
 import mongoose from "mongoose";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
@@ -22,8 +22,14 @@ export async function POST(req) {
     );
   } catch (error) {
     console.log(error);
+    let err = {
+      header1: headers().get("stripe-signature"),
+      header2: NextRequest.headers().get("stripe-signature"),
+      header2: headers().get["stripe-signature"],
+      header2: req.headers.stripe - signature,
+    };
     return new Response(
-      JSON.stringify({ message: "Webhook Error", error: req.headers }),
+      JSON.stringify({ message: "Webhook Error", error: err }),
       {
         status: 400,
       }
