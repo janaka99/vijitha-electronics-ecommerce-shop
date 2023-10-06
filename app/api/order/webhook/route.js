@@ -9,12 +9,13 @@ import { buffer } from "micro";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const body = await req.text();
+  const body = await buffer(req);
+  const payload = body.toString();
   const signature = headers().get("stripe-signature").toString();
   let event;
   try {
     event = stripe.webhooks.constructEvent(
-      body,
+      payload,
       signature,
       process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
     );
