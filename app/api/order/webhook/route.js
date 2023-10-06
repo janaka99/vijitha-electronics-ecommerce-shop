@@ -9,65 +9,74 @@ import { buffer } from "micro";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const body = await buffer(req);
-  const payload = body.toString();
-  const signature = headers().get("stripe-signature").toString();
-  let event;
   try {
-    event = stripe.webhooks.constructEvent(
-      payload,
-      signature,
-      process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
-    );
-  } catch (error) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({
-        message: "Webhook Error",
-        newErrro: error,
-        body: body,
-      }),
-      {
-        status: 400,
-      }
-    );
-  }
+    const body = await req.text();
 
-  //   const address = session.customer_details.address;
-
-  if (event.type === "checkout.session.completed") {
-    // const mongooseSession = await mongoose.startSession();
-
+    const signature = headers().get("stripe-signature").toString();
+    let event;
     try {
-      const session = event.data.object;
-      //   console.log(session);
-      // mongooseSession.startTransaction();
-
-      await Order.updateOne(
-        { _id: session.metadata.order_id },
-        { isPaid: true }
+      event = stripe.webhooks.constructEvent(
+        body,
+        signature,
+        process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
       );
-      await Cart.deleteMany({ customer: session.metadata.user_id });
-
-      // await mongooseSession.commitTransaction();
-
-      return new Response(JSON.stringify({ message: "Order Placed" }), {
-        status: 200,
-      });
     } catch (error) {
-      // mongooseSession.abortTransaction();
+      console.log(error);
       return new Response(
         JSON.stringify({
-          message: "Something went wrong",
-          error: error.message,
+          message: "Webhook Error",
+          newErrro: error,
+          body: body,
         }),
         {
           status: 400,
         }
       );
     }
+
+    //   const address = session.customer_details.address;
+
+    if (event.type === "checkout.session.completed") {
+      // const mongooseSession = await mongoose.startSession();
+
+      try {
+        const session = event.data.object;
+        //   console.log(session);
+        // mongooseSession.startTransaction();
+
+        await Order.updateOne(
+          { _id: session.metadata.order_id },
+          { isPaid: true }
+        );
+        await Cart.deleteMany({ customer: session.metadata.user_id });
+
+        // await mongooseSession.commitTransaction();
+
+        return new Response(JSON.stringify({ message: "Order Placed" }), {
+          status: 200,
+        });
+      } catch (error) {
+        // mongooseSession.abortTransaction();
+        return new Response(
+          JSON.stringify({
+            message: "Something went wrong",
+            error: error.message,
+          }),
+          {
+            status: 400,
+          }
+        );
+      }
+    }
+    return new Response(JSON.stringify({ message: "Something went wrong" }), {
+      status: 400,
+    });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ message: "Something went wrong", error: error }),
+      {
+        status: 400,
+      }
+    );
   }
-  return new Response(JSON.stringify({ message: "Something went wrong" }), {
-    status: 400,
-  });
 }
