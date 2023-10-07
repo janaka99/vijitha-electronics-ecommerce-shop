@@ -8,6 +8,7 @@ import { Inter } from "next/font/google";
 import "./global.css";
 import { Toaster } from "react-hot-toast";
 import { CartContextProvider } from "@context/cartContext/CartContextState";
+import Footer from "@components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
                   <Header />
                   {children}
                   <Toaster />
+                  <Footer />
                 </CartContextProvider>
               </main>
             </div>

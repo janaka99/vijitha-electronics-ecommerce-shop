@@ -10,12 +10,19 @@ import PopUp from "@components/PopUp";
 import Loader from "@components/Loader";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
+import Dropzone from "@components/Dropzone";
 import toast from "react-hot-toast";
+import { AiOutlineUpload } from "react-icons/ai";
 // import Loader from "./Loader";
 
 const page = () => {
   const router = useRouter();
+  let placeholderImage = "/profilePlaceholder.png";
   const { data: session, status } = useSession();
+
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileImageTemp, setProfileImageTemp] = useState(null);
+  const [isImageuploading, setIsImageuploading] = useState(false);
 
   const [loading, setloading] = useState({
     isEmailLoading: false,
@@ -33,6 +40,7 @@ const page = () => {
     address2: "",
     address3: "",
     password: "",
+    src: "",
   });
   const [errorList, setErrorList] = useState({
     email: "",
@@ -58,6 +66,41 @@ const page = () => {
     });
   };
 
+  const handleImage = (e) => {
+    setProfileImageTemp(null);
+    setProfileImage(null);
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      setProfileImageTemp(reader.result);
+    };
+    setProfileImage(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const handleImageUpload = async () => {
+    if (profileImage !== null) {
+      setIsImageuploading(true);
+      const data = new FormData();
+      data.set("file", profileImage);
+      const res = await fetch("/api/user/update/profile-image", {
+        method: "POST",
+        body: data,
+      });
+      console.log(res);
+      if (res.ok) {
+        setProfileImage(null);
+        setProfileImageTemp(null);
+        getUser();
+        setIsImageuploading(false);
+        toast.success("Profile image successfully updated");
+      } else {
+        setIsImageuploading(false);
+        toast.error("Profile image failed to update");
+      }
+      toast.error("Image is empty");
+    }
+  };
+
   const getUser = async () => {
     const res = await fetch("/api/user/get", {
       method: "GET",
@@ -65,17 +108,16 @@ const page = () => {
     const jres = await res.json();
     console.log(jres);
     if (res.ok) {
-      setUser({
-        ...user,
+      setUser((prev) => ({
+        ...prev,
         email: jres.user.email,
         name: jres.user.name,
         phone_number: jres.user.phoneNumber,
         address1: jres.user.address1,
         address2: jres.user.address2,
         address3: jres.user.address3,
-      });
-    } else {
-      toast.error("Something went wrong");
+        src: jres.user.src,
+      }));
     }
   };
 
@@ -400,6 +442,53 @@ const page = () => {
           <h1 className=" uppercase text-2xl font-semibold text-center">
             Update My Information
           </h1>
+        </div>
+        <div className="w-full flex gap-1 justify-between relative p-[2px]">
+          <div className=""></div>
+          <div className="w-[150px] flex flex-col gap-2">
+            <div className="w-[150px] h-[150px] bg-gray-100 rounded-md overflow-hidden">
+              <img
+                src={
+                  profileImageTemp
+                    ? profileImageTemp
+                    : user.src
+                    ? user.src
+                    : placeholderImage
+                }
+                alt=""
+                className="w-full h-full object-center object-cover "
+              />
+            </div>
+            <div className=" w-full ">
+              <label
+                htmlFor="profile-picture"
+                className=" bg-gray-100 cursor-pointer w-full py-2 flex justify-center items-center border-gray-200 rounded-md "
+              >
+                <AiOutlineUpload size={30} />
+              </label>
+              <input
+                id="profile-picture"
+                type="file"
+                className="hidden"
+                onInput={handleImage}
+              />
+            </div>
+            {isImageuploading ? (
+              <button
+                disabled={true}
+                className=" py-2 text-white bg-[#1a57dbc4] rounded-sm max-w-[150px] w-full "
+              >
+                Updating...
+              </button>
+            ) : (
+              <button
+                onClick={handleImageUpload}
+                className=" py-2 text-white bg-[#1A56DB] rounded-sm max-w-[150px] w-full "
+              >
+                Update Profile
+              </button>
+            )}
+          </div>
         </div>
         <form
           onSubmit={updateEmail}

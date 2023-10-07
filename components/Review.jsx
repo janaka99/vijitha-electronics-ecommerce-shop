@@ -5,11 +5,13 @@ import StarRatings from "react-star-ratings";
 
 const Review = ({ review }) => {
   return (
-    <div className="w-full p-4 flex flex-col shadow-lg border-[1px] gap-3 relative">
+    <div className="w-full p-4 flex flex-col  shadow-lg border-[1px] gap-3 relative">
       <div className="flex justify-start items-center gap-3">
         <img
-          className="w-5 h-5 object-cover rounded-full border-[1px] border-[#3232326d]"
-          src="/quality.svg"
+          className="w-10 h-10 object-cover rounded-full border-[1px] border-[#3232326d]"
+          src={
+            review.addedBy.src ? review.addedBy.src : "/profilePlaceholder.png"
+          }
           alt=""
         />
         <div className="text-sm text-[#1F2937] font-bold">

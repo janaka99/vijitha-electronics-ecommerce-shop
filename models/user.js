@@ -100,7 +100,7 @@ const UserSchema = new Schema(
           },
         },
         postalCode: {
-          type: Number,
+          type: String,
           required: true,
         },
         contact: {

@@ -74,7 +74,7 @@ export const POST = async (req, res) => {
       console.log(error);
       return new Response(
         JSON.stringify({ message: "Failed to create new user" }),
-        { status: 200 }
+        { status: 400 }
       );
     }
   } else {

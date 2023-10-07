@@ -7,7 +7,6 @@ export async function POST(req, res) {
   const loggedUser = await IsLoggedIn(req);
   if (loggedUser !== false) {
     const mongoSession = await mongoose.startSession();
-
     try {
       mongoSession.startTransaction();
 

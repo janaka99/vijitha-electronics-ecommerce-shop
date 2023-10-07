@@ -14,6 +14,7 @@ const Header = () => {
   const router = useRouter();
 
   const [navBarVisibility, setNavBarVisibility] = useState(false);
+  const [dropView, setDropView] = useState(false);
   const [cartLength, setCartLength] = useState(0);
 
   const { cart, getMyCart } = useContext(CartContext);
@@ -26,6 +27,7 @@ const Header = () => {
 
   const handleSignOut = async () => {
     const res = await signOut();
+    setNavBarVisibility(false);
     router.push("/");
   };
 
@@ -54,11 +56,19 @@ const Header = () => {
           </a>
           <div className="flex h-full gap-12 items-center">
             <div
-              className={`absolute z-[51] top-[50px] md:top-0 right-0 bg-[#1f2937] flex-col md:flex-row flex h-[calc(100vh-50px)] gap-10 pt-8  md:pt-0 w-[200px] md:w-fit items-center transition-all text-white md:h-full md:gap-4 text-sm md:static md:translate-x-0 ${
-                navBarVisibility ? "translate-x-0" : "translate-x-[200px]"
+              className={`absolute z-[51] top-[50px] md:top-0 right-0 bg-[#1f2937] flex-col md:flex-row flex h-[calc(100vh-50px)] gap-10 pt-8  md:pt-0 w-[300px] md:w-fit items-center transition-all text-white md:h-full md:gap-4 text-sm md:static md:translate-x-0 ${
+                navBarVisibility ? "translate-x-0" : "translate-x-[300px]"
               } `}
             >
-              <Link href="/">Home</Link>
+              <a className="hover:text-blue-100" href="/">
+                Home
+              </a>
+              <a className="hover:text-blue-100" href="/">
+                Privacy Policy
+              </a>
+              <a className="hover:text-blue-100" href="/">
+                Contact Us
+              </a>
 
               {status === "authenticated" && data !== null ? (
                 <>
@@ -66,24 +76,92 @@ const Header = () => {
                     data.user.role === "manager" ||
                     (data.user.role === "employee" && (
                       <>
-                        <Link href="/user/dashboard">My Dashboard</Link>
+                        <a
+                          className="hover:text-blue-100"
+                          href="/user/dashboard"
+                        >
+                          My Dashboard
+                        </a>
                       </>
                     ))}
-                  <Link href="/admin-dashboard">Admin Dashboard</Link>
-                  <Link href="/products/buy/checkout" className="relative mr-1">
+                  <div className="md:hidden">
+                    <a className="hover:text-blue-100" href="/admin-dashboard">
+                      Admin Dashboard
+                    </a>
+                  </div>
+                  <div className="md:hidden">
+                    <a
+                      className="hover:text-blue-100"
+                      href="/dashboard/my-orders"
+                    >
+                      My Orders
+                    </a>
+                  </div>
+                  <div className="md:hidden">
+                    <a className="hover:text-blue-100" href="/user/dashboard">
+                      Profile
+                    </a>
+                  </div>
+
+                  <a href="/products/buy/checkout" className="relative mr-1">
                     <AiOutlineShoppingCart size={24} className="text-white" />
                     <span className="absolute right-[-10px] -top-[10px] z-10 text-[#1A56DB] font-bold text-sm">
                       {cart.length}
                     </span>
-                  </Link>
-                  <button className="_btn1" onClick={handleSignOut}>
-                    Log out
+                  </a>
+
+                  <div className="md:hidden">
+                    <button className="_btn1" onClick={handleSignOut}>
+                      Log out
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setDropView((prev) => !prev)}
+                    className="w-10 h-10 flex justify-center items-center rounded-[50%]  relative"
+                  >
+                    <img
+                      className="w-full h-full object-cover  object-center rounded-[50%]"
+                      src={data.user.src}
+                      alt=""
+                    />
+                    {dropView && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute hidden cursor-auto md:flex top-[45px] w-[200px] h-[250px] right-0 bg-[#1F2937] p-2 text-white rounded-b-md "
+                      >
+                        <div className="flex w-full flex-col gap-2 justify-around items-center">
+                          <a
+                            className="hover:text-blue-100"
+                            href="/dashboard/my-orders"
+                          >
+                            My Orders
+                          </a>
+                          <a
+                            className="hover:text-blue-100"
+                            href="/user/dashboard"
+                          >
+                            Profile
+                          </a>
+                          <a
+                            className="hover:text-blue-100"
+                            href="/admin-dashboard"
+                          >
+                            Admin Dashboard
+                          </a>
+                          <div className="w-full flex justify-center">
+                            <button className="_btn1 " onClick={handleSignOut}>
+                              Log out
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </button>
                 </>
               ) : (
-                <Link className="_btn1" href="/user/login">
+                <a className="_btn1" href="/user/login">
                   Log In
-                </Link>
+                </a>
               )}
             </div>
           </div>

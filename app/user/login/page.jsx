@@ -38,7 +38,11 @@ const Login = () => {
   };
 
   if (status === "loading") {
-    return <SpinLoader />;
+    return (
+      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <SpinLoader />
+      </div>
+    );
   }
   if (status === "authenticated") {
     router.push("/");

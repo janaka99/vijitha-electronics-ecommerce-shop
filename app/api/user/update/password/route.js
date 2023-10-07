@@ -25,9 +25,10 @@ export const POST = async (req, res) => {
         );
       }
       await connectToDB();
+      let newHashedPass = await bcrypt.hash(password.toString(), 10);
 
       await User.findByIdAndUpdate(user._id, {
-        password: password,
+        password: newHashedPass,
       });
 
       return new Response(

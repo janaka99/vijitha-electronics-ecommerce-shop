@@ -1,4 +1,5 @@
 "use client";
+import ErrorPage from "@components/ErrorPage";
 import ShoppingCartItem from "@components/ShoppingCartItem";
 import SpinLoader from "@components/SpinLoader";
 import getStripe from "@lib/getStripe";
@@ -56,7 +57,7 @@ const page = () => {
 
   const getShippingAddresses = async () => {
     setisAddressLoading(true);
-    const res = await fetch("/api/customer/get-shipping-addresses", {
+    const res = await fetch("/api/user/get-shipping-addresses", {
       method: "GET",
     });
 
@@ -130,10 +131,17 @@ const page = () => {
       address.contact === "" ||
       address.contact === undefined
     ) {
+      setisAddressSaving(false);
       setShippingAddressError((prev) => "Fill all the fields");
+      return;
+    }
+    if (isNaN(address.contact)) {
+      setisAddressSaving(false);
+      setShippingAddressError((prev) => "Invalid Contact");
+      return;
     }
     console.log(address);
-    const res = await fetch("/api/customer/add-shipping-address", {
+    const res = await fetch("/api/user/add-shipping-address", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -243,6 +251,7 @@ const page = () => {
                     <div className="text-red-500 text-sm italic h-2 mb-2">
                       {ShippingAddressError}
                     </div>
+
                     <Select
                       options={countries}
                       value={selectedCountry}
@@ -259,42 +268,52 @@ const page = () => {
                       placeholder="Enter Shipping Name"
                       onChange={(e) => handleInput(e, "name")}
                     />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="Address 1"
-                      onChange={(e) => handleInput(e, "address1")}
-                    />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="Address 2"
-                      onChange={(e) => handleInput(e, "address2")}
-                    />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="City"
-                      onChange={(e) => handleInput(e, "city")}
-                    />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="state"
-                      onChange={(e) => handleInput(e, "state")}
-                    />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="Postal Code"
-                      onChange={(e) => handleInput(e, "postalCode")}
-                    />
-                    <input
-                      className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
-                      type="text"
-                      placeholder="555 555 555"
-                      onChange={(e) => handleInput(e, "contact")}
-                    />
+
+                    <div className="flex grid-cols-2 gap-2">
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="Address 1"
+                        onChange={(e) => handleInput(e, "address1")}
+                      />
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="Address 2"
+                        onChange={(e) => handleInput(e, "address2")}
+                      />
+                    </div>
+                    <div className="flex grid-cols-2 gap-2">
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="state"
+                        onChange={(e) => handleInput(e, "state")}
+                      />
+
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="City"
+                        onChange={(e) => handleInput(e, "city")}
+                      />
+                    </div>
+
+                    <div className="flex grid-cols-2 gap-2">
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="Postal Code"
+                        onChange={(e) => handleInput(e, "postalCode")}
+                      />
+
+                      <input
+                        className="p-2  outline-blue-500 w-full rounded border border-gray-300 text-gray-600 text-sm"
+                        type="text"
+                        placeholder="555 555 555"
+                        onChange={(e) => handleInput(e, "contact")}
+                      />
+                    </div>
                     <button
                       className="w-full bg-blue-500 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm hover:bg-blue-600 transition-all"
                       onClick={addNewShippingAddress}
@@ -307,7 +326,6 @@ const page = () => {
                       </div>
                     )}
                   </div>
-
                   {shippingAddresses.length <= 0 ? (
                     <div className="py-2">
                       <h3 className="font-bold">

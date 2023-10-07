@@ -39,6 +39,7 @@ const handler = NextAuth({
             email: user.email,
             id: user._id,
             role: user.role,
+            src: user.src,
           };
         } catch (error) {
           throw new Error("Invalid credentials");
@@ -50,6 +51,7 @@ const handler = NextAuth({
     session({ session, token }) {
       session.user.id = token.id;
       session.user.role = token.role;
+      session.user.src = token.src;
       return session;
     },
     jwt({ token, account, user }) {
@@ -57,6 +59,7 @@ const handler = NextAuth({
         token.accessToken = account.access_token;
         token.userId = user._id;
         token.role = user.role;
+        token.src = user.src;
       }
       return token;
     },
