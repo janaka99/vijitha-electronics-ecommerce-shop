@@ -56,8 +56,10 @@ export async function POST(req, next) {
               src: newImageURL,
               imageId: newImagePath,
               price: productDetails.price,
+              ethPrice: productDetails.ethPrice,
               updatedBy: loggedUser._id,
               category: productDetails.category,
+              ethPrice: productDetails.ethPrice,
             });
           } catch (error) {
             console.log("error1 ", error);
@@ -90,6 +92,7 @@ export async function POST(req, next) {
             qty: productDetails.qty,
             description: productDetails.description,
             price: productDetails.price,
+            ethPrice: productDetails.ethPrice,
             updatedBy: loggedUser._id,
             category: productDetails.category,
           });
@@ -140,6 +143,11 @@ const validateUserDetails = (productDetails) => {
   if (productDetails.price === 0) {
     error = true;
   } else if (typeof Number(productDetails.price) == NaN) {
+    error = true;
+  }
+  if (productDetails.ethPrice === 0) {
+    error = true;
+  } else if (typeof Number(productDetails.ethPrice) == NaN) {
     error = true;
   }
   if (productDetails.description === "") {

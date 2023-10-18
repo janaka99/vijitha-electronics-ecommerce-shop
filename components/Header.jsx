@@ -8,6 +8,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import WholePageLoading from "./WholePageLoading";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { CartContext } from "@context/cartContext/CartContextState";
+import { ethers } from "ethers";
 
 const Header = () => {
   const { data, status } = useSession();
@@ -30,6 +31,14 @@ const Header = () => {
     setNavBarVisibility(false);
     router.push("/");
   };
+
+  // const loadBlockchaindata = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_accounts",
+  //   });
+
+  //   console.log(accounts[0]);
+  // };
 
   useEffect(() => {
     if (status === "authenticated") {

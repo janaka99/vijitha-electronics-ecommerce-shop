@@ -1,7 +1,11 @@
 "use client";
 import React from "react";
 import CustomOrderItem from "./CustomOrderItem";
-import { AiOutlineClose, AiOutlineLoading3Quarters } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineLoading,
+  AiOutlineLoading3Quarters,
+} from "react-icons/ai";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import SpinLoader from "./SpinLoader";
@@ -9,11 +13,16 @@ import SpinLoader from "./SpinLoader";
 const CustomerOrder = ({ order, c_date, getAllOrders }) => {
   const calTotal = (item) => {
     let total = 0;
-
+    let ethTotal = 0;
     item.map((i) => {
+      ethTotal += i.boughtPrice_unit_eth * i.quantity;
       total += i.boughtPrice_unit * i.quantity;
     });
-    return total;
+    console.log(ethTotal);
+    if (ethTotal > 0) {
+      return ethTotal + " ETH";
+    }
+    return total + " LKR";
   };
 
   const [isMarkAsDeliveredLoading, setIsMarkAsDeliveredLoading] =
@@ -41,6 +50,7 @@ const CustomerOrder = ({ order, c_date, getAllOrders }) => {
     }
   };
   const [isOrderRemoving, setIsOrderRemoving] = useState(false);
+
   const removeOrder = async (id) => {
     setIsOrderRemoving(true);
     const res = await fetch("/api/order/remove-unpaid-order", {
@@ -93,7 +103,7 @@ const CustomerOrder = ({ order, c_date, getAllOrders }) => {
 
         <div className="text-sm ">
           <span className="font-semibold text-blue-500">
-            {calTotal(order.orderItems)} LKR
+            {calTotal(order.orderItems)}
           </span>
         </div>
       </div>
@@ -117,12 +127,14 @@ const CustomerOrder = ({ order, c_date, getAllOrders }) => {
         ))}
       {!order.isPaid &&
         (isOrderRemoving ? (
-          <button disabled className="absolute top-0 right-0 w-full he-full">
-            <SpinLoader />
-          </button>
+          <>
+            <span className="absolute top-0 right-0 z-30 cursor-pointer m-1 animate-spin">
+              <AiOutlineLoading size={20} />
+            </span>
+          </>
         ) : (
           <button
-            onClick={removeOrder}
+            onClick={() => removeOrder(order._id)}
             className="absolute top-0 right-0 z-30 cursor-pointer m-1 "
           >
             <AiOutlineClose size={20} color="red" />

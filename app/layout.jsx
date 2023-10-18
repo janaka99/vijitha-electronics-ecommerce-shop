@@ -9,6 +9,7 @@ import "./global.css";
 import { Toaster } from "react-hot-toast";
 import { CartContextProvider } from "@context/cartContext/CartContextState";
 import Footer from "@components/Footer";
+import { EthPaymentProvider } from "@context/ethpaymentContext/EthPaymentContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,10 +27,12 @@ export default function RootLayout({ children }) {
             <div className="main ">
               <main>
                 <CartContextProvider>
-                  <Header />
-                  {children}
-                  <Toaster />
-                  <Footer />
+                  <EthPaymentProvider>
+                    <Header />
+                    {children}
+                    <Toaster />
+                    <Footer />
+                  </EthPaymentProvider>
                 </CartContextProvider>
               </main>
             </div>

@@ -91,6 +91,9 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
             {item.itemId.price * item.quantity} $
           </span>
         </div>
+        <span className="text-blue-600 font-bold ">
+          {item.itemId.ethPrice * item.quantity} ETH
+        </span>
         <div className="mt-12 flex  justify-between">
           <p className="flex border rounded-sm">
             <span

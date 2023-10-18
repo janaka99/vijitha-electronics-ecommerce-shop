@@ -29,6 +29,10 @@ const ItemSchema = new Schema(
       type: Number,
       required: [true, "Price is required"],
     },
+    ethPrice: {
+      type: Number,
+      required: [true, "Price is required"],
+    },
     addedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",

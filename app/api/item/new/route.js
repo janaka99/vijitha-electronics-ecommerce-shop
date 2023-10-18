@@ -69,9 +69,11 @@ export async function POST(req, next) {
             src: imageURL,
             imageId: imagePath,
             price: productDetails.price,
+            ethPrice: productDetails.ethPrice,
             addedBy: loggedUser._id,
             updatedBy: loggedUser._id,
             category: productDetails.category,
+            ethPrice: productDetails.ethPrice,
           });
           try {
             //save new product
@@ -136,6 +138,11 @@ const validateUserDetails = (productDetails) => {
   if (productDetails.price === 0) {
     error = true;
   } else if (typeof Number(productDetails.price) == NaN) {
+    error = true;
+  }
+  if (productDetails.ethPrice === 0) {
+    error = true;
+  } else if (typeof Number(productDetails.ethPrice) == NaN) {
     error = true;
   }
   if (productDetails.description === "") {

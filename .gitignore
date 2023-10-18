@@ -7,6 +7,12 @@
 
 .env
 
+/web3/node_modules
+/web3/cache
+/web3/artifacts
+/web3/.env
+/web3/hardhat.config.js
+
 # testing
 /coverage
 
@@ -35,3 +41,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+

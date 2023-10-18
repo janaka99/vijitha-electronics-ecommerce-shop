@@ -2,9 +2,10 @@
 import ErrorPage from "@components/ErrorPage";
 import ShoppingCartItem from "@components/ShoppingCartItem";
 import SpinLoader from "@components/SpinLoader";
+import { EthPaymentContext } from "@context/ethpaymentContext/EthPaymentContext";
 import getStripe from "@lib/getStripe";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters, AiOutlineShopping } from "react-icons/ai";
 import { BsFillCreditCard2FrontFill } from "react-icons/bs";
@@ -33,7 +34,17 @@ const page = () => {
   const [isCartLoading, setisCartLoading] = useState(true);
   const [isAddressLoading, setisAddressLoading] = useState(true);
   const [isPaymentProcessing, setisPaymentProcessing] = useState(false);
+  const [isEthPaymentProcessing, setisEthPaymentProcessing] = useState(false);
   const [isAddressSaving, setisAddressSaving] = useState(false);
+
+  const {
+    connectWallet,
+    currentAccount,
+    makePayment,
+    getBalance,
+    getCustomerOrder,
+    getAllOrders,
+  } = useContext(EthPaymentContext);
 
   const getCartItems = async () => {
     const res = await fetch("/api/cart/get", {
@@ -94,11 +105,55 @@ const page = () => {
 
     if (res.ok) {
       const data = await res.json();
+
       stripe.redirectToCheckout({ sessionId: data.id });
     } else {
       console.log(res);
       toast.error("Something went wrong, Try again later");
       setisPaymentProcessing(false);
+    }
+  };
+
+  const handlePaymentWithEth = async () => {
+    if (
+      selectedAddress === null ||
+      selectedAddress === undefined ||
+      selectedAddress === ""
+    ) {
+      toast.error("Please select a shipping address");
+      return;
+    }
+    setisEthPaymentProcessing(true);
+    const res = await fetch("/api/order/eth-pay", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ address_id: selectedAddress }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log(data);
+      try {
+        if (!currentAccount) {
+          await connectWallet();
+        }
+        const rs = await makePayment(data.orderId, data.customerId, data.total);
+        if (rs === true) {
+          toast.success("Your order has been placed");
+        } else {
+          toast.error("Payment failed");
+        }
+      } catch (error) {
+        toast.error("Payment failed");
+      }
+      setisEthPaymentProcessing(false);
+    } else {
+      const data = await res.json();
+      console.log(data);
+      toast.error("Something went wrong, Try again later");
+      setisEthPaymentProcessing(false);
     }
   };
 
@@ -364,24 +419,73 @@ const page = () => {
                       ))}
                     </>
                   )}
-                  {isPaymentProcessing ? (
-                    <button
-                      disabled
-                      className="w-full  bg-blue-300 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm "
-                    >
-                      Processing
-                      <span className="animate-spin">
-                        <AiOutlineLoading3Quarters size={25} />
-                      </span>
-                    </button>
+                  {isPaymentProcessing || isEthPaymentProcessing ? (
+                    <>
+                      {isPaymentProcessing && (
+                        <>
+                          <button
+                            disabled
+                            className="w-full  bg-blue-300 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm "
+                          >
+                            Processing
+                            <span className="animate-spin">
+                              <AiOutlineLoading3Quarters size={25} />
+                            </span>
+                          </button>
+                          <button
+                            disabled={true}
+                            onClick={handlePaymentWithEth}
+                            className="w-full bg-blue-300 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm"
+                          >
+                            Pay with Ethereum
+                            <BsFillCreditCard2FrontFill size={25} />
+                          </button>
+                        </>
+                      )}
+                      {isEthPaymentProcessing && (
+                        <>
+                          <button
+                            disabled
+                            className="w-full  bg-blue-300 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm "
+                          >
+                            Pay with Stripe
+                            <BsFillCreditCard2FrontFill size={25} />
+                          </button>
+                          <button
+                            disabled={true}
+                            onClick={handlePaymentWithEth}
+                            className="w-full bg-blue-500 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm"
+                          >
+                            Transaction Processing
+                            <span className="animate-spin">
+                              <AiOutlineLoading3Quarters size={25} />
+                            </span>
+                          </button>
+                        </>
+                      )}
+                    </>
                   ) : (
-                    <button
-                      onClick={handlePaymentWithStripe}
-                      className="w-full bg-blue-500 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm hover:bg-blue-600 transition-all cursor-pointer"
-                    >
-                      Pay with Stripe
-                      <BsFillCreditCard2FrontFill size={25} />
-                    </button>
+                    <>
+                      <button
+                        onClick={handlePaymentWithStripe}
+                        className="w-full bg-blue-500 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm hover:bg-blue-600 transition-all cursor-pointer"
+                      >
+                        Pay with Stripe
+                        <BsFillCreditCard2FrontFill size={25} />
+                      </button>
+                      <button
+                        onClick={handlePaymentWithEth}
+                        className="w-full bg-blue-500 py-3 px-2 flex justify-center items-center text-white  text-base font-semibold gap-4 rounded-sm shadow-sm hover:bg-blue-600 transition-all cursor-pointer"
+                      >
+                        Pay with Ethereum
+                        <BsFillCreditCard2FrontFill size={25} />
+                      </button>
+                      <button onClick={getBalance}>Get balance</button>
+                      <button onClick={getCustomerOrder}>
+                        Get Customer order
+                      </button>
+                      <button onClick={getAllOrders}>Get all orders</button>
+                    </>
                   )}
                 </div>
               </div>

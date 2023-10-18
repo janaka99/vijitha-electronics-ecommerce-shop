@@ -28,6 +28,10 @@ const OrderSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isEthPayament: {
+      type: Boolean,
+      default: false,
+    },
     confirmedBy: {
       user: {
         type: Schema.Types.ObjectId,

@@ -23,6 +23,7 @@ const page = () => {
       <a href="/admin-dashboard/manage-orders">Manage orders</a>
       <a href="/admin-dashboard/sales">Sales</a>
       <a href="/admin-dashboard/sales-summary">Sales-summary</a>
+      <a href="/admin-dashboard/manage-crypto-payment">Manage Crypto Payment</a>
       {data.user.role === "admin" ||
         (data.user.role === "manager" && (
           <a href="/admin-dashboard/super-admin/manage-employee">

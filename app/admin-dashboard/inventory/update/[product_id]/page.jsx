@@ -68,6 +68,7 @@ const page = (props) => {
     id: "",
     name: "",
     price: "",
+    ethPrice: "",
     description: "",
     qty: "",
     file: null,
@@ -84,6 +85,7 @@ const page = (props) => {
   const [errorList, setErrorList] = useState({
     name: "",
     price: "",
+    ethPrice: "",
     description: "",
     quantity: "",
     file: "",
@@ -95,6 +97,7 @@ const page = (props) => {
     setErrorList({
       name: "",
       price: "",
+      ethPrice: "",
       description: "",
       quantity: "",
       file: "",
@@ -164,6 +167,25 @@ const page = (props) => {
       }));
       error = true;
     }
+    if (itemToUpdate.ethPrice === "0") {
+      setErrorList((prev) => ({
+        ...prev,
+        price: "Ethereum price cannot be 0",
+      }));
+      error = true;
+    } else if (typeof Number(itemToUpdate.ethPrice) == NaN) {
+      setErrorList((prev) => ({
+        ...prev,
+        price: "Invalid price",
+      }));
+      error = true;
+    } else if (Number(itemToUpdate.ethPrice) == 0) {
+      setErrorList((prev) => ({
+        ...prev,
+        price: "Ethereum price cannot be 0",
+      }));
+      error = true;
+    }
     if (itemToUpdate.description === "") {
       setErrorList((prev) => ({
         ...prev,
@@ -197,6 +219,7 @@ const page = (props) => {
         price: itemToUpdate.price,
         qty: itemToUpdate.qty,
         description: itemToUpdate.description,
+        ethPrice: itemToUpdate.ethPrice,
         stock: itemToUpdate.qty,
         category: categoryRef.current.value,
         id: itemToUpdate.id,
@@ -264,16 +287,15 @@ const page = (props) => {
 
   return (
     <div className="max-w-[1440px]  w-[95%] flex flex-col gap-3 my-12 mx-auto relative">
-
       {isGetProductLoading ? (
-           <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
-        <SpinLoader />
+        <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+          <SpinLoader />
         </div>
       ) : (
         <>
-              <h1 className="uppercase text-2xl font-semibold text-center mb-7">
-        Update Product Image
-      </h1>
+          <h1 className="uppercase text-2xl font-semibold text-center mb-7">
+            Update Product Image
+          </h1>
           <form
             className="w-full min-h-[750px]  h-full p-4 flex flex-col gap-4 pb-0"
             ref={formRef}
@@ -362,6 +384,27 @@ const page = (props) => {
                   />
                   <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
                     {errorList.price}
+                  </div>
+                </div>
+                <div className="w-full flex flex-col gap-3">
+                  <label className="w-full px-5 text-[#1F2937]">
+                    Ethereum Price
+                  </label>
+                  <input
+                    className="w-full px-5 text-black text-sm bg-gray-200  p-3 outline-none"
+                    type="number"
+                    step="any"
+                    placeholder="Price ( Ethereum )"
+                    onChange={(e) => {
+                      setItemToUpdate({
+                        ...itemToUpdate,
+                        ethPrice: e.target.value,
+                      });
+                    }}
+                    defaultValue={itemToUpdate?.price}
+                  />
+                  <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                    {errorList.ethPrice}
                   </div>
                 </div>
                 <div className="w-full md:w-2/5 flex flex-col gap-3">

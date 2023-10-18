@@ -41,6 +41,7 @@ const page = ({}) => {
   const [stock, setStock] = useState(0);
   const [file, setFile] = useState(null);
   const [temporyImageView, setTemporyImageView] = useState(null);
+  const [ethPrice, setEthPrice] = useState(0);
 
   const [nameError, setNameError] = useState("");
   const [priceError, setPriceError] = useState("");
@@ -48,6 +49,7 @@ const page = ({}) => {
   const [stockError, setStockError] = useState("");
   const [fileError, setFileError] = useState("");
   const [categoryError, setCategoryError] = useState("");
+  const [ethPriceError, setEthPriceError] = useState("");
 
   const handleFileUploads = async (file) => {
     setFile(null);
@@ -79,6 +81,13 @@ const page = ({}) => {
       setPriceError("Invalid price");
       error = true;
     }
+    if (ethPrice === 0) {
+      setPriceError("Product price cannot be 0");
+      error = true;
+    } else if (typeof Number(ethPrice) == NaN) {
+      setPriceError("Invalid price");
+      error = true;
+    }
     if (description === "") {
       setDescriptionError("Description cannot be empty");
       error = true;
@@ -106,6 +115,7 @@ const page = ({}) => {
         description: description,
         stock: stock,
         category: categoryRef.current.value,
+        ethPrice: ethPrice,
       };
 
       form.append("details ", JSON.stringify(product));
@@ -207,6 +217,22 @@ const page = ({}) => {
               />
               <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
                 {priceError}
+              </div>
+            </div>
+            <div className="w-full flex flex-col gap-3">
+              <label className="w-full px-5 text-[#1F2937]">
+                Ethereum Price
+              </label>
+              <input
+                className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
+                type="number"
+                placeholder="Price ( ETH )"
+                onChange={(e) => {
+                  setEthPrice(e.target.value);
+                }}
+              />
+              <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
+                {ethPriceError}
               </div>
             </div>
             <div className="w-full md:w-2/5 flex flex-col gap-3">
