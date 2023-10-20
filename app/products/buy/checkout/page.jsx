@@ -123,7 +123,12 @@ const page = () => {
       toast.error("Please select a shipping address");
       return;
     }
-    await connectWallet();
+    try {
+      await connectWallet();
+    } catch (error) {
+      toast.error("Meta Mask Error. Please Connect your wallet");
+      return;
+    }
     setisEthPaymentProcessing(true);
     const res = await fetch("/api/order/eth-pay", {
       method: "POST",
@@ -143,11 +148,14 @@ const page = () => {
         const rs = await makePayment(data.orderId, data.customerId, data.total);
         if (rs === true) {
           toast.success("Your order has been placed");
+          return;
         } else {
           toast.error("Payment failed");
+          return;
         }
       } catch (error) {
         toast.error("Payment failed");
+        return;
       }
       setisEthPaymentProcessing(false);
     } else {
