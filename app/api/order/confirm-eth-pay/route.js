@@ -3,6 +3,8 @@ import Cart from "@models/cart";
 
 import ABI from "@utils/abi.json";
 import Web3 from "web3";
+import Item from "@models/item";
+import OrderItem from "@models/orderedItem";
 
 export async function POST(req) {
   try {
@@ -33,6 +35,38 @@ export async function POST(req) {
       }
 
       try {
+        const paid_order = await Order.findOne({
+          _id: orderId,
+          isPaid: false,
+          isEthPayament: true,
+        });
+
+        if (!paid_order) {
+          return new Response(
+            JSON.stringify({
+              message: "Something went wrong",
+              error: error.message,
+            }),
+            {
+              status: 400,
+            }
+          );
+        }
+
+        const results = await OrderItem.find({
+          orderId: orderId,
+        });
+
+        for (const result of results) {
+          const item = await Item.findById(result.itemId);
+          if (item) {
+            // reduce the quantity of the product back in stock
+            item.qty -= result.quantity;
+            item.totalSold += result.quantity;
+            await item.save();
+          }
+        }
+
         await Order.updateOne({ _id: orderId }, { isPaid: true });
         await Cart.deleteMany({ customer: customer_id });
         return new Response(

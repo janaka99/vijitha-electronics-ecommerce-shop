@@ -1,4 +1,6 @@
 import { IsLoggedInAsAdmin } from "@middlewares";
+import Cart from "@models/cart";
+import Item from "@models/item";
 import Order from "@models/order";
 import OrderItem from "@models/orderedItem";
 import User from "@models/user";
@@ -28,7 +30,7 @@ export async function POST(req) {
       const orders = await contract.methods
         .getOrderByOrderId(orderId.toString())
         .call();
-      if (orders.length <= 0) {
+      if (orders.length <= 0 || !orders) {
         return new Response(
           JSON.stringify({ message: "Something went wrong" }),
           {
@@ -36,26 +38,46 @@ export async function POST(req) {
           }
         );
       }
-
-      // Convert BigInt values to strings before serializing
-      let serializedData = JSON.stringify(orders, (key, value) => {
-        if (typeof value === "bigint") {
-          return value.toString();
-        }
-        return value;
+      const paid_order = await Order.findOne({
+        _id: orderId,
+        isPaid: false,
+        isEthPayament: true,
       });
-      serializedData = JSON.parse(serializedData);
 
-      serializedData = createList(serializedData);
-
-      for (let i = 0; i < serializedData.length; i++) {
-        let order = await Order.findOneAndUpdate(
-          { _id: serializedData[i].orderId },
+      if (!paid_order) {
+        return new Response(
+          JSON.stringify({
+            message: "Something went wrong",
+            error: error.message,
+          }),
           {
-            isPaid: true,
+            status: 400,
           }
         );
       }
+
+      const results = await OrderItem.find({
+        orderId: orderId,
+      });
+
+      for (const result of results) {
+        const item = await Item.findById(result.itemId);
+        if (item) {
+          // reduce the quantity of the product back in stock
+          item.qty -= result.quantity;
+          item.totalSold += result.quantity;
+          await item.save();
+        }
+      }
+
+      await Order.updateOne({ _id: orderId }, { isPaid: true });
+      await Cart.deleteMany({ customer: paid_order.customer });
+      return new Response(
+        JSON.stringify({ message: "Order Placed", order: "orders" }),
+        {
+          status: 200,
+        }
+      );
 
       return new Response(JSON.stringify({ message: "Update Successfull" }), {
         status: 200,

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+// import Image from "/images/hero2.avif";
 
 const Banner = () => {
   return (
@@ -17,7 +18,7 @@ const Banner = () => {
       </div>
       <div className="absolute inset-0 w-full h-full justify-center flex items-center z-[-1] ">
         <img
-          src="/images/hero2.avif"
+          src={"/images/hero2.avif"}
           className="w-full h-full object-cover object-center bg-no-repeat brightness-50"
           alt=""
         />

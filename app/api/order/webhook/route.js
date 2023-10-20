@@ -6,6 +6,7 @@ import OrderItem from "@models/orderedItem";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { buffer } from "micro";
+import Item from "@models/item";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
@@ -43,6 +44,20 @@ export async function POST(req) {
         const session = event.data.object;
         //   console.log(session);
         // mongooseSession.startTransaction();
+
+        const results = await OrderItem.find({
+          orderId: session.metadata.order_id,
+        });
+
+        for (const result of results) {
+          const item = await Item.findById(result.itemId);
+          if (item) {
+            // reduce the quantity of the product back in stock
+            item.qty -= result.quantity;
+            item.totalSold += result.quantity;
+            await item.save();
+          }
+        }
 
         await Order.updateOne(
           { _id: session.metadata.order_id },

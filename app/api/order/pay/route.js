@@ -40,16 +40,6 @@ export async function POST(req, res) {
         );
       }
 
-      for (const orderItem of result) {
-        const item = await Item.findById(orderItem.itemId._id);
-        if (item) {
-          // reduce the quantity of the product back in stock
-          item.qty -= orderItem.quantity;
-          item.totalSold += orderItem.quantity;
-          await item.save();
-        }
-      }
-
       const newOrder = new Order({
         orderItems: [],
         customer: loggedUser._id,
