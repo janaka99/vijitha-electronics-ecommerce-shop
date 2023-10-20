@@ -50,7 +50,7 @@ export const EthPaymentProvider = ({ children }) => {
 
   const checkIfWalletIsConnected = async () => {
     try {
-      if (!window.ethereum) return alert("Please install metamask");
+      if (!window.ethereum) throw new Error("No ethereum object available");
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
       });
