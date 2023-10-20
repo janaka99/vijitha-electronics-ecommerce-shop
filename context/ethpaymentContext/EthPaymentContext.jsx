@@ -42,9 +42,9 @@ export const EthPaymentProvider = ({ children }) => {
       });
       console.log(accounts[0]);
       setCurrentAccount(accounts[0]);
+      return true;
     } catch (error) {
-      console.log(error);
-      throw new Error("No ethereum object available");
+      return false;
     }
   };
 
@@ -57,7 +57,7 @@ export const EthPaymentProvider = ({ children }) => {
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
       } else {
-        console.log("No accounts found");
+        throw new Error("No ethereum object available");
       }
     } catch (error) {
       console.log(error);
@@ -67,7 +67,7 @@ export const EthPaymentProvider = ({ children }) => {
 
   const makePayment = async (order_id, customer_id, amount) => {
     try {
-      if (!window.ethereum) return alert("Please install metamask");
+      if (!window.ethereum) throw new Error("No ethereum object available");
 
       const transactionContract = await getEthereumContarct();
       // console.log(amount);
@@ -153,6 +153,7 @@ export const EthPaymentProvider = ({ children }) => {
         connectWallet,
         getAllOrders,
         getCustomerOrder,
+        checkIfWalletIsConnected,
       }}
     >
       {children}

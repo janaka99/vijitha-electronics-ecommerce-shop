@@ -43,6 +43,7 @@ const page = () => {
     makePayment,
     getBalance,
     getCustomerOrder,
+    checkIfWalletIsConnected,
     getAllOrders,
   } = useContext(EthPaymentContext);
 
@@ -124,7 +125,7 @@ const page = () => {
       return;
     }
     try {
-      await connectWallet();
+      await checkIfWalletIsConnected();
     } catch (error) {
       toast.error("Meta Mask Error. Please Connect your wallet");
       return;
@@ -148,16 +149,18 @@ const page = () => {
         const rs = await makePayment(data.orderId, data.customerId, data.total);
         if (rs === true) {
           toast.success("Your order has been placed");
+          setisEthPaymentProcessing(false);
           return;
         } else {
           toast.error("Payment failed");
+          setisEthPaymentProcessing(false);
           return;
         }
       } catch (error) {
         toast.error("Payment failed");
+        setisEthPaymentProcessing(false);
         return;
       }
-      setisEthPaymentProcessing(false);
     } else {
       const data = await res.json();
       console.log(data);
