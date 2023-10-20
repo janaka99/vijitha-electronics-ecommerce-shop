@@ -6,7 +6,7 @@ import ABI from "@utils/abi.json";
 
 import Web3 from "web3";
 
-export async function GET(req) {
+export async function POST(req) {
   const user = await IsLoggedInAsAdmin(req);
   if (user === false) {
     return new Response(JSON.stringify({ message: "Unauthorized Access" }), {
@@ -17,22 +17,26 @@ export async function GET(req) {
     const web3 = new Web3(process.env.NEXT_SEPOLIA_RPC_URL);
 
     try {
+      console.log("orderId");
+      const { orderId } = await req.json();
+      console.log(orderId);
       const contractABI = ABI; // Replace with your contract's ABI
       const contractAddress =
         process.env.NEXT_VIJITHAELECTRONICS_CONTRACT_ADDRESS; // Replace with your contract's address
       const contract = new web3.eth.Contract(contractABI, contractAddress);
 
-      const orders = await contract.methods.getAllOrders().call();
-      if (orders.length < 0 || !orders) {
+      const orders = await contract.methods
+        .getOrderByOrderId(orderId.toString())
+        .call();
+      if (orders.length <= 0) {
         return new Response(
-          JSON.stringify({
-            message: "Something went wrong",
-          }),
+          JSON.stringify({ message: "Something went wrong" }),
           {
-            status: 400,
+            status: 405,
           }
         );
       }
+
       // Convert BigInt values to strings before serializing
       let serializedData = JSON.stringify(orders, (key, value) => {
         if (typeof value === "bigint") {
@@ -45,20 +49,15 @@ export async function GET(req) {
       serializedData = createList(serializedData);
 
       for (let i = 0; i < serializedData.length; i++) {
-        let order = await Order.findOne({ _id: serializedData[i].orderId })
-          .populate({
-            path: "customer",
-            model: User,
-          })
-          .populate({
-            path: "orderItems",
-            model: OrderItem,
-          });
-
-        serializedData[i].orderDetails = order;
+        let order = await Order.findOneAndUpdate(
+          { _id: serializedData[i].orderId },
+          {
+            isPaid: true,
+          }
+        );
       }
 
-      return new Response(JSON.stringify(serializedData), {
+      return new Response(JSON.stringify({ message: "Update Successfull" }), {
         status: 200,
       });
     } catch (error) {
@@ -70,7 +69,7 @@ export async function GET(req) {
           error: error.message,
         }),
         {
-          status: 400,
+          status: 401,
         }
       );
     }

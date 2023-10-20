@@ -54,6 +54,11 @@ export async function GET(req, res) {
                 $multiply: ["$quantity", "$boughtPrice_unit"],
               },
             },
+            eth_total: {
+              $sum: {
+                $multiply: ["$quantity", "$boughtPrice_unit_eth"],
+              },
+            },
           },
         },
       ]);
@@ -64,12 +69,13 @@ export async function GET(req, res) {
         allMonthsData.push({
           month: month,
           total: 0,
+          eth_total: 0,
         });
       });
 
       results.forEach((result) => {
         const monthIndex = result._id - 1;
-        allMonthsData[monthIndex].total = result.total;
+        allMonthsData[monthIndex].eth_total = result.eth_total;
       });
       return new Response(JSON.stringify(allMonthsData), {
         status: 200,

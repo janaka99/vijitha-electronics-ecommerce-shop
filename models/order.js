@@ -28,7 +28,7 @@ const OrderSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    isEthPayament: {
+    isEthPayment: {
       type: Boolean,
       default: false,
     },

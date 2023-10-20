@@ -37,6 +37,11 @@ export async function GET(req, res) {
                 $multiply: ["$quantity", "$boughtPrice_unit"],
               },
             },
+            eth_total: {
+              $sum: {
+                $multiply: ["$quantity", "$boughtPrice_unit_eth"],
+              },
+            },
           },
         },
       ]);
@@ -44,9 +49,11 @@ export async function GET(req, res) {
       const data = dateRange.map((date) => {
         const result = results.find((item) => item._id === date);
         const total = result ? result.total : 0;
+        const total_eth = result ? result.eth_total : 0;
         return {
           date,
           total,
+          total_eth,
         };
       });
 

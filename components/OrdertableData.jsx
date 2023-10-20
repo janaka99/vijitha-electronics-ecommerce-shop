@@ -17,12 +17,18 @@ const OrdertableData = ({ order }) => {
       return 0;
     }
     let total = 0;
+    if (order.isEthPayment === true) {
+      items.map((item) => {
+        let itemTotal = item.boughtPrice_unit_eth * item.quantity;
+        total = total + itemTotal;
+      });
 
+      return total;
+    }
     items.map((item) => {
       let itemTotal = item.boughtPrice_unit * item.quantity;
       total = total + itemTotal;
     });
-
     return total;
   };
 
@@ -40,7 +46,7 @@ const OrdertableData = ({ order }) => {
           {order.customer.email}
         </div>
         <div className="w-[10%] flex items-center pl-1 justify-start py-1 border-r border-r-gray-200">
-          {order.createdAt.slice(0, 9)}
+          {order.createdAt.slice(0, 10)}
         </div>
         <div className="w-[22%] flex items-center pl-1 py-1 border-r border-r-gray-200 justify-center gap-2">
           {order._id}

@@ -25,7 +25,9 @@ ChartJS.register(
 const SalesChart2 = () => {
   const [chartDataType, setChartDatatype] = useState("last7days");
   const [dataSet, setdataSet] = useState([]);
+  const [chartData, setchartData] = useState([]);
   const [loading, setloading] = useState(false);
+  const [activeCurr, setActiveCurr] = useState("usd");
 
   //get all the users available
   const getAllOrderData = async () => {
@@ -41,11 +43,20 @@ const SalesChart2 = () => {
       console.log(newRes);
       if (res.ok) {
         setdataSet(newRes);
+        changeCurrency(activeCurr, newRes);
       }
     } catch (error) {
       console.log(error);
     }
     setloading(false);
+  };
+
+  const changeCurrency = (cur, data) => {
+    if (cur === "eth") {
+      setchartData(data.map((dt) => dt.total_eth));
+    } else {
+      setchartData(data.map((dt) => dt.total));
+    }
   };
 
   useEffect(() => {
@@ -71,7 +82,7 @@ const SalesChart2 = () => {
     datasets: [
       {
         label: "Total Cost",
-        data: dataSet.map((dt) => dt.total),
+        data: chartData,
         backgroundColor: "#1A56DB",
       },
     ],
@@ -83,6 +94,20 @@ const SalesChart2 = () => {
 
   return (
     <div className="w-[90%] mx-auto flex flex-col ">
+      <select
+        className="w-full bg-[#f1f2f2] mt-[20px] py-[10px] px-[15px] outline-none"
+        name=""
+        id=""
+        onChange={(e) => {
+          setActiveCurr(e.target.value);
+          changeCurrency(e.target.value, dataSet);
+        }}
+      >
+        <option value="usd" selected>
+          USD
+        </option>
+        <option value="eth">ETH</option>
+      </select>
       <div>
         <select
           className="w-full bg-[#f1f2f2] mt-[20px] py-[10px] px-[15px] outline-none"

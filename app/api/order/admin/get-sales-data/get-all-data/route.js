@@ -94,6 +94,7 @@ export async function GET(req, res) {
           orders: allOrders,
         },
       };
+
       await session.commitTransaction();
       session.endSession();
       return new Response(JSON.stringify(payload), {
@@ -118,17 +119,30 @@ export async function GET(req, res) {
 }
 
 const calTotal = (items) => {
-  if (items.length <= 0) {
-    return 0;
-  }
   let total = 0;
-
+  let ethTotal = 0;
+  if (items.length <= 0) {
+    return {
+      usd: total,
+      eth: ethTotal,
+    };
+  }
   items.map((item) => {
-    item.orderItems.map((i) => {
-      let itemTotal = i.boughtPrice_unit * i.quantity;
-      total = total + itemTotal;
-    });
+    if (item.isEthPayment === true) {
+      item.orderItems.map((i) => {
+        let total = i.boughtPrice_unit_eth * i.quantity;
+        ethTotal = ethTotal + total;
+      });
+    } else {
+      item.orderItems.map((i) => {
+        let itemTotal = i.boughtPrice_unit * i.quantity;
+        total = total + itemTotal;
+      });
+    }
   });
 
-  return total;
+  return {
+    usd: total,
+    eth: ethTotal,
+  };
 };

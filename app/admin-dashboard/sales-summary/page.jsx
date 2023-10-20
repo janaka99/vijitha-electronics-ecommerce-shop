@@ -11,17 +11,18 @@ import ErrorPage from "@components/ErrorPage";
 import SalesChart from "@components/SalesChart";
 import SalesChart2 from "@components/SalesChart2";
 
-const Button = ({ title, total, filter, handleTableView }) => {
+const Button = ({ title, total, filter, handleTableView, type }) => {
   return (
     <button
-      onClick={() => handleTableView(filter)}
+      onClick={() => handleTableView(filter, type)}
       className="w-full p-2 rounded bg-[#1F2937] hover:shadow-lg cursor-pointer"
     >
       <div className="w-full text-center py-3 uppercase font-semibold bg-white ">
         {title}
       </div>
       <div className="text-[25px] p-2 w-full flex justify-between text-white">
-        {total} <span className="text-blue-500 font-bold">$</span>
+        {total}{" "}
+        <span className="text-blue-500 font-bold uppercase">{type}</span>
       </div>
     </button>
   );
@@ -50,10 +51,12 @@ const page = () => {
 
   const [tableData, setTableData] = useState({
     title: "Loading...",
+    currencyType: "",
     orders: [],
   });
 
   const [istableDataLoading, setIstableDataLoading] = useState(false);
+  const [currencyType, setCurrencyType] = useState("usd");
 
   const getData = async () => {
     setloading(true);
@@ -81,20 +84,31 @@ const page = () => {
     setloading(false);
   };
 
-  const handleTableView = (filter) => {
+  const handleTableView = (filter, type) => {
     setIstableDataLoading(true);
+    let fType;
+    if (type === "usd") {
+      fType = false;
+    } else {
+      fType = true;
+    }
     switch (filter) {
-      case "tosofar":
+      case "todaysofar":
         setTableData({
           title: "Today so far",
-          orders: todaySorFar.orders,
+          currencyType: type === "usd" ? "USD" : "ETH",
+          orders: todaySorFar.orders.filter(
+            (order) => order.isEthPayment === fType
+          ),
         });
         setIstableDataLoading(false);
         break;
       case "last7days":
         setTableData({
           title: "last 7 days",
-          orders: last7days.orders,
+          orders: last7days.orders.filter(
+            (order) => order.isEthPayment === fType
+          ),
         });
         setIstableDataLoading(false);
         break;
@@ -102,7 +116,10 @@ const page = () => {
       case "last31days":
         setTableData({
           title: "last 31 days",
-          orders: last31days.orders,
+          currencyType: type === "usd" ? "USD" : "ETH",
+          orders: last31days.orders.filter(
+            (order) => order.isEthPayment === fType
+          ),
         });
         setIstableDataLoading(false);
         break;
@@ -110,14 +127,20 @@ const page = () => {
       case "uptotoday":
         setTableData({
           title: "Up to date",
-          orders: allOrders.orders,
+          currencyType: type === "usd" ? "USD" : "ETH",
+          orders: allOrders.orders.filter(
+            (order) => order.isEthPayment === fType
+          ),
         });
         setIstableDataLoading(false);
         break;
       default:
         setTableData({
           title: "today so far",
-          orders: todaySorFar.orders,
+          currencyType: type === "usd" ? "USD" : "ETH",
+          orders: todaySorFar.orders.filter(
+            (order) => order.isEthPayment === fType
+          ),
         });
         setIstableDataLoading(false);
         break;
@@ -149,35 +172,87 @@ const page = () => {
         </div>
       ) : (
         <>
+          <div className="flex justify-end gap-2">
+            <select
+              className="h-12 p-2 border border-gray-300 bg-gray-100"
+              name=""
+              id=""
+              onChange={(e) => {
+                setCurrencyType(e.target.value);
+              }}
+            >
+              <option value="usd" defaultChecked>
+                USD
+              </option>
+              <option value="eth">ETH</option>
+            </select>
+          </div>
           <div className="flex gap-2 ">
-            <SalesChart2 />
-            <SalesChart />
+            <SalesChart2 currencyType={currencyType} />
+            <SalesChart currencyType={currencyType} />
           </div>
           <div className="w-full p-1 grid grid-cols-4 gap-2">
             <Button
               title={"Today So Far"}
-              total={todaySorFar.total}
-              filter={"todasofar"}
+              total={todaySorFar.total.usd}
+              type="usd"
+              filter={"todaysofar"}
               handleTableView={handleTableView}
             />
 
             <Button
               title={"Last 7 Days"}
-              total={last7days.total}
+              total={last7days.total.usd}
+              type="usd"
               filter={"last7days"}
               handleTableView={handleTableView}
             />
 
             <Button
               title={"Last 31 Days"}
-              total={last31days.total}
+              total={last31days.total.usd}
+              type="usd"
               filter={"last31days"}
               handleTableView={handleTableView}
             />
 
             <Button
               title={"Up to Date"}
-              total={allOrders.total}
+              total={allOrders.total.usd}
+              type="usd"
+              filter={"uptotoday"}
+              handleTableView={handleTableView}
+            />
+          </div>
+          <div className="w-full p-1 grid grid-cols-4 gap-2">
+            <Button
+              title={"Today So Far"}
+              total={todaySorFar.total.eth}
+              type="eth"
+              filter={"todaysofar"}
+              handleTableView={handleTableView}
+            />
+
+            <Button
+              title={"Last 7 Days"}
+              total={last7days.total.eth}
+              type="eth"
+              filter={"last7days"}
+              handleTableView={handleTableView}
+            />
+
+            <Button
+              title={"Last 31 Days"}
+              total={last31days.total.eth}
+              type="eth"
+              filter={"last31days"}
+              handleTableView={handleTableView}
+            />
+
+            <Button
+              title={"Up to Date"}
+              total={allOrders.total.eth}
+              type="eth"
               filter={"uptotoday"}
               handleTableView={handleTableView}
             />
@@ -208,8 +283,8 @@ const page = () => {
                     <div className="w-[10%] p-1 text-sm font-semibold">
                       Status
                     </div>
-                    <div className="w-[10%] p-1 text-sm font-semibold">
-                      Total (LKR)
+                    <div className="w-[10%] p-1 text-sm font-semibold gap-1 flex items-center">
+                      Total <span>{`(${tableData.currencyType})`}</span>
                     </div>
                     <div className="w-[5%] p-1 text-sm font-semibold"></div>
                   </div>
