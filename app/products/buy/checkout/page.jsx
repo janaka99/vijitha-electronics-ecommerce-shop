@@ -123,6 +123,7 @@ const page = () => {
       toast.error("Please select a shipping address");
       return;
     }
+    await connectWallet();
     setisEthPaymentProcessing(true);
     const res = await fetch("/api/order/eth-pay", {
       method: "POST",
