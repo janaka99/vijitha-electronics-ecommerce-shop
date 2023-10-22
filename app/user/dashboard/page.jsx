@@ -1,17 +1,12 @@
 "use client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { MdLocalShipping } from "react-icons/md";
-import { FcShipped } from "react-icons/fc";
 import {
   AiFillDelete,
-  AiFillMessage,
   AiOutlineLoading,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { FaShippingFast } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import WholePageLoading from "@components/WholePageLoading";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
 import { TbPackages } from "react-icons/tb";
@@ -20,6 +15,7 @@ import Select from "react-select";
 
 const Address = ({ add, getUser }) => {
   const [isAddressRemoving, setIsAddressRemoving] = useState(false);
+  const { data, status } = useSession();
 
   const deleteAddress = async (id) => {
     setIsAddressRemoving(true);
@@ -28,7 +24,6 @@ const Address = ({ add, getUser }) => {
       body: JSON.stringify({ id: id }),
     });
     if (res.ok) {
-      console.log(await res.json());
       await getUser();
       setIsAddressRemoving(false);
       toast.success("Successfully removed the shipping address");
@@ -143,7 +138,7 @@ const page = () => {
       setShippingAddressError((prev) => "Invalid Contact");
       return;
     }
-    console.log(address);
+
     const res = await fetch("/api/user/add-shipping-address", {
       method: "POST",
       headers: {
@@ -167,7 +162,6 @@ const page = () => {
       setisAddressSaving(false);
       toast.success("Successfully added new address");
     } else {
-      console.log(res);
       toast.error("Something went wrong, Try again later");
       setisAddressSaving(false);
     }
@@ -222,7 +216,7 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );

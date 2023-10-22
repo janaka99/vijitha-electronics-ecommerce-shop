@@ -1,7 +1,5 @@
 "use client";
 import InventoryCategoryItem from "@components/InventoryCategoryItem";
-import Loader from "@components/Loader";
-import PopUp from "@components/PopUp";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
@@ -62,6 +60,7 @@ const page = () => {
       if (res.ok) {
         getCategories();
         handleFormView();
+        settitle("");
         setReqLoading(false);
         toast.success("Category successfully added");
       } else {
@@ -80,7 +79,7 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );
@@ -112,7 +111,10 @@ const page = () => {
           <div className="h-[5px] text-sm text-red-600">{titleError}</div>
         </div>
         <div className="w-full flex flex-col gap-3">
-          <button className="btn-2 min-w-full" type="submit">
+          <button
+            className="bg-blue-500 px-3 py-2 transition-all text-white w-fit  items-center cursor-pointer flex justify-center  text-sm hover:bg-[#1244af] min-w-full"
+            type="submit"
+          >
             Add
           </button>
         </div>

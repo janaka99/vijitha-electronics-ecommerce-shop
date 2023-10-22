@@ -113,7 +113,7 @@ const page = () => {
         address2: "Address 2 Cannot Be Empty",
       }));
     }
-    console.log(user);
+
     if (error == true) {
       toast.error("Check the form and try again");
       setloading(false);
@@ -143,7 +143,7 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] ">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );
@@ -294,7 +294,10 @@ const page = () => {
         </div>
 
         <div className="w-full flex flex-col gap-2 mt-2">
-          <button className="btn-1 min-w-full" type="submit">
+          <button
+            className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit min-w-full"
+            type="submit"
+          >
             Sign Up
           </button>
           <span className="w-full text-center text-sm tracking-wider font-semibold italic">

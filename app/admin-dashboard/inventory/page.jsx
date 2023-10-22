@@ -50,7 +50,7 @@ const Inventory = () => {
         method: "GET",
       });
       const newRes = await res.json();
-      console.log(newRes);
+
       if (res.ok) {
         setproducts(newRes);
         setAllProductList(newRes);
@@ -66,8 +66,6 @@ const Inventory = () => {
   };
 
   const filterByCategory = async (id) => {
-    console.log(products);
-    console.log("assad");
     if (id == 0) {
       setproducts(() => {
         return allProductList;
@@ -92,7 +90,7 @@ const Inventory = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );

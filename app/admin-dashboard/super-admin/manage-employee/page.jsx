@@ -111,7 +111,7 @@ const page = () => {
   console.log(session);
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );
@@ -128,14 +128,16 @@ const page = () => {
       <h1 className=" uppercase text-2xl font-semibold text-center">
         Manage Employees
       </h1>
-      <div className="w-full max-w-[768px] mx-auto flex flex-col gap-6">
-        <div className="flex text-lg text-black  ">
-          <button>Add New Employee</button>
+      <div className="w-full max-w-[768px] mx-auto flex flex-col gap-4">
+        <div className="flex text-lg text-black pl-4  ">
+          <div className="text-base font-semibold uppercase">
+            Add New Employee
+          </div>
         </div>
         <AddNewEmployee getUsers={getUsers} />
       </div>
-      <div className="flex text-lg text-black  ">
-        <button>Employees</button>
+      <div className="flex text-lg text-black  pl-4  ">
+        <div className="text-base font-semibold uppercase">Employees</div>
       </div>
       <div className="flex flex-col w-full p-4">
         <div className="w-full flex bg-slate-200 p-2">

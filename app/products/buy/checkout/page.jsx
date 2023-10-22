@@ -492,11 +492,6 @@ const page = () => {
                         Pay with Ethereum
                         <BsFillCreditCard2FrontFill size={25} />
                       </button>
-                      <button onClick={getBalance}>Get balance</button>
-                      <button onClick={getCustomerOrder}>
-                        Get Customer order
-                      </button>
-                      <button onClick={getAllOrders}>Get all orders</button>
                     </>
                   )}
                 </div>

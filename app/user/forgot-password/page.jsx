@@ -33,7 +33,7 @@ const page = () => {
   };
   if (status == "loading") {
     return (
-      <div className="w-screen max-w-full h-[calc(100vh-80px)] flex justify-center items-center">
+      <div className="w-screen max-w-full h-[calc(100vh-240px)] flex justify-center items-center">
         <SpinLoader />
       </div>
     );

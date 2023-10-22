@@ -1,19 +1,13 @@
 "use client";
 
-import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import WholePageLoading from "@/components/WholePageLoading";
-import { resolve } from "styled-jsx/css";
-import PopUp from "@components/PopUp";
 import Loader from "@components/Loader";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
-import Dropzone from "@components/Dropzone";
 import toast from "react-hot-toast";
 import { AiOutlineUpload } from "react-icons/ai";
-// import Loader from "./Loader";
 
 const page = () => {
   const router = useRouter();
@@ -86,7 +80,7 @@ const page = () => {
         method: "POST",
         body: data,
       });
-      console.log(res);
+
       if (res.ok) {
         setProfileImage(null);
         setProfileImageTemp(null);
@@ -106,7 +100,7 @@ const page = () => {
       method: "GET",
     });
     const jres = await res.json();
-    console.log(jres);
+
     if (res.ok) {
       setUser((prev) => ({
         ...prev,
@@ -257,7 +251,7 @@ const page = () => {
 
         if (res.ok) {
           const jres = await res.json();
-          console.log(jres);
+
           getUser();
           setloading(() => ({
             ...loading,
@@ -323,7 +317,7 @@ const page = () => {
 
         if (res.ok) {
           const jres = await res.json();
-          console.log(jres);
+
           getUser();
           setloading(() => ({
             ...loading,
@@ -339,7 +333,6 @@ const page = () => {
           toast.error("Failed to update the address");
         }
       } catch (error) {
-        console.log(error);
         setloading(() => ({
           ...loading,
           isAddressLoading: false,
@@ -388,7 +381,7 @@ const page = () => {
 
         if (res.ok) {
           const jres = await res.json();
-          console.log(jres);
+
           getUser();
           setloading(() => ({
             ...loading,
@@ -404,7 +397,6 @@ const page = () => {
           toast.error("Failed to update the password");
         }
       } catch (error) {
-        console.log(error);
         setloading(() => ({
           ...loading,
           isPasswordLoading: false,
@@ -426,7 +418,7 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)]">
         <SpinLoader />
       </div>
     );

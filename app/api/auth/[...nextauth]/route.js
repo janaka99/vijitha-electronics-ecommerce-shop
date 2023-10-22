@@ -24,6 +24,7 @@ const handler = NextAuth({
           const user = await User.findOne({
             email: email.toLowerCase(),
             isVerified: true,
+            accountStatus: "working",
           });
           if (!user) {
             throw new Error("Invalid credentials");

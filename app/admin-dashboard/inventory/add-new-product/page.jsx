@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BiUpload } from "react-icons/bi";
 import { useRouter } from "next/navigation";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
@@ -19,7 +19,6 @@ const page = ({}) => {
         method: "GET",
       });
       const newRes = await res.json();
-      console.log(newRes);
       if (res.ok) {
         setCategories(newRes);
       } else {
@@ -56,7 +55,6 @@ const page = ({}) => {
     var reader = new FileReader();
     reader.onloadend = function () {
       setTemporyImageView(reader.result);
-      console.log("asd ", temporyImageView);
     };
     setFile(file);
     reader.readAsDataURL(file);
@@ -123,7 +121,6 @@ const page = ({}) => {
 
       const res = await fetch("/api/item/new", {
         method: "POST",
-        // body: JSON.stringify(product),
         body: form,
       });
 
@@ -149,7 +146,7 @@ const page = ({}) => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-140px)] ">
         <SpinLoader />
       </div>
     );

@@ -89,7 +89,7 @@ const page = (props) => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)]">
         <SpinLoader />
       </div>
     );
@@ -100,7 +100,7 @@ const page = (props) => {
 
   if (isTokenValidating == true) {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)]">
         <SpinLoader />
       </div>
     );

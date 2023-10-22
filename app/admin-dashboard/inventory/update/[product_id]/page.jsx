@@ -20,32 +20,40 @@ const page = (props) => {
 
   const [categories, setCategories] = useState([]);
   const [tempImageUrl, setTempImageUrl] = useState("");
+  const [error, setError] = useState(false);
 
   const [isGetProductLoading, setIsGetProductLoading] = useState(true);
   const getProduct = async () => {
-    setIsGetProductLoading(true);
-    const res = await fetch(
-      `/api/item/get/product_id?id=${props.searchParams.id}`,
-      {
-        method: "GET",
+    try {
+      setIsGetProductLoading(true);
+      const res = await fetch(
+        `/api/item/get/product_id?id=${props.searchParams.id}`,
+        {
+          method: "GET",
+        }
+      );
+      if (res.ok) {
+        const newRes = await res.json();
+        console.log("product ", newRes);
+        setItemToUpdate({
+          id: newRes[0]._id,
+          name: newRes[0].name,
+          price: newRes[0].price,
+          description: newRes[0].description,
+          qty: newRes[0].qty,
+          file: null,
+          src: newRes[0].src,
+          category:
+            newRes[0].category != null ? newRes[0].category?.name : null,
+          category_id:
+            newRes[0].category != null ? newRes[0].category?._id : null,
+        });
+        setIsGetProductLoading(false);
+      } else {
+        setError(true);
       }
-    );
-    if (res.ok) {
-      const newRes = await res.json();
-      console.log(newRes);
-      setItemToUpdate({
-        id: newRes[0]._id,
-        name: newRes[0].name,
-        price: newRes[0].price,
-        description: newRes[0].description,
-        qty: newRes[0].qty,
-        file: null,
-        src: newRes[0].src,
-        category: newRes[0].category != null ? newRes[0].category?.name : null,
-        category_id:
-          newRes[0].category != null ? newRes[0].category?._id : null,
-      });
-      setIsGetProductLoading(false);
+    } catch (err) {
+      setError(true);
     }
   };
 
@@ -59,9 +67,11 @@ const page = (props) => {
       if (res.ok) {
         setCategories(newRes);
       } else {
-        // settitleError(newRes.message);
+        setError(true);
       }
-    } catch (error) {}
+    } catch (error) {
+      setError(true);
+    }
   };
 
   const [itemToUpdate, setItemToUpdate] = useState({
@@ -79,7 +89,6 @@ const page = (props) => {
 
   const [reqLoading, setReqLoading] = useState(false);
 
-  // const [temporyImageView, setTemporyImageView] = useState(`${item.src}`);
   const [temporyImageView, setTemporyImageView] = useState("item.src");
 
   const [errorList, setErrorList] = useState({
@@ -125,7 +134,6 @@ const page = (props) => {
       file: file,
     });
     reader.readAsDataURL(file);
-    console.log(temporyImageView);
   };
 
   const keepOriginalImage = () => {
@@ -160,7 +168,7 @@ const page = (props) => {
         price: "Invalid price",
       }));
       error = true;
-    } else if (Number(itemToUpdate.price) == 0) {
+    } else if (Number(itemToUpdate.price) <= 0) {
       setErrorList((prev) => ({
         ...prev,
         price: "Product price cannot be 0",
@@ -179,7 +187,7 @@ const page = (props) => {
         price: "Invalid price",
       }));
       error = true;
-    } else if (Number(itemToUpdate.ethPrice) == 0) {
+    } else if (Number(itemToUpdate.ethPrice) <= 0) {
       setErrorList((prev) => ({
         ...prev,
         price: "Ethereum price cannot be 0",
@@ -259,7 +267,7 @@ const page = (props) => {
     });
     const newRes = await res.json();
     if (res.ok) {
-      router.push("/inventory");
+      getProduct();
       toast.success("Product deleted Successfully");
     } else {
       setReqLoading(false);
@@ -276,7 +284,7 @@ const page = (props) => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen h-[calc(100vh-240px)]">
         <SpinLoader />
       </div>
     );
@@ -285,10 +293,14 @@ const page = (props) => {
     return <ErrorPage />;
   }
 
+  if (error === true) {
+    return <ErrorPage />;
+  }
+
   return (
     <div className="max-w-[1440px]  w-[95%] flex flex-col gap-3 my-12 mx-auto relative">
       {isGetProductLoading ? (
-        <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+        <div className="w-screen h-[calc(100vh-240px)] ">
           <SpinLoader />
         </div>
       ) : (
@@ -493,7 +505,10 @@ const page = (props) => {
                 </div>
               </div>
               <div className="w-full flex flex-col gap-3">
-                <button type="submit" className="btn-2 min-w-[100%] ">
+                <button
+                  type="submit"
+                  className="bg-blue-500 px-3 py-2 transition-all text-white w-fit  items-center cursor-pointer flex justify-center  text-sm hover:bg-[#1244af] min-w-[100%] "
+                >
                   Update
                 </button>
               </div>

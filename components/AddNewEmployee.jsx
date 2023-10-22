@@ -178,6 +178,7 @@ const AddNewEmployee = ({ getUsers }) => {
                 <input
                   type="text"
                   className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
+                  placeholder="John Doe"
                   required
                   onChange={(e) => {
                     console.log(e.target.value);
@@ -193,6 +194,7 @@ const AddNewEmployee = ({ getUsers }) => {
                 <input
                   className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
                   type="email"
+                  placeholder="john@gmail.com"
                   required
                   onChange={(e) => {
                     setemail(e.target.value);
@@ -207,6 +209,7 @@ const AddNewEmployee = ({ getUsers }) => {
                 <input
                   className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
                   type="text"
+                  placeholder="555 555 555"
                   required
                   onChange={(e) => {
                     setphoneNumber(e.target.value);
@@ -222,6 +225,7 @@ const AddNewEmployee = ({ getUsers }) => {
                   className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
                   type="text"
                   required
+                  placeholder="23568797987"
                   onChange={(e) => {
                     setid(e.target.value);
                   }}
@@ -301,11 +305,14 @@ const AddNewEmployee = ({ getUsers }) => {
           </div>
           <div>
             {isLoading ? (
-              <p className="btn-1 mt-10 min-w-full text-center">
+              <p className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit mt-10 min-w-full text-center">
                 Registering...
               </p>
             ) : (
-              <button className="btn-1 mt-10 min-w-full" type="submit">
+              <button
+                className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit mt-10 min-w-full"
+                type="submit"
+              >
                 Register
               </button>
             )}
