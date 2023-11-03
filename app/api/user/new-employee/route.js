@@ -3,6 +3,7 @@ import User from "@models/user";
 import { getServerSession } from "next-auth/next";
 
 import { IsLoggedInAsAdmin } from "@middlewares";
+import { sendVerificationEmail } from "@utils/mailService";
 
 export const POST = async (req, res) => {
   const isAdmin = await IsLoggedInAsAdmin(req);
@@ -38,9 +39,8 @@ export const POST = async (req, res) => {
         emailVerification: vcode,
       });
 
-      const result = await newUser.save();
-
-      console.log(result);
+      await newUser.save();
+      await sendVerificationEmail(newUser.email, newUser.emailVerification);
 
       return new Response(
         JSON.stringify({ message: "Successfully registered a new user" }),

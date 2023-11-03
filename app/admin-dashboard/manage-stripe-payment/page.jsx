@@ -5,8 +5,8 @@ import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import ErrorPage from "@components/ErrorPage";
 import toast from "react-hot-toast";
-import EthOrderItem from "@components/EthOrderItem";
 import { AiOutlineDown, AiOutlineLoading } from "react-icons/ai";
+import StripeOrderItem from "@components/StripeOrderItem";
 
 const page = () => {
   const { data, status } = useSession();
@@ -22,7 +22,7 @@ const page = () => {
   const getData = async () => {
     setIsSearching(true);
     try {
-      const res = await fetch("/api/order/admin/eth/get-eth-orders", {
+      const res = await fetch("/api/order/admin/stripe/get-stripe-orders", {
         method: "GET",
       });
       if (res.ok) {
@@ -53,10 +53,13 @@ const page = () => {
       return;
     }
     try {
-      const res = await fetch("/api/order/admin/eth/get-eth-order-by-id", {
-        method: "POST",
-        body: JSON.stringify(search),
-      });
+      const res = await fetch(
+        "/api/order/admin/stripe/get-stripe-order-by-id",
+        {
+          method: "POST",
+          body: JSON.stringify({ orderId: search.body }),
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         console.log(data);
@@ -84,7 +87,7 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-240px)]">
+      <div className="w-screen h-[calc(100vh-240px)] ">
         <SpinLoader />
       </div>
     );
@@ -105,7 +108,7 @@ const page = () => {
         <>
           <div className="gap-6 max-w-7xl mx-auto flex flex-col">
             <h1 className="text-base uppercase tracking-wider font-bold">
-              Manage Crypto Payments
+              Manage Stripe Payments
             </h1>
           </div>
           <form
@@ -143,24 +146,22 @@ const page = () => {
               Search
             </button>
           </form>
-          <div className="w-full gap-2 flex flex-col">
+          <div className="w-full  flex flex-col">
             <div className="flex w-full bg-gray-200 border border-gray-200 text-sm font-semibold mb-2">
-              <div className="w-[25%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
+              <div className="w-[30%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
                 Email
               </div>
-              <div className="w-[10%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
+              <div className="w-[15%] flex items-center py-2 border-r border-gray-300 text-gray-800">
                 Date
               </div>
-              <div className="w-[20%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
+              <div className="w-[45%] flex items-center py-2 border-r border-gray-300 text-gray-800">
                 Order ID
               </div>
-              <div className="w-[35%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
-                Payment Address
-              </div>
-              <div className="w-[10%] flex items-center pl-4 py-2 border-r border-gray-300 text-gray-800">
+              <div className="w-[10%] flex items-center py-2 border-r border-gray-300 text-gray-800">
                 Action
               </div>
             </div>
+
             {isSearching ? (
               <div className="w-full h-48 backdrop-blur-[2px] flex justify-center items-center">
                 <span className="animate-spin">
@@ -173,7 +174,7 @@ const page = () => {
               </div>
             ) : (
               orders.map((order, i) => (
-                <EthOrderItem key={i} order={order} getData={getData} />
+                <StripeOrderItem key={i} order={order} getData={getData} />
               ))
             )}
           </div>

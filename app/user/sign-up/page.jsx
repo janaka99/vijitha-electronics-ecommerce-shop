@@ -301,7 +301,7 @@ const page = () => {
             Sign Up
           </button>
           <span className="w-full text-center text-sm tracking-wider font-semibold italic">
-            Already registered{" "}
+            Already registered?{" "}
             <a className="text-blue-500" href="/user/login">
               login
             </a>

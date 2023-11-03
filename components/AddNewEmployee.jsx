@@ -122,7 +122,7 @@ const AddNewEmployee = ({ getUsers }) => {
       };
 
       try {
-        const res = await fetch("/api/user/new", {
+        const res = await fetch("/api/user/new-employee", {
           method: "POST",
           body: JSON.stringify(newEmployee),
         });
