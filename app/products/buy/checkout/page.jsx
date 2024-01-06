@@ -106,7 +106,7 @@ const page = () => {
 
     if (res.ok) {
       const data = await res.json();
-
+      console.log(data);
       stripe.redirectToCheckout({ sessionId: data.id });
     } else {
       console.log(res);

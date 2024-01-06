@@ -14,6 +14,7 @@ export async function POST(req) {
   try {
     const body = await req.text();
     await connectToDB();
+    console.log("reched");
     const signature = headers().get("stripe-signature").toString();
     let event;
     try {
@@ -23,7 +24,7 @@ export async function POST(req) {
         process.env.NEXT_STRIPE_WEBHOOK_SECRET_TEST_MODE
       );
     } catch (error) {
-      console.log(error);
+      console.log("err 2 ", error);
       return new Response(
         JSON.stringify({
           message: "Webhook Error",
@@ -72,6 +73,7 @@ export async function POST(req) {
           status: 200,
         });
       } catch (error) {
+        console.log("err ", error);
         // mongooseSession.abortTransaction();
         return new Response(
           JSON.stringify({
@@ -88,6 +90,7 @@ export async function POST(req) {
       status: 400,
     });
   } catch (error) {
+    console.log(error);
     return new Response(
       JSON.stringify({ message: "Something went wrong", error: error }),
       {
