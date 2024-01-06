@@ -1,13 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  AiOutlineMinus,
-  AiOutlinePlus,
-  AiOutlineLeft,
-  AiOutlineShopping,
-} from "react-icons/ai";
+import React, { useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import SpinLoader from "./SpinLoader";
+import toast from "react-hot-toast";
 
 const ShoppingCartItem = ({ item, getCartItems }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +22,15 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
         const resn = await res.json();
         await getCartItems();
         setIsLoading(false);
-        console.log(resn);
       } else {
-        console.log(res);
+        const resn = await res.json();
+        if (resn.maxExceeded) {
+          setIsLoading(false);
+          toast.error(resn.maxExceeded);
+          return;
+        }
         setIsLoading(false);
+        toast.error("Something went wrong");
       }
     }
   };
@@ -45,14 +46,17 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
 
       if (res.ok) {
         const resn = await res.json();
-
         await getCartItems();
         setIsLoading(false);
-
-        console.log(resn);
       } else {
-        console.log(res);
+        const resn = await res.json();
+        if (resn.lessThan1) {
+          setIsLoading(false);
+          toast.error("Item Count Can not be 0");
+          return;
+        }
         setIsLoading(false);
+        toast.error("Something went wrong");
       }
     }
   };
@@ -70,7 +74,8 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
 
         console.log(resn);
       } else {
-        console.log(res);
+        const resn = await res.json();
+        console.log(resn);
         setIsLoading(false);
       }
     }
@@ -86,15 +91,18 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
       </div>
       <div className="flex-grow flex flex-col p-2 justify-between">
         <div className="w-full flex justify-between ">
-          <span className="text-blue-600 font-bold ">{item.itemId.name}</span>
-          <span className="text-blue-600 font-bold ">
+          <span className="text-blue-600 ">{item.itemId.name}</span>
+          <span className="text-blue-600 font-bold  text-sm ">
             {item.itemId.price * item.quantity} $
           </span>
         </div>
-        <span className="text-blue-600 font-bold ">
+        <span className="text-blue-600 font-bold w-full text-end text-sm ">
           {item.itemId.ethPrice * item.quantity} ETH
         </span>
-        <div className="mt-12 flex  justify-between">
+        <span className="text-[#323232] text-sm font-semibold ">
+          Available : {item.itemId.qty}
+        </span>
+        <div className=" mt-2 flex  justify-between">
           <p className="flex border rounded-sm">
             <span
               onClick={reduceQuantity}

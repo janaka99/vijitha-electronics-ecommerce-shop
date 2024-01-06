@@ -37,7 +37,7 @@ export async function GET(req, res) {
         const month = new Date(currentYear, i, 1);
         monthsOfYear.push(month);
       }
-
+      console.log(firstMonthOfYear);
       const results = await OrderItem.aggregate([
         {
           $match: {

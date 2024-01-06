@@ -3,17 +3,14 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6 mx-auto m">
-      <div className="ax-w-[1440px] w-[95%] mx-auto flex flex-col gap-4">
+    <footer className="bg-gray-800 text-white py-6  mx-auto m">
+      <div className="ax-w-[1440px] w-[95%] pt-4 mx-auto flex flex-col gap-4">
         <div className="container mx-auto flex flex-col md:flex-row gap-10 md:gap-2 items-center md:justify-between w-[95%] ">
           <div className="flex-grow md:flex-grow-[1] flex flex-col gap-6 justify-center md:justify-start ">
             <div className="text-xl font-bold  flex-grow flex justify-center ">
               <a href="#" className="text-white">
                 Vijitha Electronics
               </a>
-            </div>
-            <div className="flex-grow flex justify-center">
-              <p>Logo goes here</p>
             </div>
           </div>
           <div className="flex-grow md:flex-grow-[2] flex-col md:flex-row flex gap-10 justify-center">

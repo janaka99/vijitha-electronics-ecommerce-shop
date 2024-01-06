@@ -13,6 +13,7 @@ import { CartContext } from "@context/cartContext/CartContextState";
 const Page = () => {
   const { status } = useSession();
   const { cart, getMyCart, isCartLoading } = useContext(CartContext);
+  const [userSearch, setUserSearch] = useState("");
 
   const [products, setProducts] = useState([]);
   const [allProductList, setAllProductList] = useState([]);
@@ -38,6 +39,7 @@ const Page = () => {
         setisProductsLoading(false);
       }
     } catch (error) {
+      setisProductsLoading(false);
       toast.error("Error  while loading products, Refresh the page");
     }
   };
@@ -61,6 +63,38 @@ const Page = () => {
         );
       });
       setisProductsLoading(false);
+    }
+  };
+
+  const getSearchedProducts = async () => {
+    if (
+      userSearch.length <= 0 ||
+      userSearch === undefined ||
+      userSearch === null ||
+      userSearch === ""
+    ) {
+      await getProducts();
+      return;
+    }
+    setisProductsLoading(true);
+    try {
+      const res = await fetch("/api/item/search", {
+        method: "POST",
+        body: JSON.stringify({ search: userSearch }),
+      });
+      const newRes = await res.json();
+
+      if (res.ok) {
+        setProducts(newRes);
+        console.log("filtered products ", newRes);
+        setisProductsLoading(false);
+      } else {
+        toast.error("Error  while loading products, Refresh the page");
+        setisProductsLoading(false);
+      }
+    } catch (error) {
+      setisProductsLoading(false);
+      toast.error("Error  while loading products, Refresh the page");
     }
   };
 
@@ -115,8 +149,15 @@ const Page = () => {
             <input
               className="bg-gray-200 px-4 h-full outline-none flex-grow rounded-l"
               type="text"
+              value={userSearch}
+              onChange={(e) => {
+                setUserSearch(e.target.value);
+              }}
             />
-            <button className="w-[100px] bg-color-1 h-full text-white rounded-r">
+            <button
+              className="w-[100px] bg-color-1 h-full text-white rounded-r"
+              onClick={getSearchedProducts}
+            >
               Search
             </button>
           </div>

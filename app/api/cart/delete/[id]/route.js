@@ -23,13 +23,13 @@ export async function POST(req, res) {
       return new Response(
         JSON.stringify({ message: "Something went wrong " }),
         {
-          status: 400,
+          status: 401,
         }
       );
     }
   } else {
     return new Response(JSON.stringify({ message: "Something went wrong " }), {
-      status: 400,
+      status: 500,
     });
   }
 }

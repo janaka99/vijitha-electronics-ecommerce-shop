@@ -16,17 +16,26 @@ export async function GET(req, res) {
     try {
       connectToDB();
 
-      const endDate = moment().startOf("day"); // Today's date at midnight
-      const today = moment().format("YYYY-MM-DD"); // Today's date at midnight
-      const days7 = moment(endDate).subtract(7, "days"); // 7 days ago from today's date
-      const days31 = moment(endDate).subtract(31, "days"); // 31 days ago from today's date
+      // Today's date and time
+      const endDate = new Date();
+      endDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for the start of the day
+      const today = new Date(endDate);
+      const days7 = new Date(endDate);
+      days7.setDate(today.getDate() - 7); // 7 days ago from today's date
+      const days31 = new Date(endDate);
+      days31.setDate(today.getDate() - 31); // 31 days ago from today's date
 
+      const today_r = new Date();
+      today_r.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for the start of the day
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
       // Calculate the start of the current day by setting hours, minutes, seconds, and milliseconds to 0
       session.startTransaction();
 
       let todaySales = await Order.find({
         isPaid: true,
-        createdAt: { $eq: today },
+        createdAt: { $gte: today_r, $lt: tomorrow },
       })
         .populate({
           path: "orderItems",
@@ -37,6 +46,7 @@ export async function GET(req, res) {
         .populate({ path: "dispatchedBy.user", model: User })
         .populate({ path: "canceledBy.user", model: User })
         .populate({ path: "processingBy.user", model: User });
+
       let last7daysSales = await Order.find({
         isPaid: true,
         createdAt: { $gte: days7, $lt: endDate },

@@ -41,7 +41,7 @@ const page = () => {
     return <ErrorPage />;
   }
   return (
-    <div className="flex flex-col gap-5 p-12 min-h-[calc(100vh-240px)]">
+    <div className="flex flex-col gap-5 p-12 min-h-[calc(100vh-240px)] max-w-[1440px] w-[95%]">
       <h1 className="text-2xl font-semibold text-blue-600 mb-4">
         Control Center
       </h1>

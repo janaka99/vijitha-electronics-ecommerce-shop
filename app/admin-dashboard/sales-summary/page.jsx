@@ -172,21 +172,6 @@ const page = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-end gap-2">
-            <select
-              className="h-12 p-2 border border-gray-300 bg-gray-100"
-              name=""
-              id=""
-              onChange={(e) => {
-                setCurrencyType(e.target.value);
-              }}
-            >
-              <option value="usd" defaultChecked>
-                USD
-              </option>
-              <option value="eth">ETH</option>
-            </select>
-          </div>
           <div className="flex gap-2 ">
             <SalesChart2 currencyType={currencyType} />
             <SalesChart currencyType={currencyType} />

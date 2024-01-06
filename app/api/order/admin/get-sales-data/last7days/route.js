@@ -3,6 +3,7 @@ import Bill from "@models/bill";
 import Item from "@models/item";
 import OrderItem from "@models/orderedItem";
 import { connectToDB } from "@utils/database";
+import moment from "moment";
 
 export async function GET(req, res) {
   //check the if the user is logged import { first } from 'react-native'
@@ -12,7 +13,11 @@ export async function GET(req, res) {
       connectToDB();
 
       const today = new Date();
-      const lastSevenDays = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      // const lastSevenDays = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      // Today's date and time
+      const endDate = new Date();
+      endDate.setHours(0, 0, 0, 0);
+      const lastSevenDays = moment(endDate).subtract(7, "days"); // 7 days ago from today's date
 
       const dateRange = [];
 

@@ -7,12 +7,13 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { buffer } from "micro";
 import Item from "@models/item";
+import { connectToDB } from "@utils/database";
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export async function POST(req) {
   try {
     const body = await req.text();
-
+    await connectToDB();
     const signature = headers().get("stripe-signature").toString();
     let event;
     try {

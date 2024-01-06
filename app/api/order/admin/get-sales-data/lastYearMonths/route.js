@@ -4,6 +4,8 @@ import Item from "@models/item";
 import Order from "@models/order";
 import OrderItem from "@models/orderedItem";
 import { connectToDB } from "@utils/database";
+import moment from "moment";
+const { DateTime } = require("luxon");
 
 export async function GET(req, res) {
   //check the if the user is logged and has authority to delete a product
@@ -13,7 +15,11 @@ export async function GET(req, res) {
       connectToDB();
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
+      console.log(currentYear);
+      const lastYear = currentYear - 1;
+      console.log(lastYear);
+      const firstDayOfLastYear = new Date(lastYear, 0, 1);
+      const lastDayOfLastYear = new Date(lastYear, 11, 31);
 
       const firstMonthOfYear = new Date(currentYear - 1, 0, 1);
       const monthsOfYear = [];
@@ -38,12 +44,15 @@ export async function GET(req, res) {
         "Dec",
       ];
 
-      const startOfMonth = new Date(currentYear - 1, currentMonth, 1); // Start of the current month
-
+      // const startOfMonth = new Date(currentYear - 1, currentMonth, 1); // Start of the current month
+      console.log(lastDayOfLastYear, firstDayOfLastYear);
       const results = await OrderItem.aggregate([
         {
           $match: {
-            createdAt: { $gte: firstMonthOfYear, $lt: startOfMonth },
+            createdAt: {
+              $gte: firstDayOfLastYear,
+              $lt: lastDayOfLastYear,
+            },
           },
         },
         {
@@ -72,9 +81,10 @@ export async function GET(req, res) {
           eth_total: 0,
         });
       });
-
+      console.log(results);
       results.forEach((result) => {
         const monthIndex = result._id - 1;
+        allMonthsData[monthIndex].total = result.total;
         allMonthsData[monthIndex].eth_total = result.eth_total;
       });
       return new Response(JSON.stringify(allMonthsData), {

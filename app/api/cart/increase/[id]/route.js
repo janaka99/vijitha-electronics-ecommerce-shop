@@ -37,7 +37,7 @@ export async function POST(req, res) {
         if (qty > cartHave[0].itemId.qty) {
           return new Response(
             JSON.stringify({
-              maxExceeded: "0",
+              maxExceeded: `Only available ${cartHave[0].itemId.qty} items`,
               message: "Quantity exceed the maximum item count",
             }),
             {
