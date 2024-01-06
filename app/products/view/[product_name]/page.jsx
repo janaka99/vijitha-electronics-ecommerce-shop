@@ -187,7 +187,7 @@ const page = (props) => {
                     </button>
                   )}
                   <a
-                    href="/product/buy/checkout"
+                    href="/products/buy/checkout"
                     className="px-8 py-2 bg-color-1 text-white w-fit border-[1px] border-[#1A56DB] hover:bg-[#1a57dbf0]"
                   >
                     Buy now

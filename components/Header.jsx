@@ -141,7 +141,7 @@ const Header = () => {
                         <div className="flex w-full flex-col gap-2 justify-around items-center">
                           <a
                             className="hover:text-blue-100"
-                            href="/dashboard/my-orders"
+                            href="/user/dashboard/my-orders"
                           >
                             My Orders
                           </a>

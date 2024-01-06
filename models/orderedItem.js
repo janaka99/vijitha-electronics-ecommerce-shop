@@ -23,12 +23,10 @@ const OrderItemSchema = new Schema(
     },
     boughtPrice_unit: {
       type: Number,
-      required: true,
       default: 0,
     },
     boughtPrice_unit_eth: {
       type: Number,
-      required: true,
       default: 0,
     },
     reviewed: {
