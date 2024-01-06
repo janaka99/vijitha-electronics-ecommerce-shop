@@ -63,7 +63,7 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
   const removeItem = async () => {
     if (isLoading === false) {
       setIsLoading(true);
-      const res = await fetch("/api/cart/delete/bill-item-?id=" + item._id, {
+      const res = await fetch("/api/cart/delete/bill-item?id=" + item._id, {
         method: "GET",
       });
 

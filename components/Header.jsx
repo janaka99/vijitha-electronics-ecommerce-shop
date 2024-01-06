@@ -101,7 +101,7 @@ const Header = () => {
                   <div className="md:hidden">
                     <a
                       className="hover:text-blue-100"
-                      href="/dashboard/my-orders"
+                      href="/user/dashboard/my-orders"
                     >
                       My Orders
                     </a>
