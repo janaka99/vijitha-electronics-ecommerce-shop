@@ -6,7 +6,8 @@ export async function POST(req, res) {
   const loggedUser = await IsLoggedIn(req);
   if (loggedUser !== false) {
     try {
-      let id = req.nextUrl.searchParams.get("id");
+      let id = req.nextUrl.searchParams.get("id").toString();
+      console.log(id);
       // Check if the cart is created
       await Cart.findOneAndDelete({
         $and: [{ customer: loggedUser._id }, { _id: id }],
@@ -15,7 +16,7 @@ export async function POST(req, res) {
       return new Response(
         JSON.stringify({ message: "Successfully removed the item" }),
         {
-          status: 400,
+          status: 200,
         }
       );
     } catch (err) {

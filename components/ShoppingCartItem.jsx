@@ -64,19 +64,16 @@ const ShoppingCartItem = ({ item, getCartItems }) => {
     if (isLoading === false) {
       setIsLoading(true);
       const res = await fetch("/api/cart/delete/bill-item?id=" + item._id, {
-        method: "GET",
+        method: "POST",
       });
 
       if (res.ok) {
-        const resn = await res.json();
         await getCartItems();
         setIsLoading(false);
-
-        console.log(resn);
+        toast.success("Successfully Deleted");
       } else {
-        const resn = await res.json();
-        console.log(resn);
         setIsLoading(false);
+        toast.error("Something went wrong");
       }
     }
   };
