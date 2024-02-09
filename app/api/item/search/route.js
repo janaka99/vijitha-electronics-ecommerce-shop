@@ -1,5 +1,6 @@
 import Category from "@models/category";
 import Item from "@models/item";
+import SearchHistory from "@models/searchHistory";
 import { connectToDB } from "@utils/database";
 
 export async function POST(req, res) {
@@ -9,7 +10,6 @@ export async function POST(req, res) {
     const { search } = await req.json();
 
     const keywords = search.split(" ");
-    console.log(keywords);
     // Use regex for case-insensitive search in title or description
     const regexArray = keywords.map((keyword) => new RegExp(keyword, "i"));
     console.log(regexArray);

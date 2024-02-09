@@ -66,6 +66,28 @@ const Page = () => {
     }
   };
 
+  // Function to add a new search to the local storage queue
+  const addToSearchHistory = (search) => {
+    // Get the existing search history from local storage or initialize an empty array
+    let searchHistory =
+      JSON.parse(localStorage.getItem("vijithaelectronics_search_history")) ||
+      [];
+
+    // Add the new search to the end of the array
+    searchHistory.push(search);
+
+    // If the array size exceeds 5, remove the oldest search (queue behavior)
+    if (searchHistory.length > 5) {
+      searchHistory.shift(); // Remove the first element (oldest search)
+    }
+
+    // Save the updated search history array to local storage
+    localStorage.setItem(
+      "vijithaelectronics_search_history",
+      JSON.stringify(searchHistory)
+    );
+  };
+
   const getSearchedProducts = async () => {
     if (
       userSearch.length <= 0 ||
@@ -77,6 +99,7 @@ const Page = () => {
       return;
     }
     setisProductsLoading(true);
+    addToSearchHistory(userSearch);
     try {
       const res = await fetch("/api/item/search", {
         method: "POST",
@@ -107,7 +130,7 @@ const Page = () => {
 
   if (status === "loading") {
     return (
-      <div className="w-screen h-[calc(100vh-50px)] absolute top-[50px]">
+      <div className="w-screen min-h-[calc(100vh-50px)] absolute top-[50px]">
         <SpinLoader />
       </div>
     );
