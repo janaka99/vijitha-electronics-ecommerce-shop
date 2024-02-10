@@ -1,6 +1,5 @@
 import Category from "@models/category";
 import Item from "@models/item";
-import SearchHistory from "@models/searchHistory";
 import { connectToDB } from "@utils/database";
 
 export async function POST(req, res) {
