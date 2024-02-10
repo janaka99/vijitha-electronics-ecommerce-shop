@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import ErrorPage from "@components/ErrorPage";
 import SalesChart from "@components/SalesChart";
 import SalesChart2 from "@components/SalesChart2";
+import PageLoader from "@components/PageLoader";
 
 const Button = ({ title, total, filter, handleTableView, type }) => {
   return (
@@ -152,11 +153,7 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 import ReactStars from "react-rating-stars-component";
 
-const CustomOrderItem = ({ item, status, order_id, getAllOrders }) => {
+const CustomOrderItem = ({ item, status, order_id, getAllOrders, isEth }) => {
   const [feedback, setFeedback] = useState({
     rating: 0,
     message: "",
@@ -77,9 +77,11 @@ const CustomOrderItem = ({ item, status, order_id, getAllOrders }) => {
             </div>
             <div className="w-full flex justify-between items-center">
               <span className=" flex items-center">
-                <span className="text-sm">Unit Price</span>
-                <span className="text-blue-500 font-bold">
-                  {item.boughtPrice_unit} LKR
+                <span className="text-sm">Unit Price &nbsp;</span>
+                <span className="text-blue-500 font-bold text-sm">
+                  {isEth
+                    ? item.boughtPrice_unit_eth + " ETH"
+                    : item.boughtPrice_unit + " LKR"}
                 </span>
               </span>
               <span className="font-bold">x {item.quantity}</span>
@@ -87,8 +89,10 @@ const CustomOrderItem = ({ item, status, order_id, getAllOrders }) => {
           </div>
           <div className="w-full flex justify-end items-center">
             <span className="mr-2  text-sm">Total</span>
-            <span className="text-blue-500 font-bold">
-              {item.boughtPrice_unit * item.quantity} LKR
+            <span className="text-blue-500 font-bold text-sm">
+              {isEth
+                ? item.boughtPrice_unit_eth * item.quantity + " ETH"
+                : item.boughtPrice_unit * item.quantity + " LKR"}
             </span>
           </div>
         </div>

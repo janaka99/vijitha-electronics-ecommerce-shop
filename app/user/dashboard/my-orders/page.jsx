@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Rating } from "react-simple-star-rating";
 import CustomerOrder from "@components/CustomerOrder";
-import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
 import { useSession } from "next-auth/react";
+import PageLoader from "@components/PageLoader";
 
 const page = () => {
   const [rating, setRating] = useState(0);
@@ -31,18 +30,14 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;
   }
 
   return (
-    <div className="max-w-[768px] mx-auto w-[95%] py-12 flex flex-col gap-12">
+    <div className="max-w-[768px] flex-grow min-h-[calc(100svh-150px)] mx-auto w-[95%] py-12 flex flex-col gap-12">
       <div className="text-lg uppercase w-full text-center font-semibold">
         Order History
       </div>

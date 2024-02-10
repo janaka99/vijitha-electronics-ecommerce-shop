@@ -7,6 +7,7 @@ import ErrorPage from "@components/ErrorPage";
 import toast from "react-hot-toast";
 import { AiOutlineDown, AiOutlineLoading } from "react-icons/ai";
 import StripeOrderItem from "@components/StripeOrderItem";
+import PageLoader from "@components/PageLoader";
 
 const page = () => {
   const { data, status } = useSession();
@@ -86,11 +87,7 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

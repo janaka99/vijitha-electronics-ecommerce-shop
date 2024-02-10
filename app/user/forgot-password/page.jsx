@@ -1,5 +1,6 @@
 "use client";
 import ErrorPage from "@components/ErrorPage";
+import PageLoader from "@components/PageLoader";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
@@ -32,11 +33,7 @@ const page = () => {
     }
   };
   if (status == "loading") {
-    return (
-      <div className="w-screen max-w-full h-[calc(100vh-240px)] flex justify-center items-center">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status == "authenticated") {
     return <ErrorPage />;

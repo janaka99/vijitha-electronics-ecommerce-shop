@@ -1,6 +1,7 @@
 "use client";
 import ErrorPage from "@components/ErrorPage";
 import ManageOrders from "@components/ManageOrders";
+import PageLoader from "@components/PageLoader";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 
@@ -35,11 +36,7 @@ const page = () => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)]">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

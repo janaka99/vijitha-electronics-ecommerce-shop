@@ -25,13 +25,15 @@ export default function RootLayout({ children }) {
         <StyledComponentsRegistry>
           <Provider>
             <div className="main ">
-              <main>
+              <main className="w-full flex flex-col">
                 <CartContextProvider>
                   <EthPaymentProvider>
-                    <Header />
-                    {children}
-                    <Toaster />
-                    <Footer />
+                    <div className="flex w-full flex-col min-h-screen justify-between">
+                      <Header />
+                      {children}
+                      <Toaster />
+                      <Footer />
+                    </div>
                   </EthPaymentProvider>
                 </CartContextProvider>
               </main>

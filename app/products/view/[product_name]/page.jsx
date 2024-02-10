@@ -142,7 +142,7 @@ const page = (props) => {
               <div className="">{product?.totalSold}</div>
             </div>
             <div className="text-[#1A55D9] text-xl font-semibold">
-              {product?.price} $
+              {product?.price} $ | {product?.ethPrice.toFixed(5)} ETH
             </div>
             {product.qty > 0 && (
               <>

@@ -1,5 +1,6 @@
 "use client";
 import InventoryCategoryItem from "@components/InventoryCategoryItem";
+import PageLoader from "@components/PageLoader";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
@@ -78,11 +79,7 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

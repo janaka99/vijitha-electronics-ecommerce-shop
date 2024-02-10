@@ -1,6 +1,7 @@
 "use client";
 import AddNewEmployee from "@components/AddNewEmployee";
 import ErrorPage from "@components/ErrorPage";
+import PageLoader from "@components/PageLoader";
 import PopUp from "@components/PopUp";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
@@ -110,11 +111,7 @@ const page = () => {
   };
   console.log(session);
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

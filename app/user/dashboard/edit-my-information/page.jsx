@@ -8,6 +8,7 @@ import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
 import toast from "react-hot-toast";
 import { AiOutlineUpload } from "react-icons/ai";
+import PageLoader from "@components/PageLoader";
 
 const page = () => {
   const router = useRouter();
@@ -417,11 +418,7 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)]">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

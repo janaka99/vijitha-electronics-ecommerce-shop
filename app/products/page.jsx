@@ -5,10 +5,10 @@ import { FiShoppingBag } from "react-icons/fi";
 import ProductsCategories from "@/components/ProductsCategories";
 import CartItems from "@components/CartItems";
 import Products from "@components/Products";
-import SpinLoader from "@components/SpinLoader";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import { CartContext } from "@context/cartContext/CartContextState";
+import PageLoader from "@components/PageLoader";
 
 const Page = () => {
   const { status } = useSession();
@@ -129,11 +129,7 @@ const Page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen min-h-[calc(100vh-50px)] absolute top-[50px]">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (

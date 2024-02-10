@@ -12,6 +12,7 @@ import ErrorPage from "@components/ErrorPage";
 import { TbPackages } from "react-icons/tb";
 import toast from "react-hot-toast";
 import Select from "react-select";
+import PageLoader from "@components/PageLoader";
 
 const Address = ({ add, getUser }) => {
   const [isAddressRemoving, setIsAddressRemoving] = useState(false);
@@ -32,6 +33,12 @@ const Address = ({ add, getUser }) => {
       toast.error("Failed to remove the shipping address");
     }
   };
+  if (status === "loading") {
+    return <PageLoader />;
+  }
+  if (status === "unauthenticated") {
+    return <ErrorPage />;
+  }
 
   return (
     <>

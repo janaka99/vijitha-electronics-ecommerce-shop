@@ -13,6 +13,7 @@ import Loader from "@components/Loader";
 import SpinLoader from "@components/SpinLoader";
 import { AiOutlineLoading } from "react-icons/ai";
 import toast from "react-hot-toast";
+import PageLoader from "@components/PageLoader";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
@@ -38,11 +39,7 @@ const Login = () => {
   };
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "authenticated") {
     router.push("/");

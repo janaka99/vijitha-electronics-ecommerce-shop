@@ -77,7 +77,7 @@ const CustomerOrder = ({ order, c_date, getAllOrders }) => {
       <div className="w-full flex justify-between items-center border-b  border-b-gray-200 p-2 pr-4">
         <div className="text-sm ">
           Ordered Date:{" "}
-          <span className="font-semibold">{c_date.slice(0, 9)}</span>
+          <span className="font-semibold">{c_date.slice(0, 10)}</span>
         </div>
         <div className="text-sm ">
           Payment Status:{" "}
@@ -96,6 +96,7 @@ const CustomerOrder = ({ order, c_date, getAllOrders }) => {
           status={order.status}
           order_id={order._id}
           getAllOrders={getAllOrders}
+          isEth={order.isEthPayment}
         />
       ))}
       <div className="w-full flex justify-between items-center border-b  border-b-gray-200 p-2">

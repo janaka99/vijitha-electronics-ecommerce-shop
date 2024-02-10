@@ -1,5 +1,6 @@
 "use client";
 import ErrorPage from "@components/ErrorPage";
+import PageLoader from "@components/PageLoader";
 import ShoppingCartItem from "@components/ShoppingCartItem";
 import SpinLoader from "@components/SpinLoader";
 import { EthPaymentContext } from "@context/ethpaymentContext/EthPaymentContext";
@@ -247,11 +248,7 @@ const page = () => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;
@@ -259,7 +256,7 @@ const page = () => {
 
   return (
     <div>
-      <div className="max-w-[1000px] w-[95%] mx-auto py-12 flex flex-col justify-center gap-6">
+      <div className="max-w-[1000px] flex-grow w-[95%] mx-auto py-12 flex flex-col justify-center gap-6">
         <div className="flex gap-3 items-center justify-center w-ffull text-center">
           <span>Your Cart</span>
           <span className="text-blue-500 font-semibold">

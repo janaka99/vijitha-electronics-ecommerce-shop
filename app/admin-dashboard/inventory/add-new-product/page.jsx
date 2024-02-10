@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
+import PageLoader from "@components/PageLoader";
 
 const page = ({}) => {
   const [categories, setCategories] = useState([]);
@@ -145,11 +146,7 @@ const page = ({}) => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-140px)] ">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;

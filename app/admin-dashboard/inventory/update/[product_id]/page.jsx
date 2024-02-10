@@ -10,6 +10,7 @@ import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import PageLoader from "@components/PageLoader";
 
 const page = (props) => {
   const formRef = useRef();
@@ -283,11 +284,7 @@ const page = (props) => {
   }, []);
 
   if (status === "loading") {
-    return (
-      <div className="w-screen h-[calc(100vh-240px)]">
-        <SpinLoader />
-      </div>
-    );
+    return <PageLoader />;
   }
   if (status === "unauthenticated") {
     return <ErrorPage />;
