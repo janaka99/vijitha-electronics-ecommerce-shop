@@ -46,7 +46,7 @@ const Login = () => {
   }
 
   return (
-    <div className="max-w-[95%] mx-auto w-screen h-[calc(100vh-50px)] flex justify-center items-center">
+    <div className="max-w-[95%] mx-auto w-full h-[calc(100vh-50px)] flex justify-center items-center">
       <div className="max-w-[400px] w-full  flex flex-col justify-center items-center p-6 gap-2 border border-gray-100 shadow-md rounded-md">
         <div className="w-full flex flex-col gap-4 pt-2 pb-4 text-center">
           <h1 className="text-2xl uppercase tracking-wider font-semibold">

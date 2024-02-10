@@ -95,7 +95,7 @@ const page = () => {
   return (
     <div className="max-w-[1440px] min-h-[calc(100vh-240px)] w-[95%] mx-auto py-12 flex flex-col gap-8">
       {loading ? (
-        <div className="w-screen h-[calc(100vh-240px)] flex justify-center items-center backdrop-blur-[1px]">
+        <div className="w-full h-[calc(100vh-240px)] flex justify-center items-center backdrop-blur-[1px]">
           <SpinLoader />
         </div>
       ) : (

@@ -1,10 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BiUpload } from "react-icons/bi";
-import styled from "styled-components";
-import Loader from "@components/Loader";
-import PopUp from "@components/PopUp";
 import { useSession } from "next-auth/react";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
@@ -270,6 +266,7 @@ const page = (props) => {
     if (res.ok) {
       getProduct();
       toast.success("Product deleted Successfully");
+      router.push("/admin-dashboard/inventory");
     } else {
       setReqLoading(false);
       console.log(res);
@@ -297,9 +294,7 @@ const page = (props) => {
   return (
     <div className="max-w-[1440px]  w-[95%] flex flex-col gap-3 my-12 mx-auto relative">
       {isGetProductLoading ? (
-        <div className="w-screen h-[calc(100vh-240px)] ">
-          <SpinLoader />
-        </div>
+        <PageLoader />
       ) : (
         <>
           <h1 className="uppercase text-2xl font-semibold text-center mb-7">
@@ -519,12 +514,12 @@ const page = (props) => {
               Delete
             </button>
           </div>
+          {reqLoading && (
+            <div className="absolute w-full h-full top-0 left-0 bgs-[#ffffff03]s backdrop-blur-[1px] flex justify-center items-center">
+              <SpinLoader />
+            </div>
+          )}
         </>
-      )}
-      {reqLoading && (
-        <div className="absolute w-screen h-full bg-[#ffffff03] backdrop-blur-[1px] flex justify-center items-center">
-          <SpinLoader />
-        </div>
       )}
     </div>
   );

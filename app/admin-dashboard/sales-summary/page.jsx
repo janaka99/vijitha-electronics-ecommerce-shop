@@ -164,9 +164,7 @@ const page = () => {
   return (
     <div className="max-w-[1440px] w-[95%] mx-auto py-12 flex flex-col gap-8">
       {loading ? (
-        <div className="w-screen h-[calc(100vh-176px)] flex justify-center items-center backdrop-blur-[1px]">
-          <Loader size={"50px"} border={"5px"} />
-        </div>
+        <PageLoader />
       ) : (
         <>
           <div className="flex gap-2 ">
