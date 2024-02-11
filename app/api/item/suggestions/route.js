@@ -15,7 +15,7 @@ export async function POST(req, res) {
       search == ""
     ) {
       //find all available products
-      rs = await Item.find()
+      rs = await Item.find({ status: "available" })
         .populate({
           path: "category",
           model: Category,
@@ -28,11 +28,16 @@ export async function POST(req, res) {
       const regexArray = keywords.map((keyword) => new RegExp(keyword, "i"));
       console.log(regexArray);
       const query = {
-        $or: [
-          { name: { $in: regexArray } },
-          { description: { $in: regexArray } },
+        $and: [
+          {
+            $or: [
+              { name: { $in: regexArray } },
+              { description: { $in: regexArray } },
+            ],
+          },
+
+          { status: "available" },
         ],
-        // status: "available", // Additional condition for the status
       };
       //find all available products
       rs = await Item.find(query)
@@ -43,7 +48,7 @@ export async function POST(req, res) {
         .limit(4);
     }
     if (rs == null || rs.length == 0 || rs == undefined) {
-      rs = await Item.find()
+      rs = await Item.find({ status: "available" })
         .populate({
           path: "category",
           model: Category,
@@ -52,7 +57,7 @@ export async function POST(req, res) {
     }
     if (rs.length < 4) {
       const remain = 4 - rs.length;
-      const newrs = await Item.find()
+      const newrs = await Item.find({ status: "available" })
         .populate({
           path: "category",
           model: Category,

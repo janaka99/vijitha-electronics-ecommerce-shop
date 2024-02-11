@@ -269,10 +269,10 @@ const page = (props) => {
       router.push("/admin-dashboard/inventory");
     } else {
       setReqLoading(false);
+      setReqLoading(false);
       console.log(res);
       toast.error("Something went wrong 2");
     }
-    setReqLoading(false);
   };
 
   useEffect(() => {

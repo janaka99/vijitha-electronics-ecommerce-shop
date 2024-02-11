@@ -101,7 +101,7 @@ const page = (props) => {
   return (
     <div className="max-w-[1440px] w-[95%] mx-auto flex flex-col gap-12 py-12 min-h-[calc(100vh-80px)]">
       {isProductLoading ? (
-        <div className="w-screen flex-grow flex justify-center items-center">
+        <div className="w-full flex-grow flex justify-center items-center">
           <SpinLoader />
         </div>
       ) : (
