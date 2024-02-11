@@ -42,6 +42,7 @@ const page = () => {
     <div className="w-full max-w-full h-[calc(100vh-80px)] flex justify-center items-center">
       <div className="max-w-[400px] mx-auto w-[90%] p-6 flex gap6 border border-gray-200 shadow-md rounded-md">
         <form onSubmit={handleForm} className="w-full flex flex-col gap-6">
+          <label htmlFor="text-black">Email</label>
           <input
             type="email"
             className="p-2 outline-blue-500 text-sm border border-gray-200 rounded-md"
