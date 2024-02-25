@@ -7,15 +7,19 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useStateManager } from "react-select";
+import { useSearchParams } from "next/navigation";
 
 const page = (props) => {
   const router = useRouter();
-  const [token, setToken] = useState("");
+  // const [token, setToken] = useState("");
   const [verified, setVerified] = useState(false);
   const [error, seterror] = useState(false);
   const [isVerifying, setIsVerifying] = useState(true);
 
   const { data, status } = useSession();
+  const searchParams = useSearchParams();
+
+  const token = searchParams.get("token");
 
   const verifyUserEmail = async () => {
     setIsVerifying(true);
@@ -23,6 +27,7 @@ const page = (props) => {
     console.log(props);
     console.log(props.searchParams);
     console.log(props.params);
+    console.log(token);
     try {
       let res = await fetch(
         `/api/user/verify?token_id=${props.searchParams.token}`,
