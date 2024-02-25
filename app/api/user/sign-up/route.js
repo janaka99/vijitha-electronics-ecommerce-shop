@@ -10,12 +10,10 @@ export const POST = async (req, res) => {
     const {
       name,
       email,
-      phoneNumber,
-      id,
+      phone_number,
       address1,
       address2,
       address3,
-      role,
       password,
     } = await req.json();
     await connectToDB();
@@ -27,12 +25,10 @@ export const POST = async (req, res) => {
       name: name,
       email: email.toLowerCase(),
       password: password,
-      phoneNumber: phoneNumber,
-      NIC: id,
+      phoneNumber: phone_number,
       address1: address1,
       address2: address2,
       address3: address3,
-      role: role,
       emailVerification: vcode,
     });
 
@@ -49,7 +45,7 @@ export const POST = async (req, res) => {
     console.log(error);
     return new Response(
       JSON.stringify({ message: "Failed to create new user" }),
-      { status: 200 }
+      { status: 400 }
     );
   }
 };
