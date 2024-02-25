@@ -50,12 +50,15 @@ export const EthPaymentProvider = ({ children }) => {
 
   const checkIfWalletIsConnected = async () => {
     try {
-      if (!window.ethereum) throw new Error("No ethereum object available");
-      const accounts = await window.ethereum.request({
-        method: "eth_accounts",
-      });
-      if (accounts.length) {
-        setCurrentAccount(accounts[0]);
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        if (accounts.length) {
+          setCurrentAccount(accounts[0]);
+        } else {
+          throw new Error("No ethereum object available");
+        }
       } else {
         throw new Error("No ethereum object available");
       }

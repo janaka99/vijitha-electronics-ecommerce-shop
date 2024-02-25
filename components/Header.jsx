@@ -81,18 +81,18 @@ const Header = () => {
 
               {status === "authenticated" && data !== null ? (
                 <>
-                  {data.user.role === "admin" ||
+                  {(data.user.role === "admin" ||
                     data.user.role === "manager" ||
-                    (data.user.role === "employee" && (
-                      <>
-                        <a
-                          className="hover:text-blue-100"
-                          href="/admin-dashboard"
-                        >
-                          Admin Dashboard
-                        </a>
-                      </>
-                    ))}
+                    data.user.role === "employee") && (
+                    <>
+                      <a
+                        className="hover:text-blue-100"
+                        href="/admin-dashboard"
+                      >
+                        Admin Dashboard
+                      </a>
+                    </>
+                  )}
                   <div className="md:hidden">
                     <a className="hover:text-blue-100" href="/user/dashboard">
                       My Dashboard
@@ -163,18 +163,18 @@ const Header = () => {
                             My Dashboard
                           </a>
 
-                          {data.user.role === "admin" ||
+                          {(data.user.role === "admin" ||
                             data.user.role === "manager" ||
-                            (data.user.role === "employee" && (
-                              <>
-                                <a
-                                  className="hover:text-blue-100"
-                                  href="/admin-dashboard"
-                                >
-                                  Admin Dashboard
-                                </a>
-                              </>
-                            ))}
+                            data.user.role === "employee") && (
+                            <>
+                              <a
+                                className="hover:text-blue-100"
+                                href="/admin-dashboard"
+                              >
+                                Admin Dashboard
+                              </a>
+                            </>
+                          )}
                           <div className="w-full flex justify-center">
                             <button className="_btn1 " onClick={handleSignOut}>
                               Log out

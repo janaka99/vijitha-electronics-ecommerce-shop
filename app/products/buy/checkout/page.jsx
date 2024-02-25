@@ -129,6 +129,7 @@ const page = () => {
       await checkIfWalletIsConnected();
     } catch (error) {
       toast.error("Meta Mask Error. Please Connect your wallet");
+
       return;
     }
     setisEthPaymentProcessing(true);
@@ -219,6 +220,7 @@ const page = () => {
 
     if (res.ok) {
       const data = await res.json();
+      getShippingAddresses();
       setisAddressSaving(false);
     } else {
       console.log(res);
