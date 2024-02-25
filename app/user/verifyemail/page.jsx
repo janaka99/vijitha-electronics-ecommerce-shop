@@ -19,6 +19,8 @@ const page = (props) => {
 
   const verifyUserEmail = async () => {
     setIsVerifying(true);
+    console.log(props.searchParams.token);
+    console.log(props);
     try {
       let res = await fetch(
         `/api/user/verify?token_id=${props.searchParams.token}`,
@@ -57,7 +59,7 @@ const page = (props) => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center flex-col">
-      <h1 className="text-4xl">VErify Email</h1>
+      <h1 className="text-4xl">Verify Email</h1>
       {isVerifying ? (
         <button className="bg-blue-500 px-4 py-2 mt-4 text-white rounded-xl ">
           Verifying
