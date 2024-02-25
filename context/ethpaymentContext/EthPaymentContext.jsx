@@ -52,7 +52,7 @@ export const EthPaymentProvider = ({ children }) => {
     try {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({
-          method: "eth_accounts",
+          method: "eth_requestAccounts",
         });
         if (accounts.length) {
           setCurrentAccount(accounts[0]);
