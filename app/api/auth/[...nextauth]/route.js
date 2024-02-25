@@ -12,10 +12,7 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         const { email, password } = credentials;
         if (email == "" || password == "") {
-          return new Response(
-            JSON.stringify({ message: "Invalid credentials" }),
-            { status: 401 }
-          );
+          throw new Error("Invalid credentials");
         }
         try {
           //perform user verification logic

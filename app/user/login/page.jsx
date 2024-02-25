@@ -25,6 +25,14 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log(userInfo);
+    if (userInfo.email == "") {
+      toast.error("Email is Required");
+      return;
+    }
+    if (userInfo.password == "") {
+      toast.error("Password is Required");
+      return;
+    }
     setReqLoading(true);
     const res = await signIn("credentials", {
       email: userInfo.email,
