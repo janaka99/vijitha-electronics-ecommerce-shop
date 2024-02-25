@@ -1,4 +1,5 @@
 "use client";
+import ErrorPage from "@components/ErrorPage";
 import Review from "@components/Review";
 import SpinLoader from "@components/SpinLoader";
 import { useSearchParams } from "next/navigation";
@@ -20,6 +21,7 @@ const page = (props) => {
 
   const getProduct = async () => {
     setIsProductLoading(true);
+    console.log(product_id_para);
     const res = await fetch(`/api/item/get/product_id?id=${product_id_para}`, {
       method: "GET",
     });
@@ -106,6 +108,8 @@ const page = (props) => {
         <div className="w-full flex-grow flex justify-center items-center">
           <SpinLoader />
         </div>
+      ) : product == null ? (
+        <ErrorPage />
       ) : (
         <>
           <div className="w-full flex gap-12  flex-col lg:flex-row">
