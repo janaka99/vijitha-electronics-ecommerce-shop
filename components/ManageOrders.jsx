@@ -104,6 +104,20 @@ const Order = ({ order, type, getOrders }) => {
     return `${newDate} - ${name}`;
   };
 
+  const calTotal = (item) => {
+    let total = 0;
+    let ethTotal = 0;
+    item.map((i) => {
+      ethTotal += i.boughtPrice_unit_eth * i.quantity;
+      total += i.boughtPrice_unit * i.quantity;
+    });
+    console.log(ethTotal);
+    if (ethTotal > 0) {
+      return ethTotal + " ETH";
+    }
+    return total + " LKR";
+  };
+
   return (
     <div className="flex flex-col w-full">
       <div
@@ -134,91 +148,123 @@ const Order = ({ order, type, getOrders }) => {
         </div>
       </div>
       {expand && (
-        <div className=" top-full left-0 w-full py-3 px-2 flex gap-2 border border-gray-200 justify-between">
-          <div className=" flex flex-col gap-4 border-">
-            {order.orderItems.map((item, i) => (
-              <div className="w-full flex gap-6">
-                <div className="w-[50px] h-[50px] flex justify-center rounded overflow-hidden bg-gray-200 items-center">
-                  <img
-                    className="w-full h-full p-2 object-contain"
-                    src={item.product_img}
-                    alt=""
-                  />
-                </div>
-                <div className="flex flex-col flex-grow">
-                  <span>{item.name}</span>
-                  <span>
-                    {item.quantity} x {item.boughtPrice_unit} LKR
+        <div className="w-full p-4 border flex flex-col justify-between text-sm gap-2">
+          <div className="flex py-2 justify-start gap-4">
+            <div className="flex items-center justify-start gap-2 text-gray-800">
+              Status: <span className="font-bold">{order.status}</span>
+            </div>
+            <div className="flex items-center py-1 gap-2 text-gray-800">
+              Total:{" "}
+              <span className="font-bold">{calTotal(order.orderItems)}</span>
+            </div>
+            <div className="flex items-center justify-start gap-2 text-gray-800">
+              Paid:{" "}
+              <span className="font-bold text-green-500">
+                {order.isPaid ? "Paid" : "Not Paid"}
+              </span>
+            </div>
+            {!order.isPaid &&
+              (isReqProcessing ? (
+                <button
+                  disabled={true}
+                  className="w-[111px] h-10 bg-blue-600 text-white rounded-lg cursor-pointer flex justify-center items-center"
+                >
+                  <span className="animate-spin">
+                    <AiOutlineLoading size={20} />
                   </span>
-                  <span></span>
-                </div>
-              </div>
-            ))}
+                </button>
+              ) : (
+                <button
+                  onClick={() => markAsPaid(order._id)}
+                  className="w-[111px] h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer"
+                >
+                  Mark As Paid
+                </button>
+              ))}
           </div>
-          <div className="flex gap-6">
-            <div className="flex flex-col gap-2 border border-gray-200 p-2">
-              <div className="flex gap-2 text-sm">
-                <span className="w-[105px]">Confirmed By </span>
-                <span className="font-bold ">
+          <div className="flex justify-between text-sm gap-2">
+            <div className="flex flex-col gap-4   pr-4">
+              {order.orderItems.map((item, i) => (
+                <div className="flex gap-4 items-center">
+                  <div className="w-[50px] h-[50px] flex justify-center rounded overflow-hidden bg-gray-200">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={item.product_img}
+                      alt={item.name}
+                    />
+                  </div>
+                  <div className="flex flex-col flex-grow">
+                    <span className="text-sm font-semibold text-gray-800">
+                      {item.name}
+                    </span>
+                    <span className="text-gray-600 text-sm">
+                      {item.quantity} x{" "}
+                      {order.isEthPayment
+                        ? item.boughtPrice_unit_eth + " ETH"
+                        : item.boughtPrice_unit + " LKR"}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="text-gray-800 font-semibold text-lg">
+                Status Details
+              </div>
+              <div className="flex gap-2 text-gray-800">
+                <span className="w-[90px] text-gray-600">Confirmed:</span>
+                <span className="font-bold">
                   {order.confirmedBy.user || order.confirmedBy.isConfirmed
-                    ? functionGetDate(
-                        order.confirmedBy.datetime,
-                        order.confirmedBy.user?.name
-                      )
-                    : "Not Confiremd Yet"}
+                    ? functionGetDate(order.confirmedBy.datetime)
+                    : "Not Confirmed Yet"}
                 </span>
               </div>
-              <div className="flex gap-2 text-sm">
-                <span className="w-[105px]">Processing By </span>
-                <span className="font-bold ">
+              <div className="flex gap-2 text-gray-800">
+                <span className="w-[90px] text-gray-600">Processed:</span>
+                <span className="font-bold">
                   {order.processingBy.user || order.processingBy.isProcessing
-                    ? functionGetDate(
-                        order.processingBy.datetime,
-                        order.processingBy.user?.name
-                      )
-                    : "Not Processes Yet"}
+                    ? functionGetDate(order.processingBy.datetime)
+                    : "Not Processed Yet"}
                 </span>
               </div>
-              <div className="flex gap-2 text-sm">
-                <span className="w-[105px]">Distpacthed By </span>
-                <span className="font-bold ">
+              <div className="flex gap-2 text-gray-800">
+                <span className="w-[90px] text-gray-600">Dispatched:</span>
+                <span className="font-bold">
                   {order.dispatchedBy.user || order.dispatchedBy.isDispatched
-                    ? functionGetDate(
-                        order.dispatchedBy.datetime,
-                        order.dispatchedBy.user?.name
-                      )
+                    ? functionGetDate(order.dispatchedBy.datetime)
                     : "Not Dispatched Yet"}
                 </span>
               </div>
-              <div className="flex gap-2 text-sm">
-                <span className="w-[105px]">Canceled By </span>
-                <span className="font-bold ">
+              <div className="flex gap-2 text-gray-800">
+                <span className="w-[90px] text-gray-600">Canceled:</span>
+                <span className="font-bold">
                   {order.canceledBy.user || order.canceledBy.isCanceled
-                    ? functionGetDate(
-                        order.canceledBy.datetime,
-                        order.canceledBy.user?.name
-                      )
+                    ? functionGetDate(order.canceledBy.datetime)
                     : "Order is not canceled"}
                 </span>
               </div>
             </div>
-
-            <div className="border border-gray-200 p-2">
-              <div className="flex flex-col flex-grow">
-                <div className="text-sm">{order.shippingDetails.name}</div>
-                <div className="text-sm">
-                  {order.shippingDetails.address1} {","}{" "}
-                  {order.shippingDetails.address2}
-                </div>
-                <div className="text-sm">
-                  {order.shippingDetails.city} {","}{" "}
-                  {order.shippingDetails.state}
-                </div>
-                <div className="text-sm">
-                  {order.shippingDetails.country.label} {","}{" "}
-                  {order.shippingDetails.postalCode}
-                </div>
-                <div className="text-sm">{order.shippingDetails.contact}</div>
+            <div className="rounded-lg px-4">
+              <div className="text-gray-800 font-semibold text-lg mb-4">
+                Shipping Address
+              </div>
+              <div className="text-gray-800 font-semibold text-base">
+                {order.shippingDetails.name}
+              </div>
+              <div className="text-gray-600">
+                {order.shippingDetails.address1},{" "}
+                {order.shippingDetails.address2}
+              </div>
+              <div className="text-gray-600">
+                {order.shippingDetails.city}, {order.shippingDetails.state}
+              </div>
+              <div className="text-gray-600">
+                {order.shippingDetails.country.label},{" "}
+                {order.shippingDetails.postalCode}
+              </div>
+              <div className="text-gray-800">
+                {order.shippingDetails.contact}
               </div>
             </div>
           </div>
@@ -281,3 +327,95 @@ const ManageOrders = ({ type }) => {
 };
 
 export default ManageOrders;
+
+{
+  /* <div className=" top-full left-0 w-full py-3 px-2 flex gap-2 border border-gray-200 justify-between">
+<div className=" flex flex-col gap-4 border-">
+  {order.orderItems.map((item, i) => (
+    <div className="w-full flex gap-6">
+      <div className="w-[50px] h-[50px] flex justify-center rounded overflow-hidden bg-gray-200 items-center">
+        <img
+          className="w-full h-full p-2 object-contain"
+          src={item.product_img}
+          alt=""
+        />
+      </div>
+      <div className="flex flex-col flex-grow">
+        <span>{item.name}</span>
+        <span>
+          {item.quantity} x {item.boughtPrice_unit} LKR
+        </span>
+        <span></span>
+      </div>
+    </div>
+  ))}
+</div>
+<div className="flex gap-6">
+  <div className="flex flex-col gap-2 border border-gray-200 p-2">
+    <div className="flex gap-2 text-sm">
+      <span className="w-[105px]">Confirmed By </span>
+      <span className="font-bold ">
+        {order.confirmedBy.user || order.confirmedBy.isConfirmed
+          ? functionGetDate(
+              order.confirmedBy.datetime,
+              order.confirmedBy.user?.name
+            )
+          : "Not Confiremd Yet"}
+      </span>
+    </div>
+    <div className="flex gap-2 text-sm">
+      <span className="w-[105px]">Processing By </span>
+      <span className="font-bold ">
+        {order.processingBy.user || order.processingBy.isProcessing
+          ? functionGetDate(
+              order.processingBy.datetime,
+              order.processingBy.user?.name
+            )
+          : "Not Processes Yet"}
+      </span>
+    </div>
+    <div className="flex gap-2 text-sm">
+      <span className="w-[105px]">Distpacthed By </span>
+      <span className="font-bold ">
+        {order.dispatchedBy.user || order.dispatchedBy.isDispatched
+          ? functionGetDate(
+              order.dispatchedBy.datetime,
+              order.dispatchedBy.user?.name
+            )
+          : "Not Dispatched Yet"}
+      </span>
+    </div>
+    <div className="flex gap-2 text-sm">
+      <span className="w-[105px]">Canceled By </span>
+      <span className="font-bold ">
+        {order.canceledBy.user || order.canceledBy.isCanceled
+          ? functionGetDate(
+              order.canceledBy.datetime,
+              order.canceledBy.user?.name
+            )
+          : "Order is not canceled"}
+      </span>
+    </div>
+  </div>
+
+  <div className="border border-gray-200 p-2">
+    <div className="flex flex-col flex-grow">
+      <div className="text-sm">{order.shippingDetails.name}</div>
+      <div className="text-sm">
+        {order.shippingDetails.address1} {","}{" "}
+        {order.shippingDetails.address2}
+      </div>
+      <div className="text-sm">
+        {order.shippingDetails.city} {","}{" "}
+        {order.shippingDetails.state}
+      </div>
+      <div className="text-sm">
+        {order.shippingDetails.country.label} {","}{" "}
+        {order.shippingDetails.postalCode}
+      </div>
+      <div className="text-sm">{order.shippingDetails.contact}</div>
+    </div>
+  </div>
+</div>
+</div> */
+}

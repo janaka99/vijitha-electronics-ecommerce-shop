@@ -37,6 +37,7 @@ export const POST = async (req, res) => {
         address3: address3,
         role: role,
         emailVerification: vcode,
+        src: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
       });
 
       await newUser.save();

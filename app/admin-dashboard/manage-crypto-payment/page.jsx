@@ -169,9 +169,13 @@ const page = () => {
                 Can not find any orders
               </div>
             ) : (
-              orders.map((order, i) => (
-                <EthOrderItem key={i} order={order} getData={getData} />
-              ))
+              orders.map((order, i) => {
+                if (order.orderDetails) {
+                  return (
+                    <EthOrderItem key={i} order={order} getData={getData} />
+                  );
+                }
+              })
             )}
           </div>
         </>

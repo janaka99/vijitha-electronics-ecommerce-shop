@@ -64,10 +64,10 @@ const EthOrderItem = ({ order, getData }) => {
         }`}
       >
         <div className="w-[25%] flex items-center pl-2 justify-start py-1 border-r border-r-gray-200">
-          {order.orderDetails.customer.email}
+          {order.orderDetails?.customer.email}
         </div>
         <div className="w-[10%] flex items-center pl-2 py-2 border-r border-gray-300 text-gray-600">
-          {order.orderDetails.customer.createdAt.slice(0, 10)}
+          {order.orderDetails?.customer.createdAt.slice(0, 10)}
         </div>
 
         <div className="w-[20%] flex items-center pl-2 py-2 border-r border-gray-300 text-gray-800">
@@ -95,21 +95,21 @@ const EthOrderItem = ({ order, getData }) => {
           <div className="flex py-2 justify-start gap-4">
             <div className="flex items-center justify-start gap-2 text-gray-800">
               Status:{" "}
-              <span className="font-bold">{order.orderDetails.status}</span>
+              <span className="font-bold">{order.orderDetails?.status}</span>
             </div>
             <div className="flex items-center py-1 gap-2 text-gray-800">
               Total:{" "}
               <span className="font-bold">
-                {calTotal(order.orderDetails.orderItems)} ETH
+                {calTotal(order.orderDetails?.orderItems)} ETH
               </span>
             </div>
             <div className="flex items-center justify-start gap-2 text-gray-800">
               Paid:{" "}
               <span className="font-bold text-green-500">
-                {order.orderDetails.isPaid ? "Paid" : "Not Paid"}
+                {order.orderDetails?.isPaid ? "Paid" : "Not Paid"}
               </span>
             </div>
-            {!order.orderDetails.isPaid &&
+            {!order.orderDetails?.isPaid &&
               (isReqProcessing ? (
                 <button
                   disabled={true}
@@ -121,7 +121,7 @@ const EthOrderItem = ({ order, getData }) => {
                 </button>
               ) : (
                 <button
-                  onClick={() => markAsPaid(order.orderDetails._id)}
+                  onClick={() => markAsPaid(order.orderDetails?._id)}
                   className="w-[111px] h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer"
                 >
                   Mark As Paid
@@ -130,7 +130,7 @@ const EthOrderItem = ({ order, getData }) => {
           </div>
           <div className="flex justify-between text-sm gap-2">
             <div className="flex flex-col gap-4   pr-4">
-              {order.orderDetails.orderItems.map((item, i) => (
+              {order.orderDetails?.orderItems.map((item, i) => (
                 <div className="flex gap-4 items-center">
                   <div className="w-[50px] h-[50px] flex justify-center rounded overflow-hidden bg-gray-200">
                     <img
@@ -158,36 +158,36 @@ const EthOrderItem = ({ order, getData }) => {
               <div className="flex gap-2 text-gray-800">
                 <span className="w-[90px] text-gray-600">Confirmed:</span>
                 <span className="font-bold">
-                  {order.orderDetails.confirmedBy.user ||
-                  order.orderDetails.confirmedBy.isConfirmed
-                    ? functionGetDate(order.orderDetails.confirmedBy.datetime)
+                  {order.orderDetails?.confirmedBy.user ||
+                  order.orderDetails?.confirmedBy.isConfirmed
+                    ? functionGetDate(order.orderDetails?.confirmedBy.datetime)
                     : "Not Confirmed Yet"}
                 </span>
               </div>
               <div className="flex gap-2 text-gray-800">
                 <span className="w-[90px] text-gray-600">Processed:</span>
                 <span className="font-bold">
-                  {order.orderDetails.processingBy.user ||
-                  order.orderDetails.processingBy.isProcessing
-                    ? functionGetDate(order.orderDetails.processingBy.datetime)
+                  {order.orderDetails?.processingBy.user ||
+                  order.orderDetails?.processingBy.isProcessing
+                    ? functionGetDate(order.orderDetails?.processingBy.datetime)
                     : "Not Processed Yet"}
                 </span>
               </div>
               <div className="flex gap-2 text-gray-800">
                 <span className="w-[90px] text-gray-600">Dispatched:</span>
                 <span className="font-bold">
-                  {order.orderDetails.dispatchedBy.user ||
-                  order.orderDetails.dispatchedBy.isDispatched
-                    ? functionGetDate(order.orderDetails.dispatchedBy.datetime)
+                  {order.orderDetails?.dispatchedBy.user ||
+                  order.orderDetails?.dispatchedBy.isDispatched
+                    ? functionGetDate(order.orderDetails?.dispatchedBy.datetime)
                     : "Not Dispatched Yet"}
                 </span>
               </div>
               <div className="flex gap-2 text-gray-800">
                 <span className="w-[90px] text-gray-600">Canceled:</span>
                 <span className="font-bold">
-                  {order.orderDetails.canceledBy.user ||
-                  order.orderDetails.canceledBy.isCanceled
-                    ? functionGetDate(order.orderDetails.canceledBy.datetime)
+                  {order.orderDetails?.canceledBy.user ||
+                  order.orderDetails?.canceledBy.isCanceled
+                    ? functionGetDate(order.orderDetails?.canceledBy.datetime)
                     : "Order is not canceled"}
                 </span>
               </div>
@@ -197,22 +197,22 @@ const EthOrderItem = ({ order, getData }) => {
                 Shipping Address
               </div>
               <div className="text-gray-800 font-semibold text-base">
-                {order.orderDetails.shippingDetails.name}
+                {order.orderDetails?.shippingDetails.name}
               </div>
               <div className="text-gray-600">
-                {order.orderDetails.shippingDetails.address1},{" "}
-                {order.orderDetails.shippingDetails.address2}
+                {order.orderDetails?.shippingDetails.address1},{" "}
+                {order.orderDetails?.shippingDetails.address2}
               </div>
               <div className="text-gray-600">
-                {order.orderDetails.shippingDetails.city},{" "}
-                {order.orderDetails.shippingDetails.state}
+                {order.orderDetails?.shippingDetails.city},{" "}
+                {order.orderDetails?.shippingDetails.state}
               </div>
               <div className="text-gray-600">
-                {order.orderDetails.shippingDetails.country.label},{" "}
-                {order.orderDetails.shippingDetails.postalCode}
+                {order.orderDetails?.shippingDetails.country.label},{" "}
+                {order.orderDetails?.shippingDetails.postalCode}
               </div>
               <div className="text-gray-800">
-                {order.orderDetails.shippingDetails.contact}
+                {order.orderDetails?.shippingDetails.contact}
               </div>
             </div>
           </div>
