@@ -92,7 +92,6 @@ const page = () => {
         setIsImageuploading(false);
         toast.error("Profile image failed to update");
       }
-      toast.error("Image is empty");
     }
   };
 
@@ -388,7 +387,7 @@ const page = () => {
             ...loading,
             isPasswordLoading: false,
           }));
-          toast.success("Failed to update the password, Please Login again");
+          toast.success("Password updated successfully.");
         } else {
           const jres = await res.json();
           setloading(() => ({

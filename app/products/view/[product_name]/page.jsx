@@ -1,6 +1,7 @@
 "use client";
 import Review from "@components/Review";
 import SpinLoader from "@components/SpinLoader";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -13,14 +14,15 @@ const page = (props) => {
   const [isReviewsLoading, setIsReviewsLoading] = useState(false);
   const [isCartUpdating, setIsCartUpdating] = useState(false);
 
+  const searchParams = useSearchParams();
+
+  const product_id_para = searchParams.get("id");
+
   const getProduct = async () => {
     setIsProductLoading(true);
-    const res = await fetch(
-      `/api/item/get/product_id?id=${props.searchParams.id}`,
-      {
-        method: "GET",
-      }
-    );
+    const res = await fetch(`/api/item/get/product_id?id=${product_id_para}`, {
+      method: "GET",
+    });
     if (res.ok) {
       const newRes = await res.json();
       setProduct(newRes[0]);
@@ -36,7 +38,7 @@ const page = (props) => {
   const getReviews = async () => {
     setIsReviewsLoading(true);
     const res = await fetch(
-      `/api/item/get-reviews/product_id?id=${props.searchParams.id}`,
+      `/api/item/get-reviews/product_id?id=${product_id_para}`,
       {
         method: "GET",
       }
@@ -96,7 +98,7 @@ const page = (props) => {
 
   useEffect(() => {
     getProduct();
-  }, []);
+  }, [product_id_para]);
 
   return (
     <div className="max-w-[1440px] w-[95%] mx-auto flex flex-col gap-12 py-12 min-h-[calc(100vh-80px)]">

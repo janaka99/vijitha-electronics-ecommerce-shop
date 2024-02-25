@@ -130,7 +130,11 @@ const Header = () => {
                   >
                     <img
                       className="w-full h-full object-cover  object-center rounded-[50%]"
-                      src={data.user.src}
+                      src={
+                        data.user.src
+                          ? data.user.src
+                          : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                      }
                       alt=""
                     />
                     {dropView && (

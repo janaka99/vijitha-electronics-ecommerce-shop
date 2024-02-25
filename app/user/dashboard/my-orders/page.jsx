@@ -43,15 +43,19 @@ const page = () => {
       </div>
       <div className="w-full flex flex-col gap-6">
         <div className="w-full max-w-[768px] mx-auto flex flex-col gap-4">
-          {orders.map((order) => (
-            <>
-              <CustomerOrder
-                order={order}
-                c_date={order.createdAt}
-                getAllOrders={getAllOrders}
-              />
-            </>
-          ))}
+          {orders.length <= 0 ? (
+            <div>No Orders</div>
+          ) : (
+            orders.map((order) => (
+              <>
+                <CustomerOrder
+                  order={order}
+                  c_date={order.createdAt}
+                  getAllOrders={getAllOrders}
+                />
+              </>
+            ))
+          )}
         </div>
       </div>
     </div>
