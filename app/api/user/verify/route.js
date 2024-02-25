@@ -10,7 +10,7 @@ export async function POST(req, res) {
   try {
     await connectToDB();
     const { token } = await req.json();
-    console.log(id);
+    console.log(token);
     const rs = await User.findOneAndUpdate(
       { emailVerification: token, isVerified: false },
       {

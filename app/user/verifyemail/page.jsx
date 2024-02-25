@@ -24,7 +24,7 @@ const page = (props) => {
         `/api/user/verify?token_id=${props.searchParams.token}`,
         {
           method: "POST",
-          body: JSON.stringify(token),
+          body: JSON.stringify({ token: props.searchParams.token }),
         }
       );
       if (res.ok) {
@@ -59,9 +59,16 @@ const page = (props) => {
     <div className="w-screen h-screen flex justify-center items-center flex-col">
       <h1 className="text-4xl">VErify Email</h1>
       {isVerifying ? (
-        <button>Verifying</button>
+        <button className="bg-blue-500 px-4 py-2 mt-4 text-white rounded-xl ">
+          Verifying
+        </button>
       ) : (
-        <button onClick={verifyUserEmail}>Retrynb</button>
+        <button
+          className="bg-blue-500 px-4 py-2 mt-4 text-white rounded-xl "
+          onClick={verifyUserEmail}
+        >
+          Retry
+        </button>
       )}
     </div>
   );
