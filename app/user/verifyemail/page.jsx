@@ -21,7 +21,6 @@ const page = (props) => {
     setIsVerifying(true);
     console.log(props.searchParams.token);
     console.log(props);
-    console.log(props.searchParams.get("token"));
     console.log(props.searchParams);
     console.log(props.params);
     try {
