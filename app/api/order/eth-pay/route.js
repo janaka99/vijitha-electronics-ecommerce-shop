@@ -46,7 +46,7 @@ export async function POST(req, res) {
         orderItems: [],
         customer: loggedUser._id,
         shippingDetails: shippingAddress,
-        isEthPayament: true,
+        isEthPayment: true,
       });
 
       const items = await Promise.all(

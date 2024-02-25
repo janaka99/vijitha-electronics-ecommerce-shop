@@ -6,6 +6,7 @@ import SpinLoader from "@components/SpinLoader";
 import { EthPaymentContext } from "@context/ethpaymentContext/EthPaymentContext";
 import getStripe from "@lib/getStripe";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters, AiOutlineShopping } from "react-icons/ai";
@@ -21,6 +22,7 @@ const page = () => {
   const [selectedCountry, setSelectedCountry] = useState({});
   const [ShippingAddressError, setShippingAddressError] = useState("");
   const [isHide, setIsHide] = useState(true);
+  const router = useRouter();
   const [address, setaddress] = useState({
     name: "",
     address1: "",
@@ -151,7 +153,7 @@ const page = () => {
         const rs = await makePayment(data.orderId, data.customerId, data.total);
         if (rs === true) {
           toast.success("Your order has been placed");
-          setisEthPaymentProcessing(false);
+          router.push("/user/dashboard/my-orders");
           return;
         } else {
           toast.error("Payment failed");
