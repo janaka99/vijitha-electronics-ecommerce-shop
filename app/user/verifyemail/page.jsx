@@ -23,19 +23,14 @@ const page = (props) => {
 
   const verifyUserEmail = async () => {
     setIsVerifying(true);
-    console.log(props.searchParams.token);
-    console.log(props);
-    console.log(props.searchParams);
-    console.log(props.params);
-    console.log(token);
+    if (token === undefined) {
+      return;
+    }
     try {
-      let res = await fetch(
-        `/api/user/verify?token_id=${props.searchParams.token}`,
-        {
-          method: "POST",
-          body: JSON.stringify({ token: props.searchParams.token }),
-        }
-      );
+      let res = await fetch(`/api/user/verify?token_id=${token}`, {
+        method: "POST",
+        body: JSON.stringify({ token: token }),
+      });
       if (res.ok) {
         toast.success("Email verification Success. PLease Login");
         router.push("/user/login");
@@ -55,7 +50,7 @@ const page = (props) => {
     if (status === "unauthenticated") {
       verifyUserEmail();
     }
-  }, [status]);
+  }, [status, token]);
 
   if (status === "loading") {
     return <PageLoader />;
