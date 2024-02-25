@@ -34,7 +34,9 @@ export const sendVerificationEmail = async (user, link) => {
       ...mailOptions,
       subject: "Verification email",
       text: `This is a password reset email`,
-      html: `<a href="https://vijithaelectronics.netlify.app/user/verifyemail?token=${link}" style="background-color: blue; padding: 10px; border-radius: 5px; color: white; font-size: 35px; text-decoration: none;">Verify</a>`,
+      html: `<a href="https://vijithaelectronics.netlify.app/user/verifyemail?token=${link}" style="background-color: blue; padding: 10px; border-radius: 5px; color: white; font-size: 35px; text-decoration: none;">Verify</a> <br> <h4>or use below link </h4> <br> 
+        <p> https://vijithaelectronics.netlify.app/user/verifyemail?token=${link} </p>
+      `,
     });
     return mailres;
   } catch (error) {
@@ -54,7 +56,9 @@ export const sendPasswordVerificationEmail = async (user, link) => {
       ...mailOptions,
       subject: "Verification email",
       text: `This is a verification email Please verify your email`,
-      html: `<a href="https://vijithaelectronics.netlify.app/user/reset-password?token=${link}" style="background-color: blue; padding: 10px; border-radius: 5px; color: white; font-size: 35px; text-decoration: none;">Reset</a>`,
+      html: `<a href="https://vijithaelectronics.netlify.app/user/reset-password?token=${link}" style="background-color: blue; padding: 10px; border-radius: 5px; color: white; font-size: 35px; text-decoration: none;">Reset</a> <br> <h4>or use below link </h4> <br> 
+        <p>https://vijithaelectronics.netlify.app/user/reset-password?token=${link}</p>
+      `,
     });
     return mailres;
   } catch (error) {
