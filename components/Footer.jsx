@@ -47,14 +47,14 @@ const Footer = () => {
                 className="text-white mx-2 flex items-center gap-2 hover:text-gray-400"
               >
                 Facebook
-                <FaFacebook size={24} />
+                <FaFacebook size={20} />
               </a>
               <a
                 href="whatsapp://send?phone=94767008571"
                 className="text-white mx-2 flex items-center gap-2 hover:text-gray-400"
               >
                 Whatsapp
-                <TbBrandWhatsapp size={24} />
+                <TbBrandWhatsapp size={20} />
               </a>
             </div>
           </div>

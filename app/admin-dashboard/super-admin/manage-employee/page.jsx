@@ -184,7 +184,6 @@ const page = () => {
             </div>
           ))}
       </div>
-      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };

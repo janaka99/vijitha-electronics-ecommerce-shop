@@ -72,7 +72,6 @@ const AddNewEmployee = ({ getUsers }) => {
 
     if (password == "") {
       error = true;
-
       setPasswordError("Password is required");
     } else if (password.length < 8) {
       setPasswordError("Password should be at least 8 characters long");
@@ -80,25 +79,24 @@ const AddNewEmployee = ({ getUsers }) => {
 
     if (id == "") {
       error = true;
-
       setIdError("Id is required");
     }
 
     if (phoneNumber == "") {
       error = true;
-
       setPhoneNumberError("Phone number is required");
+    } else if (phoneNumber.length == 10) {
+      error = true;
+      setPhoneNumberError("Phone number should be at least 10 characters long");
     }
 
     if (address1 == "") {
       error = true;
-
       setAddress1Error("Address1 is required");
     }
 
     if (address2 == "") {
       error = true;
-
       setAddress2Error("Address2 is required");
     }
 
@@ -122,14 +120,14 @@ const AddNewEmployee = ({ getUsers }) => {
         });
 
         if (res.ok) {
-          console.log(res);
+          // console.log(res);
           getUsers();
           handleFormView();
           setIsLoading(false);
           toast.success("Successfully created new employee");
         } else {
           const newres = await res.json();
-          console.log(newres);
+          // console.log(newres);
           setIsLoading(false);
           toast.error(newres.message);
         }

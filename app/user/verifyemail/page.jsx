@@ -47,18 +47,12 @@ const page = (props) => {
   };
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      verifyUserEmail();
-    }
+    verifyUserEmail();
   }, [status, token]);
 
   if (status === "loading") {
     return <PageLoader />;
   }
-  if (status === "authenticated") {
-    return <ErrorPage />;
-  }
-
   return (
     <div className="w-screen h-screen flex justify-center items-center flex-col">
       <h1 className="text-4xl">Verify Email</h1>
