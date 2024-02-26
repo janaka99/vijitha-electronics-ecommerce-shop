@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import PopUp from "./PopUp";
+import toast from "react-hot-toast";
 
 const AddNewEmployee = ({ getUsers }) => {
   const validateEmail = (email) => {
@@ -23,12 +23,6 @@ const AddNewEmployee = ({ getUsers }) => {
   const roleRef = useRef();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [popUp, setPopUp] = useState({
-    message: "",
-    type: "",
-    show: false,
-  });
 
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -80,7 +74,7 @@ const AddNewEmployee = ({ getUsers }) => {
       error = true;
 
       setPasswordError("Password is required");
-    } else if (password.length <= 8) {
+    } else if (password.length < 8) {
       setPasswordError("Password should be at least 8 characters long");
     }
 
@@ -132,33 +126,18 @@ const AddNewEmployee = ({ getUsers }) => {
           getUsers();
           handleFormView();
           setIsLoading(false);
-          setPopUp({
-            message: "Successfully Registered a new user",
-            type: "sucess",
-            show: true,
-          });
+          toast.success("Successfully created new employee");
         } else {
-          console.log(res);
+          const newres = await res.json();
+          console.log(newres);
           setIsLoading(false);
-          setPopUp({
-            message: "Something went wrong try again later",
-            type: "error",
-            show: true,
-          });
+          toast.error(newres.message);
         }
       } catch (error) {
-        setPopUp({
-          message: "Something went wrong try again later",
-          type: "error",
-          show: true,
-        });
+        toast.error("Something went wrong try again later");
       }
     } else {
-      setPopUp({
-        message: "Something went wrong try again later",
-        type: "error",
-        show: true,
-      });
+      toast.error("Something went wrong try again later");
     }
   };
 
@@ -240,7 +219,7 @@ const AddNewEmployee = ({ getUsers }) => {
                 <label className="text-sm text-black ml-3 ">Password</label>
                 <input
                   className="w-full outline-none px-3 py-4 bg-gray-200 rounded-md"
-                  type="text"
+                  type="password"
                   required
                   onChange={(e) => {
                     setpassword(e.target.value);
@@ -319,7 +298,6 @@ const AddNewEmployee = ({ getUsers }) => {
           </div>
         </form>
       </div>
-      {popUp.show && <PopUp popUp={popUp} setPopUp={setPopUp} />}
     </div>
   );
 };
