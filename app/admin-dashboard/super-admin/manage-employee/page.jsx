@@ -136,6 +136,9 @@ const page = () => {
       <div className="flex text-lg text-black  pl-4  ">
         <div className="text-base font-semibold uppercase">Employees</div>
       </div>
+      <div className="text-lg text-black pl-4">
+        Welcome : {session?.user.email}{" "}
+      </div>
       <div className="flex flex-col w-full p-4">
         <div className="w-full flex bg-slate-200 p-2">
           <div className="w-2/5">Email</div>
