@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { TbBrandWhatsapp } from "react-icons/tb";
 
 const Footer = () => {
   return (
@@ -47,6 +48,13 @@ const Footer = () => {
               >
                 Facebook
                 <FaFacebook size={24} />
+              </a>
+              <a
+                href="whatsapp://send?phone=94767008571"
+                className="text-white mx-2 flex items-center gap-2 hover:text-gray-400"
+              >
+                Whatsapp
+                <TbBrandWhatsapp size={24} />
               </a>
             </div>
           </div>
