@@ -115,9 +115,9 @@ export const EthPaymentProvider = ({ children }) => {
 
       let result = await transactionContract.getBalance();
       result = ethers.formatEther(result);
-      console.log(result);
+      return result;
     } catch (error) {
-      console.log(error);
+      throw new Error("Wallet connection was rejected");
     }
   };
   const getCustomerOrder = async () => {

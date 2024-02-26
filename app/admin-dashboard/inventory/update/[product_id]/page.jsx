@@ -405,7 +405,7 @@ const page = (props) => {
                         ethPrice: e.target.value,
                       });
                     }}
-                    defaultValue={itemToUpdate?.price}
+                    defaultValue={itemToUpdate?.ethPrice}
                   />
                   <div className="text-red-900 ml-[20px] text-[12px] h-[10px]">
                     {errorList.ethPrice}

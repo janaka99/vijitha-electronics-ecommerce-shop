@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Loader from "@components/Loader";
 import SpinLoader from "@components/SpinLoader";
 import { useSession } from "next-auth/react";
@@ -8,12 +8,15 @@ import toast from "react-hot-toast";
 import EthOrderItem from "@components/EthOrderItem";
 import { AiOutlineDown, AiOutlineLoading } from "react-icons/ai";
 import PageLoader from "@components/PageLoader";
+import { EthPaymentContext } from "@context/ethpaymentContext/EthPaymentContext";
 
 const page = () => {
   const { data, status } = useSession();
 
   const [loading, setloading] = useState(false);
+  const [cryptoBalance, setcryptoBalance] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
+  const { getBalance } = useContext(EthPaymentContext);
   const [search, setSearch] = useState({
     type: "by_customer_id",
     body: "",
@@ -75,8 +78,18 @@ const page = () => {
   const loadDataOnPageLoad = async () => {
     setloading(true);
 
+    await getCryptobalance();
     await getData();
     setloading(false);
+  };
+
+  const getCryptobalance = async () => {
+    try {
+      const result = await getBalance();
+      setcryptoBalance(result);
+    } catch (error) {
+      setcryptoBalance("Wallet connection error");
+    }
   };
 
   useEffect(() => {
@@ -104,6 +117,10 @@ const page = () => {
             <h1 className="text-base uppercase tracking-wider font-bold">
               Manage Crypto Payments
             </h1>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="text-sm uppercase">Available balance</div>
+            <div className="font-bold">{cryptoBalance}</div>
           </div>
           <form
             onSubmit={handleSearch}
