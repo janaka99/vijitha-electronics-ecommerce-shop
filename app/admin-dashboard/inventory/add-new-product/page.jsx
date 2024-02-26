@@ -129,7 +129,7 @@ const page = ({}) => {
         setReqLoading(false);
         toast.success("Successfully created new product");
         await delay(5000);
-        router.push("/inventory");
+        router.push("/admin-dashboard/inventory");
       } else {
         setReqLoading(false);
 
@@ -220,6 +220,7 @@ const page = ({}) => {
               <input
                 className="w-full px-5 text-black text-sm bg-gray-200 p-3 outline-none"
                 type="number"
+                step="any"
                 placeholder="Price ( ETH )"
                 onChange={(e) => {
                   setEthPrice(e.target.value);
