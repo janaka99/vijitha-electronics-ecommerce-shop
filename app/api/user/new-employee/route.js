@@ -1,7 +1,7 @@
 import { connectToDB } from "@utils/database";
 import User from "@models/user";
 import { getServerSession } from "next-auth/next";
-
+import bcrypt from "bcrypt";
 import { IsLoggedInAsAdmin } from "@middlewares";
 import { sendVerificationEmail } from "@utils/mailService";
 
@@ -22,14 +22,19 @@ export const POST = async (req, res) => {
         password,
       } = await req.json();
       await connectToDB();
-
+      if (password == "" || password.length <= 8) {
+        return new Response(
+          JSON.stringify({ message: "Password not long enough" }),
+          { status: 400 }
+        );
+      }
       var crypto = require("crypto");
       var vcode = crypto.randomBytes(20).toString("hex");
-
+      let newHashedPass = await bcrypt.hash(password.toString(), 10);
       const newUser = new User({
         name: name,
         email: email,
-        password: password,
+        password: newHashedPass,
         phoneNumber: phoneNumber,
         NIC: id,
         address1: address1,

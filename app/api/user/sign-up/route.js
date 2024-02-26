@@ -17,14 +17,19 @@ export const POST = async (req, res) => {
       password,
     } = await req.json();
     await connectToDB();
-
+    if (password == "" || password.length <= 8) {
+      return new Response(
+        JSON.stringify({ message: "Password not long enough" }),
+        { status: 400 }
+      );
+    }
     var crypto = require("crypto");
     var vcode = crypto.randomBytes(20).toString("hex");
-
+    let newHashedPass = await bcrypt.hash(password.toString(), 10);
     const newUser = new User({
       name: name,
       email: email.toLowerCase(),
-      password: password,
+      password: newHashedPass,
       phoneNumber: phone_number,
       address1: address1,
       address2: address2,
