@@ -36,6 +36,7 @@ const page = (props) => {
           id: newRes[0]._id,
           name: newRes[0].name,
           price: newRes[0].price,
+          ethPrice: newRes[0].ethPrice,
           description: newRes[0].description,
           qty: newRes[0].qty,
           file: null,
