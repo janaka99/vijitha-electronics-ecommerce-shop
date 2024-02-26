@@ -59,7 +59,7 @@ const Header = () => {
   } else {
     return (
       <header className="bg-[#1f2937] w-full h-[50px] relative">
-        <nav className="w-[90%] max-w-[1440px] mx-auto flex justify-between items-center h-full">
+        <nav className="w-[95%] max-w-[1440px] mx-auto flex justify-between items-center h-full">
           <a className="cursor-pointer text-white" href="/">
             Vijitha Electronics
           </a>
@@ -72,10 +72,10 @@ const Header = () => {
               <a className="hover:text-blue-100" href="/">
                 Home
               </a>
-              <a className="hover:text-blue-100" href="/">
+              <a className="hover:text-blue-100" href="/privacy-policy">
                 Privacy Policy
               </a>
-              <a className="hover:text-blue-100" href="/">
+              <a className="hover:text-blue-100" href="/contact">
                 Contact Us
               </a>
 

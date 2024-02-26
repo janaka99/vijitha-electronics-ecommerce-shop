@@ -112,7 +112,7 @@ const page = (props) => {
           <input
             type="password"
             className="p-2 outline-blue-500 text-sm border border-gray-200 rounded-md"
-            placeholder="Enter Passowrd "
+            placeholder="Enter Passoword "
             disabled={isReqLoading ? true : false}
             onChange={(e) => setpassword(e.target.value)}
           />

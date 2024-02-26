@@ -37,6 +37,9 @@ const page = () => {
   if (status === "unauthenticated") {
     return <ErrorPage />;
   }
+  if (data.role === "customer") {
+    return <ErrorPage />;
+  }
   return (
     <div className="flex flex-col gap-5 p-12 min-h-[calc(100vh-240px)] max-w-[1440px] mx-auto w-[95%]">
       <h1 className="text-2xl font-semibold text-blue-600 mb-4">
@@ -78,6 +81,12 @@ const page = () => {
           title="Manage Stripe Payment"
           description="Manage stripe payments."
           link="/admin-dashboard/manage-stripe-payment"
+        />
+        <Card
+          icon={<FaUser size={30} color="green" />}
+          title="Manage Users"
+          description="See all the users"
+          link="/admin-dashboard/manage-users"
         />
       </div>
     </div>

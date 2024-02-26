@@ -28,13 +28,12 @@ const page = () => {
   const getUsers = async () => {
     setIsUsersLoading(true);
     try {
-      const res = await fetch("/api/user/employees", {
+      const res = await fetch("/api/user/customers", {
         method: "GET",
       });
       const newRes = await res.json();
       console.log(newRes);
       if (res.ok) {
-        console.log("session found ", session, status);
         setseletedUser(() =>
           newRes.filter((i) => i.email === session.user.email)
         );
@@ -123,16 +122,8 @@ const page = () => {
   return (
     <div className="max-w-[1440px] w-[95%] mx-auto my-12 flex flex-col gap-12">
       <h1 className=" uppercase text-2xl font-semibold text-center">
-        Manage Employees
+        Manage Customers
       </h1>
-      <div className="w-full max-w-[768px] mx-auto flex flex-col gap-4">
-        <div className="flex text-lg text-black pl-4  ">
-          <div className="text-base font-semibold uppercase">
-            Add New Employee
-          </div>
-        </div>
-        <AddNewEmployee getUsers={getUsers} />
-      </div>
       <div className="flex text-lg text-black  pl-4  ">
         <div className="text-base font-semibold uppercase">Employees</div>
       </div>
@@ -140,10 +131,9 @@ const page = () => {
         <div className="w-full flex bg-slate-200 p-2">
           <div className="w-2/5">Email</div>
           <div className="w-1/5">Name</div>
-          <div className="w-1/5">Verified</div>
-          <div className="w-[10%]">Role</div>
-          <div className="w-[10%]">Status</div>
-          <div className="w-[10%] flex justify-end ">Action</div>
+          <div className="w-[10%]">Verified</div>
+          <div className="w-[10%] ">Status</div>
+          <div className="w-1/5 flex justify-end">Action</div>
         </div>
         {users
           .filter((user) => user.email !== session.user.email)
@@ -151,29 +141,29 @@ const page = () => {
             <div key={i} className="w-full flex p-2">
               <div className="w-2/5 text-sm">{user.email}</div>
               <div className="w-1/5 text-sm">{user.name}</div>
-              <div className="w-1/5 text-sm">
+              <div className="w-[10%] text-sm">
                 {user.isVerified ? "Verified" : "Not Verified"}
               </div>
-              <div className="w-[10%] text-sm">{user.role}</div>
               <div className="w-[10%] text-sm">
-                {user.accountStatus == "working" ? "working" : "not working"}
+                {user.accountStatus == "working" ? "Live" : "Blocked"}
               </div>
-              {(session.user.role === "admin" ||
-                session.user.role === "manager") && (
-                <div className="w-[10%] flex justify-end gap-1">
+              {(session.user.role == "admin" ||
+                session.user.role == "manager" ||
+                session.user.role == "employee") && (
+                <div className="w-1/5 flex gap-1 justify-end">
                   {user.accountStatus === "working" ? (
                     <button
                       className="bg-red-400 py-[2px] px-2 rounded text-sm"
                       onClick={() => handleRemoveuser(user._id)}
                     >
-                      Remove
+                      Block
                     </button>
                   ) : (
                     <button
                       className="bg-green-400 py-[2px] px-2 rounded text-sm"
                       onClick={() => handleActivateUser(user._id)}
                     >
-                      ReAsign
+                      Unblock
                     </button>
                   )}
                 </div>
