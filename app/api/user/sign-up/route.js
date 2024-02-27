@@ -18,12 +18,21 @@ export const POST = async (req, res) => {
       password,
     } = await req.json();
     await connectToDB();
-    if (password == "" || password.length <= 8) {
+    if (password == "" || password.length < 8) {
       return new Response(
         JSON.stringify({ message: "Password not long enough" }),
         { status: 400 }
       );
     }
+
+    const existUser = await User.findOne({ email: email });
+
+    if (existUser) {
+      return new Response(JSON.stringify({ message: "Email already taken" }), {
+        status: 400,
+      });
+    }
+
     var crypto = require("crypto");
     var vcode = crypto.randomBytes(20).toString("hex");
     let newHashedPass = await bcrypt.hash(password.toString(), 10);

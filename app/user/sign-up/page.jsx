@@ -131,9 +131,10 @@ const page = () => {
         formRef.current.reset();
         toast.success("Successfully signed up. Verify your email address");
       } else {
+        const newRes = await res.json();
         setloading(false);
 
-        toast.error("Something went wrong, please try again");
+        toast.error(newRes.message);
       }
     } catch (error) {
       setloading(false);
