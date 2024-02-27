@@ -9,6 +9,7 @@ import { resolve } from "styled-jsx/css";
 import toast from "react-hot-toast";
 import SpinLoader from "@components/SpinLoader";
 import ErrorPage from "@components/ErrorPage";
+import { AiOutlineLoading } from "react-icons/ai";
 import PageLoader from "@components/PageLoader";
 // import Loader from "./Loader";
 
@@ -292,12 +293,24 @@ const page = () => {
         </div>
 
         <div className="w-full flex flex-col gap-2 mt-2">
-          <button
-            className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit min-w-full"
-            type="submit"
-          >
-            Sign Up
-          </button>
+          {loading ? (
+            <button
+              type="submit"
+              disabled
+              className="w-full p-2 text-sm bg-blue-400 ext-white rounded-md  text-white flex justify-center items-center"
+            >
+              <span className="animate-spin">
+                <AiOutlineLoading size={20} />
+              </span>
+            </button>
+          ) : (
+            <button
+              className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit min-w-full"
+              type="submit"
+            >
+              Sign Up
+            </button>
+          )}
           <span className="w-full text-center text-sm tracking-wider font-semibold italic">
             Already registered?{" "}
             <a className="text-blue-500" href="/user/login">

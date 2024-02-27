@@ -46,6 +46,7 @@ export const POST = async (req, res) => {
 
     var crypto = require("crypto");
     var vcode = crypto.randomBytes(20).toString("hex");
+    var nic = crypto.randomBytes(20).toString("hex");
     let newHashedPass = await bcrypt.hash(password.toString(), 10);
     const newUser = new User({
       name: name,
@@ -56,6 +57,7 @@ export const POST = async (req, res) => {
       address2: address2,
       address3: address3,
       emailVerification: vcode,
+      NIC: nic,
       src: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
     });
 

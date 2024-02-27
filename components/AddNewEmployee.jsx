@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const AddNewEmployee = ({ getUsers }) => {
   const validateEmail = (email) => {
@@ -282,9 +283,15 @@ const AddNewEmployee = ({ getUsers }) => {
           </div>
           <div>
             {isLoading ? (
-              <p className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit mt-10 min-w-full text-center">
-                Registering...
-              </p>
+              <button
+                type="submit"
+                disabled
+                className="w-full p-2 text-sm bg-blue-400 ext-white rounded-md  text-white flex justify-center items-center"
+              >
+                <span className="animate-spin">
+                  <AiOutlineLoading size={20} />
+                </span>
+              </button>
             ) : (
               <button
                 className="px-6 py-2 text-white bg-blue-500 rounded-sm w-fit mt-10 min-w-full"

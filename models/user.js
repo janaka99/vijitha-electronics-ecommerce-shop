@@ -13,7 +13,6 @@ const UserSchema = new Schema(
     },
     src: {
       type: String,
-      unique: true,
     },
     imageId: {
       type: String,
@@ -30,6 +29,7 @@ const UserSchema = new Schema(
     },
     NIC: {
       type: String,
+      required: false,
     },
     address1: {
       type: String,
