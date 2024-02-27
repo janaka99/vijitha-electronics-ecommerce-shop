@@ -33,6 +33,17 @@ export const POST = async (req, res) => {
       });
     }
 
+    const existNumber = await User.findOne({ phoneNumber: phone_number });
+
+    if (existNumber) {
+      return new Response(
+        JSON.stringify({ message: "Phone number already taken" }),
+        {
+          status: 400,
+        }
+      );
+    }
+
     var crypto = require("crypto");
     var vcode = crypto.randomBytes(20).toString("hex");
     let newHashedPass = await bcrypt.hash(password.toString(), 10);

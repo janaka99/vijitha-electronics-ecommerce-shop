@@ -478,7 +478,7 @@ const page = () => {
             )}
           </div>
         </div>
-        <form
+        {/* <form
           onSubmit={updateEmail}
           className="w-full flex flex-col gap-1 relative p-[2px]"
         >
@@ -510,7 +510,8 @@ const page = () => {
               <Loader size={"50px"} border={"5px"} />
             </div>
           )}
-        </form>
+        </form> */}
+
         <form
           onSubmit={updateName}
           className="w-full flex flex-col gap-2 p-[2px] relative"
@@ -646,7 +647,7 @@ const page = () => {
             </div>
           )}
         </form>
-        <form
+        {/* <form
           onSubmit={updatePassword}
           className="w-full flex flex-col gap-2 p-[2px] relative"
         >
@@ -676,7 +677,7 @@ const page = () => {
               <SpinLoader />
             </div>
           )}
-        </form>
+        </form> */}
       </div>
     </div>
   );

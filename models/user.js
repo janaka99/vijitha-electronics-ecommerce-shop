@@ -30,7 +30,6 @@ const UserSchema = new Schema(
     },
     NIC: {
       type: String,
-      unique: true,
     },
     address1: {
       type: String,
